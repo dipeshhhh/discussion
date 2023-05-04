@@ -1,7 +1,7 @@
 import React from 'react'
 import './css/header.css'
 import logo from  '../images/logo.png'
-import InboxIcon from '@mui/icons-material/Inbox';
+import MarkEmail from '@mui/icons-material/MarkEmailUnread';
 import SearchIcon from '@mui/icons-material/Search';
 import { Avatar } from '@mui/material';
 const header = () => {
@@ -20,8 +20,10 @@ const header = () => {
         </div>
         <div className='header-right'>
           <div className='header-right-container'>
+          
+           <MarkEmail/>
            <Avatar/>
-           <InboxIcon/>
+     
           </div>
         </div>
       </div>
