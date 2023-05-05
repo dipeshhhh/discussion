@@ -2,7 +2,6 @@ import React from 'react'
 import './css/index.css'
 import Sidebar from './sidebar'
 import Main from './main'
-import { NavLink } from 'react-router-dom'
 const index = () => {
   return (
     <div className='stack-index'>
