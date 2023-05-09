@@ -7,7 +7,7 @@ const sidebar = () => {
         <div className='sidebar-container'>
             <div className='sidebar-options'>
                 <div className='sidebar-option'>
-                    <NavLink href="">Home</NavLink>
+                    <NavLink to="/">Home</NavLink>
                 </div>
                 <div className='sidebar-option'>
                     <NavLink href="">PUBLIC</NavLink>

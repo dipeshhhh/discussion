@@ -9,7 +9,7 @@ const main = () => {
       <div className='main-container'>
       <div className='main-top'>
         <h2>All Questions</h2>
-        <NavLink>
+        <NavLink to="/add-question">
           <button>New Question</button>
           </NavLink>
         </div>

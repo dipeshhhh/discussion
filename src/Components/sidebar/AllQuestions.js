@@ -8,10 +8,7 @@ const AllQuestions = () => {
     <div className='all-questions-container'>
       <div className='all-questions-left'>
         <div className='all-options'>
-          <div className='all-option'>
-            <p>0</p>
-            <span>Votes</span>
-          </div>
+          
           <div className='all-option'>
             <p>1</p>
             <span>Comments</span>
@@ -23,7 +20,7 @@ const AllQuestions = () => {
         </div>
       </div>
       <div className='question-answer'>
-          <NavLink>
+          <NavLink to="/view-question">
             This is question Title
           </NavLink>
         <div style={{width:"90%"}}>
