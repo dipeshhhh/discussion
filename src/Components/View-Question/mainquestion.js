@@ -1,8 +1,13 @@
 import React from 'react'
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import HistoryIcon from '@mui/icons-material/History';
-import { Avatar } from '@mui/material';
+import BookmarkIcon from '@mui/icons-material/Bookmark'
+import HistoryIcon from '@mui/icons-material/History'
+import { Avatar } from '@mui/material'
 import {NavLink} from 'react-router-dom'
+import ReactQuill from 'react-quill'
+import 'react-quill/dist/quill.snow.css' // quill css 
+
+
+import './index.css'
 
 const mainquestion = () => {
 
@@ -74,10 +79,29 @@ const mainquestion = () => {
                 <HistoryIcon />
                 </div>
               </div>
+              <div className='question-anser'>
+              
+                <div className='author'>
+                  <small>asked "Timestamp"</small>
+                  <div className='auth-details'>
+                  <Avatar/>
+                  <p>Author Name</p>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
+        </div>
+        <div className='main-answer'>
+        <h3>Your Answer</h3>
+        <ReactQuill theme="snow" className='react-quill'  style={{height
+        :"200px"}}/> 
       </div>
-    </div>
+      <button style={{
+          marginTop: "100px",
+          maxWidth: "fit-content",
+        }}>Post your Comment</button>
+      </div>
   )
 }
 
