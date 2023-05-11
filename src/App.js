@@ -3,7 +3,11 @@ import Header from './Components/Header/header'
 import Index from './Components/sidebar/index'
 import Question from './Components/Ask-Question/question'
 import ViewQuestion from './Components/View-Question/index'
+<<<<<<< HEAD
 import Auth from './Components/Signin/index'
+=======
+import Auth from './Components/Signin'
+>>>>>>> 9c4ce04a6b224e062810fbf01e5b591f37420535
 import './App.css';
 import {Routes, Route, Redirect} from 'react-router-dom'
 import {useSelector} from 'react-redux'
