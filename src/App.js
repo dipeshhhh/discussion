@@ -3,7 +3,7 @@ import Header from './Components/Header/header'
 import Index from './Components/sidebar/index'
 import Question from './Components/Ask-Question/question'
 import ViewQuestion from './Components/View-Question/index'
-import Auth from './Components/Auth/index'
+import Auth from './Components/Signin/index'
 import './App.css';
 import {Routes, Route, Redirect} from 'react-router-dom'
 import {useSelector} from 'react-redux'
