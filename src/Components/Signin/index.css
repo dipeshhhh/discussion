@@ -8,11 +8,6 @@
   }
 
   .auth-container {
-    /* display: flex;
-    flex-direction: column;
-    width: 100%;    
-    align-items: center;
-    justify-content: space-around; */
     padding: 20px 0;
     margin: 0 20px;
     height: auto !important;
@@ -39,7 +34,7 @@
     display: flex;
     margin: 40px 0;
     width: 400px;
-    height: 300px;
+   
   }
 
   .auth-login-container {
@@ -66,6 +61,13 @@
   }
   
   .input-field > input {
+    padding: 10px;
+    border: 1px solid #0095ff8e;
+    background-color: transparent;
+    border-radius: 3px;
+    outline: none;
+  }
+  .input-field > select{
     padding: 10px;
     border: 1px solid #0095ff8e;
     background-color: transparent;
@@ -107,5 +109,22 @@
   font-family:'Times New Roman';
   font-size: larger;
   
+}
+
+.refresh-button{
+  position: absolute;
+  top:55%;
+  margin-left:370px;
+  transform: translateY(-50);
+  background-color: #0f77c1;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+
+}
+
+.refresh-button:active{
+  transform:translateY(-20%) scale(0.99) ;
 }
 

@@ -11,19 +11,20 @@ const Header = () => {
   const handlePageChange = () => {
     setShowIcons(true);
   };
+  
 
   return (
     <header>
       <div className='header-container'>
         <div className='header-left'>
-          <Link to="/" onClick={handlePageChange}>
+          <Link to="/" onClick={handlePageChange} >
             <img src={logo} alt="" />
           </Link>
           <h3>          </h3>
         </div>
         <div className='header-center'>
-          <h1 className='header-title'>Discussion Forum</h1>
-          <h2 className='header-title2'>ICAR (Indian Council Of Agricultural Research)</h2>
+          <h1 className='header-title'><font style={{color:'#006633'}}>Discussion Forum</font></h1>
+          <h2 className='header-title2'><font style={{color:'#006633'}}>ICAR (Indian Council Of Agricultural Research)</font></h2>
         </div>
         <div className='header-right'>
           {showIcons && (
