@@ -126,5 +126,6 @@
 
 .refresh-button:active{
   transform:translateY(-20%) scale(0.99) ;
+  display: inline-block;
 }
 
