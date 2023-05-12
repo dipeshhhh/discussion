@@ -1,7 +1,9 @@
 import React, {useState} from 'react'
 import Img from './logo.png'
 import './index.css'
-import { ForkRight, Margin } from '@mui/icons-material';
+import Content from './content'
+import RestartAltIcon from '@mui/icons-material/RestartAlt';
+import './captcha'
 
 const Index = () => {
  
@@ -9,22 +11,13 @@ const Index = () => {
     const [passowrd, setPassword] = useState("")
     const [loading, setLoading] = useState(false)
     const [err, setError] = useState("")
+    const [register, setRegister] = useState(false)
 
+    
     const handleLogin= (e)=>{
-        e.preventDefault()
-        setError("")
-        setLoading(true)
-        if(email === "" || passowrd === "")
-        {
-            console.log("Something missing");
-            setError('Required field is missing')
-            setLoading(false)
-        }
-        else{
-            console.log("everything is great");
-            setLoading(false)
-        }
+     
     }
+
   return (
     <div className='auth'>
         <div className='auth-container'>
@@ -36,7 +29,49 @@ const Index = () => {
                       </div>
                       <div className='auth-login'>
                           <div className='auth-login-container'>
+                            {
+                                register ? (<>
+                                    <div className='input-field'>
+                                  <p>Name</p>
+                                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' placeholder='Enter your full name' />
+                              </div>
                               <div className='input-field'>
+                                  <p>ICAR Email</p>
+                                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' placeholder='Enter your icar mail' />
+                              </div>
+
+                              <div className='input-field'>
+                                  <p>Select Division</p>
+                                  <select name="organization" id="">Division
+                                  <option value="">--Select Organization--</option>
+                                  <option value="">Agricultural Education </option>
+                                  <option value="">Agricultural Engineering</option>
+                                  <option value="">Agricultural Extension</option>
+                                  <option value="">Animal Science</option>
+                                  <option value="">Crop Science</option>
+                                  <option value="">Fisheries Science</option>
+                                  <option value="">Horticulture Science</option>
+                                  <option value="">Natural Resource Management</option>
+                                  <option value="">Administration</option>
+                                  <option value="">Finance</option>
+                                  <option value="">Social Science</option>
+                                  <option value="">Technical</option>
+                                  </select>
+                              </div>
+                              <div className='input-field'>
+                                  <p>Password</p>
+                                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' placeholder='Enter the password'/>
+                              </div>
+                              <div className='input-field'>
+                                  <p>Confirm Pasword</p>
+                                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' placeholder='Enter the Confirm password' />
+                              </div>
+                              <button style={{ marginTop: "20px" }}>Register</button>
+                                </>
+                                ) : (
+                                
+                                <>
+                                <div className='input-field'>
                                   <p>Email</p>
                                   <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' />
                               </div>
@@ -44,98 +79,37 @@ const Index = () => {
                                   <p>Password</p>
                                   <input value={passowrd} type="password" onChange={(e) => { setPassword(e.target.value) }} autoComplete='off'/>
                               </div>
+                              <div className='input-field captcha_box'>
+                              <p></p>
+                                  <input value='' type="text" disabled autoComplete='off'/>
+                                  <div className='refresh-button'>
+                                  <RestartAltIcon/>
+                                  </div>
+                              </div>   
+                              <div className='input-field captcha_input '>
+                              <p>Enter Capcha</p>
+                                  <input type="text" placeholder='Enter Captcha' autoComplete='off'/>
+                                                                    
+                              </div>                                                      
                               <button style={{ marginTop: "20px" }} onClick={handleLogin}>Login</button>
+                                </>
+                                )}
+                              <p onClick={()=> setRegister(!register)} style={{
+                                    marginTop:'10px',
+                                    textAlign:'center',
+                                    color:'#0095ff',
+                                    textDecoration:'underline',
+                                    cursor:'pointer'
+                              }}>{ register ? 'Login' : 'Register'}?</p>
                               <div id="company">
                                   <div>Copyright @ICAR - ICT Unit</div>
                               </div>
                           </div>
                       </div>
                     </div>
-                    <div className='thread-body'>
-                        <h1>
-                        <span> <u>Discussion Box  for ICAR Users </u> </span></h1>
-                      <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-
-                    </div>
+                    
+                        <Content/>
+                  
                 
                     </div>       
             
@@ -143,6 +117,7 @@ const Index = () => {
             
        
     </div>
+    
   )
 }
 
