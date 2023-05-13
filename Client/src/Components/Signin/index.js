@@ -2,17 +2,35 @@ import React, {useState} from 'react'
 import Img from './logo.png'
 import './index.css'
 import Content from './content'
-import RestartAltIcon from '@mui/icons-material/RestartAlt';
 import './captcha'
+import axios from 'axios'
 
 const Index = () => {
  
-    const [email, setEmail] = useState("");
-    const [passowrd, setPassword] = useState("")
-    const [loading, setLoading] = useState(false)
-    const [err, setError] = useState("")
     const [register, setRegister] = useState(false)
+    const [user, setUSer] = useState({
+        name:'',email:'',division:'',password:'',cpassword:''
+    })
+    let name, value 
+    const handleInput = (e)=>{
+        console.log(e)
+        name =e.target.name
+        value =e.target.value
 
+        setUSer({...user, [name]:value})
+    }
+
+    const handleRegister = (e)=>{
+        e.preventDefault()
+        console.log(user);
+        axios.post('/Signup',{user}).then(res=>
+            console.log(res)
+        ).catch(err=>
+            console.log(err.toJSON().message)
+        )
+       
+    }
+    
     
     const handleLogin= (e)=>{
         
@@ -33,64 +51,65 @@ const Index = () => {
                                 register ? (<>
                                     <div className='input-field'>
                                   <p>Name</p>
-                                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' placeholder='Enter your full name' />
+                                  <input  type="text" name='name' autoComplete='off'
+                                  value={user.name}
+                                  onChange={handleInput}
+                                  placeholder='Enter your full name' />
                               </div>
                               <div className='input-field'>
                                   <p>ICAR Email</p>
-                                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' placeholder='Enter your icar mail' />
+                                  <input  type="email" name='email' autoComplete='off'
+                                  value={user.email}
+                                  onChange={handleInput}
+                                  placeholder='Enter your icar mail' />
                               </div>
 
                               <div className='input-field'>
                                   <p>Select Division</p>
-                                  <select name="organization" id="">Division
-                                  <option value="">--Select Organization--</option>
-                                  <option value="">Agricultural Education </option>
-                                  <option value="">Agricultural Engineering</option>
-                                  <option value="">Agricultural Extension</option>
-                                  <option value="">Animal Science</option>
-                                  <option value="">Crop Science</option>
-                                  <option value="">Fisheries Science</option>
-                                  <option value="">Horticulture Science</option>
-                                  <option value="">Natural Resource Management</option>
-                                  <option value="">Administration</option>
-                                  <option value="">Finance</option>
-                                  <option value="">Social Science</option>
-                                  <option value="">Technical</option>
+                                  <select name="division" onChange={handleInput} value={user.division} id="divsion">
+                                  <option>--Select Organization--</option>
+                                  <option>Agricultural Education </option>
+                                  <option>Agricultural Engineering</option>
+                                  <option>Agricultural Extension</option>
+                                  <option>Animal Science</option>
+                                  <option>Crop Science</option>
+                                  <option>Fisheries Science</option>
+                                  <option>Horticulture Science</option>
+                                  <option>Natural Resource Management</option>
+                                  <option>Administration</option>
+                                  <option>Finance</option>
+                                  <option>Social Science</option>
+                                  <option>Technical</option>
                                   </select>
                               </div>
                               <div className='input-field'>
                                   <p>Password</p>
-                                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' placeholder='Enter the password'/>
+                                  <input  name='password' type="password"  autoComplete='off'
+                                  value={user.password}
+                                  onChange={handleInput}
+                                  placeholder='Enter the password'/>
                               </div>
                               <div className='input-field'>
                                   <p>Confirm Pasword</p>
-                                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' placeholder='Enter the Confirm password' />
+                                  <input type="password" name='cpassword' autoComplete='off'
+                                  value={user.cpassword}
+                                  onChange={handleInput}
+                                  placeholder='Enter the Confirm password' />
                               </div>
-                              <button style={{ marginTop: "20px" }}>Register</button>
+                              <button style={{ marginTop: "20px" }} onClick={handleRegister}>Register</button>
                                 </>
                                 ) : (
                                 
                                 <>
                                 <div className='input-field'>
                                   <p>Email</p>
-                                  <input value={email} type="email" onChange={(e) => setEmail(e.target.value)} autoComplete='off' />
+                                  <input  type="email" autoComplete='off' />
                               </div>
                               <div className='input-field'>
                                   <p>Password</p>
-                                  <input value={passowrd} type="password" onChange={(e) => { setPassword(e.target.value) }} autoComplete='off'/>
-                              </div>
-                              <div className='input-field captcha_box'>
-                              <p></p>
-                                  <input value='' type="text" disabled autoComplete='off'/>
-                                  <div className='refresh-button'>
-                                  <RestartAltIcon/>
-                                  </div>
-                              </div>   
-                              <div className='input-field captcha_input '>
-                              <p>Enter Capcha</p>
-                                  <input type="text" placeholder='Enter Captcha' autoComplete='off'/>
-                                                                    
-                              </div>                                                      
+                                  <input  type="password" autoComplete='off'/>
+                              </div>                         
+                                                                                                                 
                               <button style={{ marginTop: "20px" }} onClick={handleLogin}>Login</button>
                                 </>
                                 )}

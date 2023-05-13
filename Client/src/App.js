@@ -5,13 +5,14 @@ import Question from './Components/Ask-Question/question'
 import ViewQuestion from './Components/View-Question/index'
 import Auth from './Components/Signin/index'
 import './App.css';
+import Errorpage from './Components/Error/errorpage';
 import {Routes, Route, Redirect} from 'react-router-dom'
-import {useSelector} from 'react-redux'
-import { selectUser } from './features/userSlice';
+
+
 
 function App() {
-   const user = useSelector(selectUser)
-  // const dispatch = useDispatch()
+   
+  
 
   return (
   <>
@@ -22,6 +23,7 @@ function App() {
      <Route exact path='/add-question' element={<Question/>}></Route>
      <Route exact path='/view-question' element={<ViewQuestion/>}></Route>
      <Route exact path='/auth' element={<Auth/>}></Route>
+     <Route exact path='*' element={<Errorpage/>}></Route>
     </Routes> 
     </div>
   
