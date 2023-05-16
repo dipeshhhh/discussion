@@ -5,15 +5,16 @@ import './index.css'
 import Content from './content'
 import './captcha'
 import axios from 'axios'
+import {NavLink, useNavigate} from 'react-router-dom'
 
 
 const Index = () => {
-    
+    const navigate = useNavigate()
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [register, setRegister] = useState(false)
     const [user, setUSer] = useState({
-        name:'',email:'',division:'',password:'',cpassword:'',spassword:''
+        name:'',email:'',division:'',password:'',cpassword:''
     })
     let name, value 
     const handleInput = (e)=>{
@@ -77,9 +78,10 @@ const Index = () => {
         
       }
       
-const handleLogin= (e)=>{
-    const {email, spassword} = user
-    if(!email || !spassword )
+const handleLogin= async (e)=>{
+    const {email, password} = user
+    e.preventDefault()
+        if(!email || !password )
     {
         setError("Something missing");
         setLoading(false);
@@ -89,8 +91,22 @@ const handleLogin= (e)=>{
         setError("Email is not in valid formate");
         setLoading(false);
     }
+    else{
+    const resp = await axios.post('/Signin', {
+        email,
+        password
+    }).then((resp)=>{
+        console.log(resp)
+        navigate('/')
+        
+    },(problem) => {
+        setError('Wrong Credentails')
+        setUSer({email:'',password:''})
+        setLoading(false)
+      })
 
     }
+        }
 
   return (
     <div className='auth'>
@@ -168,8 +184,8 @@ const handleLogin= (e)=>{
                               </div>
                               <div className='input-field'>
                                   <p>Password</p>
-                                  <input  type="password" name='spassword' autoComplete='off'
-                                  value={user.spassword}
+                                  <input  type="password" name='password' autoComplete='off'
+                                  value={user.password}
                                   onChange={handleInput}
                                   />
                               </div>                         
@@ -180,7 +196,7 @@ const handleLogin= (e)=>{
                               
                                 </>
                                 )}
-                              <p onClick={()=> setRegister(!register)   || setUSer({name:'',email:'',division:'',password:'',cpassword:'',spassword:''})   || setError(false)                        
+                              <p onClick={()=> setRegister(!register)   || setUSer({name:'',email:'',division:'',password:'',cpassword:''})   || setError(false)                        
                             } style={{
                                     marginTop:'10px',
                                     textAlign:'center',
