@@ -35,19 +35,8 @@ router.get('/', (req,res)=>{
 
 
 router.post('/Signup', async (req,res)=>{
-    const {name, email, division, password, cpassword} = req.body;
-    if (!name || !email || !division || !password || !cpassword)
-    {
-        return res.status(422).json({eror:'something missing'})
-    }
-    else if(!(email.split('@')[1] === 'icar.gov.in')){
-        return res.status(422).json({eror:'Email in wrong formate'})
-    }
-    else if(!(password === cpassword))
-    {
-        return res.status(422).json({eror:'Password is not matched'})
-    }
-
+    const {name, email, division, password} = req.body;
+        
     try{
     const userExist = await Users.findOne({email:email})
     if(userExist)

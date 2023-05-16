@@ -1,39 +1,95 @@
 import React, {useState} from 'react'
+import swal from 'sweetalert'
 import Img from './logo.png'
 import './index.css'
 import Content from './content'
 import './captcha'
 import axios from 'axios'
 
+
 const Index = () => {
- 
+    
+    const [loading, setLoading] = useState(false);
+    const [error, setError] = useState("");
     const [register, setRegister] = useState(false)
     const [user, setUSer] = useState({
-        name:'',email:'',division:'',password:'',cpassword:''
+        name:'',email:'',division:'',password:'',cpassword:'',spassword:''
     })
     let name, value 
     const handleInput = (e)=>{
-        console.log(e)
+       
         name =e.target.name
         value =e.target.value
 
         setUSer({...user, [name]:value})
     }
 
-    const handleRegister = (e)=>{
-        e.preventDefault()
-        console.log(user);
-        axios.post('/Signup',{user}).then(res=>
-            console.log(res)
-        ).catch(err=>
-            console.log(err.toJSON().message)
-        )
+    function validateEmail(email) {
+        const reg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
+        if (reg.test(email) === false || !(email.split('@')[1] === 'icar.gov.in')) {
+          return false;
+        } else return true;
+      }
+/// Registration button function call here
+       const handleRegister= async (e)=>{
        
-    }
-    
-    
-    const handleLogin= (e)=>{
+        e.preventDefault()
+        setLoading(true)
+        const {name, email, division, password, cpassword} = user
+        if(!name || !email || !division || !password || !cpassword )
+        {
+            setError("Something missing");
+            setLoading(false);
+        }
+        else if (!validateEmail(email))
+        {
+            setError("Email is not in valid formate");
+            setLoading(false);
+        }
+        else if(!(password === cpassword))
+        {
+            
+            setError("Password is not Matched");
+            setUSer({password:'',cpassword:''})
+            setLoading(false);
+        }
+        else{          
+
+            const resp =await axios.post('/Signup',
+                {
+                    name,
+                    email,
+                    division,
+                    password
+                    
+                }).then((resp) => {
+                    swal("Signup Successfully")
+                    window.location.reload(false)
+                    setLoading(false)
+                  }, (problem) => {
+                    setError('email id already exist')
+                    setLoading(false)
+
+                  });
+           
+        }
         
+        
+      }
+      
+const handleLogin= (e)=>{
+    const {email, spassword} = user
+    if(!email || !spassword )
+    {
+        setError("Something missing");
+        setLoading(false);
+    }
+    else if (!validateEmail(email))
+    {
+        setError("Email is not in valid formate");
+        setLoading(false);
+    }
+
     }
 
   return (
@@ -84,7 +140,7 @@ const Index = () => {
                               </div>
                               <div className='input-field'>
                                   <p>Password</p>
-                                  <input  name='password' type="password"  autoComplete='off'
+                                  <input  name='password' type="password" autoComplete='off'
                                   value={user.password}
                                   onChange={handleInput}
                                   placeholder='Enter the password'/>
@@ -96,46 +152,67 @@ const Index = () => {
                                   onChange={handleInput}
                                   placeholder='Enter the Confirm password' />
                               </div>
-                              <button style={{ marginTop: "20px" }} onClick={handleRegister}>Register</button>
+                              <button style={{ marginTop: "20px" }} onClick={handleRegister}>
+                              {loading ? "Registering..." : "Register"}
+                              </button>
                                 </>
                                 ) : (
                                 
                                 <>
                                 <div className='input-field'>
                                   <p>Email</p>
-                                  <input  type="email" autoComplete='off' />
+                                  <input  type="email" name='email'  autoComplete='off' 
+                                   value={user.email}
+                                   onChange={handleInput}
+                                  />
                               </div>
                               <div className='input-field'>
                                   <p>Password</p>
-                                  <input  type="password" autoComplete='off'/>
+                                  <input  type="password" name='spassword' autoComplete='off'
+                                  value={user.spassword}
+                                  onChange={handleInput}
+                                  />
                               </div>                         
                                                                                                                  
-                              <button style={{ marginTop: "20px" }} onClick={handleLogin}>Login</button>
+                              <button style={{ marginTop: "20px" }} onClick={handleLogin}>
+                              {loading ? "Logging in..." : "Login"}
+                              </button>
+                              
                                 </>
                                 )}
-                              <p onClick={()=> setRegister(!register)} style={{
+                              <p onClick={()=> setRegister(!register)   || setUSer({name:'',email:'',division:'',password:'',cpassword:'',spassword:''})   || setError(false)                        
+                            } style={{
                                     marginTop:'10px',
                                     textAlign:'center',
                                     color:'#0095ff',
                                     textDecoration:'underline',
                                     cursor:'pointer'
                               }}>{ register ? 'Login' : 'Register'}?</p>
-                              <div id="company">
-                                  <div>Copyright @ICAR - ICT Unit</div>
+                                  <div id="company">
+                                  {error !== "" && (
+                                        <p
+                                        style={{
+                                        color: "red",
+                                        fontSize: "14px",
+                                               }}
+                                        >
+                                          {error}
+                                        </p>
+                                            )}    
+                                  </div>
+                                   
                               </div>
-                          </div>
                       </div>
+
                     </div>
                     
                         <Content/>
                   
                 
                     </div>       
-            
-            </div>
-            
-       
-    </div>
+                   
+                  </div>      
+           </div>
     
   )
 }
