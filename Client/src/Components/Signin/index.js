@@ -67,7 +67,7 @@ const Index = () => {
                     window.location.reload(false)
                     setLoading(false)
                   }, (problem) => {
-                    setError('email id already exist')
+                    setError("User Already exist")
                     setLoading(false)
 
                   });
