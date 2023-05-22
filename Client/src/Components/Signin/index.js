@@ -6,7 +6,6 @@ import Content from './content'
 import './captcha'
 import axios from 'axios'
 
-
 const Index = () => {
     
     const [loading, setLoading] = useState(false);

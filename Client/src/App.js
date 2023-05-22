@@ -23,6 +23,7 @@ function App() {
      <Route exact path='/add-question' element={<Question/>}></Route>
      <Route exact path='/view-question' element={<ViewQuestion/>}></Route>
      <Route exact path='/auth' element={<Auth/>}></Route>
+     
      <Route exact path='*' element={<Errorpage/>}></Route>
     </Routes> 
     </div>

@@ -4,87 +4,17 @@ const content = () => {
   return (
     <div className='thread-body'>
         <h1>
-                        <span> <u>Discussion Box  for ICAR Users </u> </span></h1>
-                      <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
-                              <p>
-                        <span>
-                            ICAR-Data Center&nbsp;is providing support for email services,
-                             hosting of web applications/websites, e-Office, ICAR-ERP,
-                              Agricultural Research Management System, 
-                              Foreign Visit Management System, Personnel Management System, 
-                              eHRMS, SPARROW, super computing facility, etc. 
-                              This is a centralized help desk in the form&nbsp;of web 
-                              application which address the issues and concerns related to 
-                              use of ICAR-web application services. In order to use this you have to follow:
-                              </span></p>
+            <u>Discussion Forum  for ICAR Employees </u> </h1>
+            <p class="description">
+             <span>
+               Our website is a discussion forum designed for ICAR employees from various divisions and posts
+               to share and discuss information within their division or with specific members.
+               Users can choose to make their content visible to all or limit the visibility to a 
+               selected audience. Content is published as PDF files, with the ability for others 
+               to comment and reply. Users can also request to expand the content's scope to include 
+               additional users.
+              </span>
+            </p>
 
 
     </div>
