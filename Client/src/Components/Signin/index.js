@@ -7,7 +7,6 @@ import './captcha'
 import axios from 'axios'
 import {NavLink, useNavigate} from 'react-router-dom'
 
-
 const Index = () => {
     const navigate = useNavigate()
     const [loading, setLoading] = useState(false);
