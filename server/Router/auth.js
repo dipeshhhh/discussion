@@ -4,9 +4,8 @@ require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
 const jwt = require('jsonwebtoken');
-router.get('/', (req,res)=>{
-    res.send('Home Page of router');
-});
+const authenticate = require('../middleware/authenticate')
+
 
 // using of promise
 /*router.post('/Signup', (req,res)=>{
@@ -94,11 +93,12 @@ router.post('/Signin', async (req, res) => {
 }
 )
 
-router.get('/Contact', (req,res)=>{
+router.get('/', authenticate, (req,res)=>{
     res.cookie("Token", 'ICARCookie');
     res.send('Home Page of router');
     
 })
+
 
 
 module.exports = router;
