@@ -11,11 +11,8 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(require('./Router/auth'));
 
-//collect data by body with json format
-// const middleware = (req,res,next)=>{
-//         console.log('hi.. middleware');
-//         next();
-// }
+
+
 
 app.listen(PORT, ()=>{
         console.log(`server running on port no. ${PORT}`)

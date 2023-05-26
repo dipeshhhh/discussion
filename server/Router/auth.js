@@ -3,8 +3,6 @@ const router = express.Router();
 require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
-const jwt = require('jsonwebtoken');
-const authenticate = require('../middleware/authenticate')
 
 
 // using of promise
@@ -68,14 +66,8 @@ router.post('/Signin', async (req, res) => {
             const verified = await bcyrpt.compare(password, userExist.password);
 
             if (verified) {
-                const token = await userExist.generateAuthToken();
-                //console.log(token);
-                res.cookie("jwttoken", token, {
-                    expires: new Date(Date.now() + 25892000000),
-                    httpOnly: true
-                });
-
-                return res.status(200).json({ message: 'You can Access' })
+                
+                return res.status(200).json({userExist})
 
             }
             else {
@@ -93,11 +85,7 @@ router.post('/Signin', async (req, res) => {
 }
 )
 
-router.get('/', authenticate, (req,res)=>{
-    res.cookie("Token", 'ICARCookie');
-    res.send('Home Page of router');
-    
-})
+
 
 
 

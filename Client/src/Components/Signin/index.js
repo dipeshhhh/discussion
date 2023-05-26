@@ -1,14 +1,24 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import swal from 'sweetalert'
 import Img from './logo.png'
 import './index.css'
 import Content from './content'
 import './captcha'
 import axios from 'axios'
-import {NavLink, useNavigate} from 'react-router-dom'
+import {useNavigate} from 'react-router-dom'
 
 const Index = () => {
     const navigate = useNavigate()
+
+    //if user already login then it will not redirect to auth page
+    useEffect (()=>{
+        const auth = sessionStorage.getItem('username')
+        if(auth)
+        {
+          navigate('/')
+        }
+      })
+
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [register, setRegister] = useState(false)
@@ -95,7 +105,8 @@ const handleLogin= async (e)=>{
         email,
         password
     }).then((resp)=>{
-        console.log(resp)
+        const UserName = resp.data.userExist     
+        sessionStorage.setItem('user',UserName);
         navigate('/')
         
     },(problem) => {

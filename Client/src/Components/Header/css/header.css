@@ -64,13 +64,33 @@ header{
   }
 
 .header-right{
-    display: flex;
+    /* display: flex; */
 }
+
+.header-right > h4{
+    color: rgb(15, 93, 21);
+    animation: blinker 1s linear infinite;
+}
+@keyframes blinker {
+    50% {
+      opacity: 0;
+    }
+  }
+
 .header-right-container{  
     display: flex;
     align-content: center;
     padding: 5px 10px;
 }
+
+.header-right-container> p {
+   cursor: pointer;
+   margin-top: 12px;
+}
+p:hover{
+    color:#a71c0c;
+}
+
 .header-right-container > .MuiSvgIcon-root{
     color: rgba(0,0,0,0.534);
     padding: 10px 5px;
