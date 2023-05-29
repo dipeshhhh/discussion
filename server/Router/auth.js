@@ -3,6 +3,8 @@ const router = express.Router();
 require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
+const Question = require('../DB/Questions')
+const Answer = require('../DB/Answer')
 
 
 // using of promise
@@ -93,6 +95,11 @@ router.post('/Signin', async (req, res) => {
     }
 }
 )
+
+router.use('/Question',Question)
+
+
+
 
 
 
