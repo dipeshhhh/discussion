@@ -17,6 +17,10 @@ const Userschema = new mongoose.Schema({
         type:String,
         required:true
     },
+    status:{
+        type:Number,
+        required:true
+    }
     });
 
 Userschema.pre('save', async function(next){

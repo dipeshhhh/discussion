@@ -9,7 +9,7 @@ const Header = () => {
   const navigate = useNavigate()
  
   const auth = sessionStorage.getItem('username')
-  console.log(auth.name)
+  console.log(auth)
   const logout = () => {
         sessionStorage.clear('username')
         navigate('/auth')

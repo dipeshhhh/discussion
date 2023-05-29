@@ -6,6 +6,7 @@ import Content from './content'
 import './captcha'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
+import { Helmet } from 'react-helmet';
 
 const Index = () => {
     const navigate = useNavigate()
@@ -42,7 +43,7 @@ const Index = () => {
       }
 /// Registration button function call here
        const handleRegister= async (e)=>{
-       
+       const status=0
         e.preventDefault()
         setLoading(true)
         const {name, email, division, password, cpassword} = user
@@ -63,24 +64,45 @@ const Index = () => {
             setUSer({password:'',cpassword:''})
             setLoading(false);
         }
-        else{          
-
-            const resp =await axios.post('/Signup',
+        else{    
+                  
+            try{
+                const resp =await axios.post('/Signup',
                 {
                     name,
                     email,
                     division,
-                    password
+                    password,
+                    status
                     
-                }).then((resp) => {
+                }).then((resp)=>{
                     swal("Signup Successfully")
                     window.location.reload(false)
                     setLoading(false)
-                  }, (problem) => {
-                    setError("User Already exist")
-                    setLoading(false)
+                })
+            }
+            catch(err)
+            {
+                setError(err.response.data.err)
+                setLoading(false);
+            }
+            // const resp =await axios.post('/Signup',
+            //     {
+            //         name,
+            //         email,
+            //         division,
+            //         password,
+            //         status
+                    
+            //     }).then((resp) => {
+            //         swal("Signup Successfully")
+            //         window.location.reload(false)
+            //         setLoading(false)
+            //       }, (problem) => {
+            //         setError("User Already exist")
+            //         setLoading(false)
 
-                  });
+            //       });
            
         }
         
@@ -101,25 +123,32 @@ const handleLogin= async (e)=>{
         setLoading(false);
     }
     else{
-    const resp = await axios.post('/Signin', {
-        email,
-        password
-    }).then((resp)=>{
-        const UserName = resp.data.userExist     
-        sessionStorage.setItem('user',UserName);
-        navigate('/')
-        
-    },(problem) => {
-        setError('Wrong Credentails')
-        setUSer({email:'',password:''})
-        setLoading(false)
-      })
-
+    try{
+        const resp = await axios.post('/Signin', {
+            email,
+            password
+        }).then((resp)=>{
+            const UserName = resp.data.userExist.email
+            const UserID = resp.data.userExist._id 
+            const User = resp.data.userExist._id
+            const UserDivision = resp.data.userExist.division       
+            sessionStorage.setItem('username',UserName)
+            navigate('/')
+        })
+        }
+        catch(err) {
+            setError(err.response.data.err)
+            setLoading(false);
+        }
+    
     }
         }
 
   return (
-    <div className='auth'>
+        <div className='auth'>
+            <Helmet>
+        <title>Discussion Forum | Auth</title>
+      </Helmet>
         <div className='auth-container'>
                 <div className='landing_page'>
                     <div className='pull-right'>
