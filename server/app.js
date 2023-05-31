@@ -10,8 +10,7 @@ const PORT = process.env.PORT;
 // Link the router file
 app.use(express.json());
 app.use(require('./Router/auth'));
-
-
+app.use(require('./Router/Questions'));
 
 
 app.listen(PORT, ()=>{
