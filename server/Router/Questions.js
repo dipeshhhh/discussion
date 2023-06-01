@@ -2,27 +2,41 @@ const express = require('express');
 const router = express.Router();
 require('../DB/conn');
 const Question = require('../DB/Questions')
+const multer  = require('multer')
 
-router.post('/Question', async(req,res)=>{
-    const {title, body, post_at, file} = req.body;
-    const u_id = sessionStorage.getItem('username')
-    try{
-        const data = new Question({u_id, title, body, post_at, file});
-        const result = await data.save()
-
-        if(result)
+const storage = multer.diskStorage({
+        destination:function(req,file,cb)
         {
-            console.log(result)
-        res.status(201).json({message: 'inserted'})
+            cb(null,'../Uploads/')
+        },
+        filename:function(req,file,cb)
+        {
+            cb(null, file.fieldname+Date.now().toString()+'.pdf')
         }
-        else{
-        console.log('error')
-        return res.status(402).json({ err: 'not inserted' }) 
-        }
-    }
-    catch{
-        console.log(err);
-    }
+    })
+
+var upload = multer({storage:storage})
+
+router.post('/Question', upload.single('file'), async(req,res)=>{
+    console.log({title, body,auth} = req.body)  
+    
+    // try{   
+    //     const data = new Question({auth, title, body, file});
+    //     const result = await data.save()
+
+    //     if(result)
+    //     {
+    //         console.log(result)
+    //     res.status(201).json({message: 'inserted'})
+    //     }
+    //     else{
+    //     console.log('error')
+    //     return res.status(402).json({ err: 'not inserted' }) 
+    //     }
+    // }
+    // catch (err){
+    //     console.log(err);
+    // }
 })
 
 module.exports = router;

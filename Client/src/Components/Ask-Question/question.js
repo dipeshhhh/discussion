@@ -2,29 +2,78 @@ import React, {useState} from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // quill css 
 import './question.css'
+import axios from 'axios'
+
 const Question = () => {
 
-  // const [loading, setLoading] = useState(false);
-  // const [error, setError] = useState("");
-  const [post_question, setQuestion] = useState({
-    title:'',content:'',document:''
-    })
-
-    let name, value 
-    const handlequestion = (e)=>{
-       
-        name =e.target.name
-        value =e.target.value
-
-        setQuestion({...post_question, [name]:value})
+  const auth = sessionStorage.getItem('username')
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");  
+    const [title, setTitle] =useState('')
+    const [body, setBody] = useState('')    
+    const handleQuill = (value) => {
+      setBody(value)
     }
+
+    // const handleFileChange = (event) => {
+      
+    //    // setFile(event.target.files);
+    //    setFile(event.target.files)
+      
+    // }
+
 
     const add_question = async(e) => {
-      e.preventDefault()
-      console.log(post_question)
-    }
+      
+      setLoading(true)
+      e.preventDefault() 
+    
+    // const fileSizeKiloBytes = file.size / 1024
+    // const extension = file.type.split('/').pop();
+    // const docName = file.name
+      if(!title || !body)
+      {
+          setError("Something missing");
+          setLoading(false);
+      }
+      else if (title.length > 250)
+      {
+        setError("Title Character should be about 200 Characters");
+        setLoading(false);
+      }      
+        // else if(extension!='pdf')
+        // {
+        //   setError("File shoud in pdf only");
+        //   setLoading(false);
+        // }
+        // else if(fileSizeKiloBytes > 5120)
+        // {
+        //   setError("File shoud be not more than 5 MB");
+        //   setLoading(false);
+        // }   
+     
+      else
+      {   
+          
+        try{
 
-  
+          const resp = await axios.post('/Question', {
+              title,
+              body,              
+              auth
+            
+          }).then((resp) =>{
+            alert('Post Update Successfully')
+            window.location.reload(false)
+            setLoading(false)
+          })
+        }
+        catch(err)
+        {
+          setError(err)
+        }
+      }
+    } 
 
 
   return (
@@ -41,9 +90,8 @@ const Question = () => {
           <div className='title'>
             <h3>Title</h3>
             <small>Be specific and imagine you're asking a question to Group Member</small>
-            <input type="text" name='title' 
-             value={post_question.title}
-             onChange={handlequestion}
+            <input type="text" value={title} onChange={(e)=> setTitle(e.target.value)}
+             
             placeholder='Add the question title' />
           </div>
         </div>
@@ -51,25 +99,27 @@ const Question = () => {
           <div className='body'>
             <h3>Body</h3>
             <small>Include all the information someone would need to answer your question</small>
-             <ReactQuill className='react-quill' name='content'
-            value={post_question.content}
-            onChange={handlequestion}
-             theme='snow'/>
-          </div>
+             <ReactQuill value={body} onChange={handleQuill} className='react-quill'theme='snow'/>
+             </div>
         </div>
 
         <div className='question-option'>
           <div className='attachment'>
             <h3>Attach file if any(only PDF with 5 MB)</h3>
-            <input label="File upload" type="file" name='document' 
-              value={post_question.document}
-              onChange={handlequestion}
-            placeholder="Select file..." />
+            <input label="File upload" type="file" name='file'
+              placeholder="Select file..." />
           </div>
         </div>
         </div>
       </div>
-      <button className='button' onClick={add_question}>Add Your Question</button>
+      <button className='button' onClick={add_question}>
+      {loading ? "Posting..." : "Post"}
+        </button>
+      {error !== "" && (
+      <p style={{ color: "red", fontSize: "14px"}} >
+          {error}
+      </p>
+      )}  
       </div>
 
     </div>
