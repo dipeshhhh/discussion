@@ -10,27 +10,34 @@ const Question = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");  
     const [title, setTitle] =useState('')
-    const [body, setBody] = useState('')    
+    const [body, setBody] = useState('')
+    const [file,setFile] = useState('')
     const handleQuill = (value) => {
       setBody(value)
     }
 
-    // const handleFileChange = (event) => {
-      
-    //    // setFile(event.target.files);
-    //    setFile(event.target.files)
-      
-    // }
-
+   const handleFileChange = (event) => {
+       
+        setFile(event.target.files[0])      
+     
+    };  
 
     const add_question = async(e) => {
       
-      setLoading(true)
-      e.preventDefault() 
+    setLoading(true)
+    e.preventDefault() 
+
+    const data = new FormData()
+
+    data.append('file', file)
+    data.append('title',title)
+    data.append('body',body)
+    data.append('auth',auth)
     
-    // const fileSizeKiloBytes = file.size / 1024
-    // const extension = file.type.split('/').pop();
-    // const docName = file.name
+    
+    const fileSizeKiloBytes = file.size / 1024
+    const extension = file.type.split('/').pop();
+   
       if(!title || !body)
       {
           setError("Something missing");
@@ -41,37 +48,39 @@ const Question = () => {
         setError("Title Character should be about 200 Characters");
         setLoading(false);
       }      
-        // else if(extension!='pdf')
-        // {
-        //   setError("File shoud in pdf only");
-        //   setLoading(false);
-        // }
-        // else if(fileSizeKiloBytes > 5120)
-        // {
-        //   setError("File shoud be not more than 5 MB");
-        //   setLoading(false);
-        // }   
+        else if(extension!='pdf')
+        {
+          setError("File shoud in pdf only");
+          setLoading(false);
+        }
+        else if(fileSizeKiloBytes > 5120)
+        {
+          setError("File shoud be not more than 5 MB");
+          setLoading(false);
+        }   
      
       else
-      {   
-          
-        try{
+      {    
+        let xyz = ``
+        
+        try {
+          axios.post("/Question",data).then(res => {
 
-          const resp = await axios.post('/Question', {
-              title,
-              body,              
-              auth
-            
-          }).then((resp) =>{
-            alert('Post Update Successfully')
-            window.location.reload(false)
-            setLoading(false)
-          })
+                console.log(res)
+                // alert('Post Update Successfully')
+                // window.location.reload(false)
+                // setLoading(false)
+
+
+              })
         }
-        catch(err)
-        {
-          setError(err)
+        catch (err) {
+          console.log(err)
         }
+        
+        
+        
+       
       }
     } 
 
@@ -106,7 +115,7 @@ const Question = () => {
         <div className='question-option'>
           <div className='attachment'>
             <h3>Attach file if any(only PDF with 5 MB)</h3>
-            <input label="File upload" type="file" name='file'
+            <input label="File upload" type="file" name='file' onChange={handleFileChange}
               placeholder="Select file..." />
           </div>
         </div>
