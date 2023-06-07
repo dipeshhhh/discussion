@@ -133,7 +133,9 @@ const handleLogin= async (e)=>{
             const User = resp.data.userExist._id
             const UserDivision = resp.data.userExist.division       
             sessionStorage.setItem('username',UserName)
+            alert('Welcome to ICAR Discussion Forum')           
             navigate('/')
+            
         })
         }
         catch(err) {

@@ -7,7 +7,8 @@ const QuestionSchema = new mongoose.Schema({
         type:Date,
         default:Date.now()
     },
-    file:String
+    file:String,
+    group:String
     
 })
 

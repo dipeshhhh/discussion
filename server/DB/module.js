@@ -9,10 +9,7 @@ const Userschema = new mongoose.Schema({
         type:String,
         required:true
     },
-    division:{
-        type:String,
-        required:true
-    },
+    division:[String],
     password:{
         type:String,
         required:true

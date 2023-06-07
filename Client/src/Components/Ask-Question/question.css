@@ -78,6 +78,34 @@
     border: 1px solid #0054ff;
     box-shadow: 0 4px 8px 0 #0055ff23, 0 6px 20px 0 #0055ff11;
   }
+  .group  {
+    display: flex;
+    flex-direction: column;
+    margin: 10px 0px;
+    font-size: 0.9rem;
+  }
+
+  .group > h3 {
+    color: rgba(0, 0, 0, 0.8);
+    font-weight: 500;
+  }
+
+  .group > select 
+  {
+    margin: 5px 0px;
+    padding: 10px;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 3px;
+    outline: none;
+  }
+  
+  .group > select:focus {
+    border: 1px solid #0054ff;
+    box-shadow: 0 4px 8px 0 #0055ff23, 0 6px 20px 0 #0055ff11;
+  }
+
+
+
 
   .attachment {
     display: flex;

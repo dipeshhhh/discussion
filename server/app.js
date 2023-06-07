@@ -11,6 +11,7 @@ const PORT = process.env.PORT;
 app.use(express.json());
 app.use(require('./Router/auth'));
 app.use(require('./Router/Questions'));
+app.use(require('./Router/Answers'));
 
 
 app.listen(PORT, ()=>{

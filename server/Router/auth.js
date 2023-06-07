@@ -3,8 +3,6 @@ const router = express.Router();
 require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
-const Answer = require('../DB/Answer')
-
 
 // using of promise
 /*router.post('/Signup', (req,res)=>{
