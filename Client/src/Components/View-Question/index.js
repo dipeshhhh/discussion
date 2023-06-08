@@ -1,9 +1,11 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import './index.css'
 import Sidebar from '../sidebar/sidebar'
 import Main from './mainquestion'
-const index = () => {
-  return (
+import axios from 'axios'
+const Index = () => {
+
+   return (
     <div className='stack-index'>
         <div className='stack-index-content'>
             <Sidebar/>
@@ -13,4 +15,4 @@ const index = () => {
   )
 }
 
-export default index
+export default Index

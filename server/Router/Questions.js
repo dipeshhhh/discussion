@@ -65,30 +65,30 @@ router.post('/Question', upload,async(req,res)=>{
     }
 })
 
-router.get('/Question', async(req,res)=>{
+router.get('/Question/:id', async(req,res)=>{
 
-  
-let result = await User.findOne({ email: 'chhavi@icar.gov.in'})
 
-let result1 = result.division
-
-    
-    Question.aggregate([
-        {
-              
-            $match :{
-                group: {
-                    $in: result1
-                }
-             }
-            
-        }
-
-    ])
+        let email = req.params.id
        
+        
+        User.aggregate([
+            {
+                $lookup: {
+                    from:'questions',
+                    localField:'division',
+                    foreignField:'group',
+                    as:'result'
+                }
+            },
+            {
+                $match:{email:email}
+            }
+           
+        ])
         .then((resp)=>{
            
-               res.status(200).json({status:'success', data:resp})
+               return res.status(200).json({status:'success', data:resp})
+              
             })
             .catch((e)=>{
                 console.log("Error:", e)
@@ -98,61 +98,61 @@ let result1 = result.division
     
 })
 
-router.get('/Question/:id', async(req,res)=>{
-    try{
+// router.get('/Question/:id', async(req,res)=>{
+//     try{
 
-        QuestionDB.aggregate([
-            {
-                $match:{_id: mongoose.Types.ObjectId(req.params.id)},
-            },
-            {
+//         QuestionDB.aggregate([
+//             {
+//                 $match:{_id: mongoose.Types.ObjectId(req.params.id)},
+//             },
+//             {
             
-                $lookup:{
-                    from: "answers",
-                    let: { question_id:"$_id"},
-                    pipline:[
-                        {
-                            $match:{
-                                $expr: {
-                                    $eq:['$question_id','$$question_id'],
-                                },
-                            },
-                        },
-                        {
-                            $project:{
-                                _id:1,
-                                auth:1,
-                                reply:1,
-                                question_id:1,
-                                created_at:1,
-                                file:1
-                            },
-                        },
-                    ],
-                    as:"answerDetails",
-                },
-            }, 
-            {
-                $project: {
-                    _v:0,
-                },
-            },
-        ])
-        .exec()
-    .then((questionDetails)=>{
-        res.send(200).send(questionDetails)
-    })
-    .catch((e)=>{
-        console.log("Error:", e)
-        res.status(400).send(e)
-    })        
+//                 $lookup:{
+//                     from: "answers",
+//                     let: { question_id:"$_id"},
+//                     pipline:[
+//                         {
+//                             $match:{
+//                                 $expr: {
+//                                     $eq:['$question_id','$$question_id'],
+//                                 },
+//                             },
+//                         },
+//                         {
+//                             $project:{
+//                                 _id:1,
+//                                 auth:1,
+//                                 reply:1,
+//                                 question_id:1,
+//                                 created_at:1,
+//                                 file:1
+//                             },
+//                         },
+//                     ],
+//                     as:"answerDetails",
+//                 },
+//             }, 
+//             {
+//                 $project: {
+//                     _v:0,
+//                 },
+//             },
+//         ])
+//         .exec()
+//     .then((questionDetails)=>{
+//         res.send(200).send(questionDetails)
+//     })
+//     .catch((e)=>{
+//         console.log("Error:", e)
+//         res.status(400).send(e)
+//     })        
 
-    }
-    catch(err)
-    {
+//     }
+//     catch(err)
+//     {
 
-    }
-})
+//     }
+// })
 
 module.exports = router;
 

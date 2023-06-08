@@ -1,8 +1,25 @@
-import React from 'react'
+import React, {useState, useEffect} from 'react'
 import './css/index.css'
 import Sidebar from './sidebar'
 import Main from './main'
-const index = () => {
+import axios from 'axios'
+const Index = () => {
+
+  const [questions, setQuestions] = useState([])
+  const auth = sessionStorage.getItem('username')
+  useEffect(()=>{
+    async function getQuestion()
+    {
+      await axios.get(`/Question/${auth}`).then((res)=>{
+        console.log(res)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+    getQuestion()
+  },[])
+
+
   return (
     <div className='stack-index'>
         <div className='stack-index-content'>
@@ -13,4 +30,4 @@ const index = () => {
   )
 }
 
-export default index
+export default Index
