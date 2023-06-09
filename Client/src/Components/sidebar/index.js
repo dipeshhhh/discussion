@@ -3,6 +3,8 @@ import './css/index.css'
 import Sidebar from './sidebar'
 import Main from './main'
 import axios from 'axios'
+
+
 const Index = () => {
 
   const [questions, setQuestions] = useState([])
@@ -11,7 +13,9 @@ const Index = () => {
     async function getQuestion()
     {
       await axios.get(`/Question/${auth}`).then((res)=>{
-        console.log(res)
+        
+        // console.log(res.data)
+        setQuestions(res.data)
       }).catch((err)=>{
         console.log(err)
       })
@@ -22,9 +26,10 @@ const Index = () => {
 
   return (
     <div className='stack-index'>
+
         <div className='stack-index-content'>
             <Sidebar/>
-            <Main/>
+            <Main questions= {questions} />
         </div>
     </div>
   )

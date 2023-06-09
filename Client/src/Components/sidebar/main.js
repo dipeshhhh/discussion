@@ -3,7 +3,8 @@ import { NavLink } from 'react-router-dom'
 import FilterListIcon from '@mui/icons-material/FilterList';
 import AllQuestions from './AllQuestions';
 import './css/main.css'
-const main = () => {
+const main = ({questions}) => {
+   
   return (
     <div className='main'>
       <div className='main-container'>
@@ -14,7 +15,7 @@ const main = () => {
           </NavLink>
         </div>
         <div className='main-dec'>
-          <p>All Questions</p>
+          <p></p>
         <div className='main-filter'>
           <div className='main-tabs'>
             <div className='main-tab'>
@@ -42,12 +43,16 @@ const main = () => {
         </div>
         </div>
         <div className='questions'>
-        <div className='question'>
-              <AllQuestions/>
-              <AllQuestions/>
-              <AllQuestions/>
-              <AllQuestions/>
-            </div>
+          {questions.map((_q,index)=> (<>
+          <div key= {index} className='question'>
+            
+            <AllQuestions question={_q}/>
+          
+        
+              
+            
+             </div>
+             </> ))}
         </div>
         
       </div>

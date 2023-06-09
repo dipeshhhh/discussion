@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 require('../DB/conn');
-
 const Question = require('../DB/Questions')
 const User = require('../DB/module')
 const multer  = require('multer');
 const { default: mongoose } = require('mongoose');
+const { ObjectId } = require('mongodb');
+
 
 const storage = multer.diskStorage({
         destination:function(req,file,cb)
@@ -82,12 +83,13 @@ router.get('/Question/:id', async(req,res)=>{
             },
             {
                 $match:{email:email}
-            }
+            },             
            
         ])
+        .exec()
         .then((resp)=>{
            
-               return res.status(200).json({status:'success', data:resp})
+               return res.status(200).send(resp)
               
             })
             .catch((e)=>{
@@ -98,61 +100,40 @@ router.get('/Question/:id', async(req,res)=>{
     
 })
 
-// router.get('/Question/:id', async(req,res)=>{
-//     try{
+router.get('/Question-detail/:id', (req,res)=>{
 
-//         QuestionDB.aggregate([
-//             {
-//                 $match:{_id: mongoose.Types.ObjectId(req.params.id)},
-//             },
-//             {
+    
+    const id = new ObjectId(req.params.id)
+        
+   
+    Question.aggregate([
+            {
+                $match: {_id:id},
+            },
+            {
+                $lookup: {
+                    from:'answers',
+                    localField:'_id',
+                    foreignField:'question_id',
+                    as:'result'
+                }
+            }
             
-//                 $lookup:{
-//                     from: "answers",
-//                     let: { question_id:"$_id"},
-//                     pipline:[
-//                         {
-//                             $match:{
-//                                 $expr: {
-//                                     $eq:['$question_id','$$question_id'],
-//                                 },
-//                             },
-//                         },
-//                         {
-//                             $project:{
-//                                 _id:1,
-//                                 auth:1,
-//                                 reply:1,
-//                                 question_id:1,
-//                                 created_at:1,
-//                                 file:1
-//                             },
-//                         },
-//                     ],
-//                     as:"answerDetails",
-//                 },
-//             }, 
-//             {
-//                 $project: {
-//                     _v:0,
-//                 },
-//             },
-//         ])
-//         .exec()
-//     .then((questionDetails)=>{
-//         res.send(200).send(questionDetails)
-//     })
-//     .catch((e)=>{
-//         console.log("Error:", e)
-//         res.status(400).send(e)
-//     })        
+        ]).exec()
+            .then((resp) => {
 
-//     }
-//     catch(err)
-//     {
+                return res.status(200).send(resp)
 
-//     }
-// })
+            })
+            .catch((e) => {
+                console.log("Error:", e)
+                res.status(400).send(e)
+            })
+        
+     
+   
+    
+})
 
 module.exports = router;
 

@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import './css/sidebar.css'
+import parse from 'html-react-parser'
 const sidebar = () => {
   return (
     <div className='sidebar'>

@@ -7,12 +7,22 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // quill css 
 
 
+
+
 import './index.css'
 
-const mainquestion = () => {
+const Mainquestion = (details) => {
 
+  
+  
+  
+  
+  
+ 
+  
   return (
     <div className='main'>
+      
       <div className='main-container'>
         <div className='main-top'>
           <h2 className='main-question'>This is question title</h2>
@@ -43,7 +53,7 @@ const mainquestion = () => {
                 </div>
               </div>
               <div className='question-answer'>
-                <p>This is quetion body </p>
+                <p>This is quetion body</p>
                 <div className='author'>
                   <small>Asked "Timestamp"</small>
                   <div className='auth-details'>
@@ -79,8 +89,9 @@ const mainquestion = () => {
                 <HistoryIcon />
                 </div>
               </div>
+            
               <div className='question-anser'>
-              
+             dsfsdfsdfsdfsdfsdfsdfsdfsd
                 <div className='author'>
                   <small>asked "Timestamp"</small>
                   <div className='auth-details'>
@@ -105,4 +116,4 @@ const mainquestion = () => {
   )
 }
 
-export default mainquestion
+export default Mainquestion
