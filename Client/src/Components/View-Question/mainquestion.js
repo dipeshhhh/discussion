@@ -14,6 +14,12 @@ import './index.css'
 const Mainquestion = (details) => {
 
   
+  let detail = details.details
+
+  let answer = detail.result
+
+  console.log(answer)
+  
   
   
   

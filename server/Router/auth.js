@@ -4,6 +4,7 @@ require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
 
+
 // using of promise
 /*router.post('/Signup', (req,res)=>{
     const {name, email, password} = req.body;
@@ -92,5 +93,15 @@ router.post('/Signin', async (req, res) => {
     }
 }
 )
+
+
+router.get('/user-detail/:id',(req,res)=>{
+
+    Users.findOne({email:req.params.id}).then((resp)=>{
+        res.status(200).send(resp)
+    }).catch((e)=>{
+       res.status(400).send(e)
+    })
+})
 
 module.exports = router;

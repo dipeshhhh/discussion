@@ -1,21 +1,42 @@
-import React, { useEffect } from 'react';
+import React, { useState ,useEffect } from 'react';
 import './css/header.css';
 import logo from '../images/logo.png';
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom'
+import axios from 'axios';
 
 
 const Header = () => {
   const navigate = useNavigate()
  
   const auth = sessionStorage.getItem('username')
-  console.log(auth)
+  // console.log(auth)
   const logout = () => {
         sessionStorage.clear('username')
+        
         navigate('/auth')
   }   
 
+  const [userdetail , setUserDetail] = useState('')
 
+  useEffect(()=>{
+    async function getUser()
+    {
+      await axios.get(`/user-detail/${auth}`).then((res)=>{
+        
+        
+        setUserDetail(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+    getUser()
+  },[]) 
+
+
+  // const user = userdetail[0]
+  
+  console.log(userdetail.name)
 
    return (
     <header>
@@ -34,7 +55,10 @@ const Header = () => {
         {
           auth ? 
               <div className='header-right'>
-                <h4>User Name</h4>
+               
+                     <h4>User Name</h4>
+                  
+               
                 <div className='header-right-container'>
                   <p href="#" onClick={logout} >
                     <i class="fa-solid fa-right-from-bracket"></i>  Log out
