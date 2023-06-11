@@ -47,6 +47,7 @@ const Index = () => {
         e.preventDefault()
         setLoading(true)
         const {name, email, division, password, cpassword} = user
+        console.log(user)
         if(!name || !email || !division || !password || !cpassword )
         {
             setError("Something missing");
@@ -61,7 +62,7 @@ const Index = () => {
         {
             
             setError("Password is not Matched");
-            setUSer({password:'',cpassword:''})
+            // setUSer({password:'',cpassword:''})
             setLoading(false);
         }
         else{    
@@ -180,19 +181,19 @@ const handleLogin= async (e)=>{
                               <div className='input-field'>
                                   <p>Select Division</p>
                                   <select name="division" onChange={handleInput} value={user.division} id="divsion">
-                                  <option>--Select Organization--</option>
-                                  <option>Agricultural Education </option>
-                                  <option>Agricultural Engineering</option>
-                                  <option>Agricultural Extension</option>
-                                  <option>Animal Science</option>
-                                  <option>Crop Science</option>
-                                  <option>Fisheries Science</option>
-                                  <option>Horticulture Science</option>
-                                  <option>Natural Resource Management</option>
-                                  <option>Administration</option>
-                                  <option>Finance</option>
-                                  <option>Social Science</option>
-                                  <option>Technical</option>
+                                  <option value=''>--Select Organization--</option>
+                                  <option value='Agricultural Education'>Agricultural Education </option>
+                                  <option value='Agricultural Engineering'>Agricultural Engineering</option>
+                                  <option value='Agricultural Extension'>Agricultural Extension</option>
+                                  <option value='Animal Science'>Animal Science</option>
+                                  <option value='Crop Science'>Crop Science</option>
+                                  <option value='Fisheries Science'>Fisheries Science</option>
+                                  <option value='Horticulture Science'>Horticulture Science</option>
+                                  <option value='Natural Resource Management'>Natural Resource Management</option>
+                                  <option value='Administration'>Administration</option>
+                                  <option value='Finance'>Finance</option>
+                                  <option value='Social Science'>Social Science</option>
+                                  <option value='Technical'>Technical</option>
                                   </select>
                               </div>
                               <div className='input-field'>
