@@ -76,7 +76,7 @@ router.get('/Question/:id', async(req,res)=>{
             {
                 $lookup: {
                     from:'questions',
-                    localField:'division',
+                    localField:'Group',
                     foreignField:'group',
                     as:'result'
                 }

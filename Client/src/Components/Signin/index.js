@@ -24,7 +24,7 @@ const Index = () => {
     const [error, setError] = useState("");
     const [register, setRegister] = useState(false)
     const [user, setUSer] = useState({
-        name:'',email:'',division:'',password:'',cpassword:''
+        name:'',email:'',password:'',cpassword:''
     })
     let name, value 
     const handleInput = (e)=>{
@@ -46,9 +46,9 @@ const Index = () => {
        const status=0
         e.preventDefault()
         setLoading(true)
-        const {name, email, division, password, cpassword} = user
+        const {name, email,password, cpassword} = user
         console.log(user)
-        if(!name || !email || !division || !password || !cpassword )
+        if(!name || !email || !Divisionid || !password || !cpassword || !Smdid )
         {
             setError("Something missing");
             setLoading(false);
@@ -62,7 +62,7 @@ const Index = () => {
         {
             
             setError("Password is not Matched");
-            // setUSer({password:'',cpassword:''})
+            
             setLoading(false);
         }
         else{    
@@ -72,7 +72,8 @@ const Index = () => {
                 {
                     name,
                     email,
-                    division,
+                    Divisionid,
+                    Smdid,
                     password,
                     status
                     
@@ -86,28 +87,10 @@ const Index = () => {
             {
                 setError(err.response.data.err)
                 setLoading(false);
-            }
-            // const resp =await axios.post('/Signup',
-            //     {
-            //         name,
-            //         email,
-            //         division,
-            //         password,
-            //         status
-                    
-            //     }).then((resp) => {
-            //         swal("Signup Successfully")
-            //         window.location.reload(false)
-            //         setLoading(false)
-            //       }, (problem) => {
-            //         setError("User Already exist")
-            //         setLoading(false)
-
-            //       });
+            }          
            
         }
-        
-        
+                
       }
       
 const handleLogin= async (e)=>{
@@ -130,9 +113,9 @@ const handleLogin= async (e)=>{
             password
         }).then((resp)=>{
             const UserName = resp.data.userExist.email
-            const UserID = resp.data.userExist._id 
-            const User = resp.data.userExist._id
-            const UserDivision = resp.data.userExist.division       
+            // const UserID = resp.data.userExist._id 
+            // const User = resp.data.userExist._id
+            // const UserDivision = resp.data.userExist.division       
             sessionStorage.setItem('username',UserName)
             alert('Welcome to ICAR Discussion Forum')           
             navigate('/')
@@ -146,6 +129,76 @@ const handleLogin= async (e)=>{
     
     }
         }
+        
+    
+
+      const [Smd , setSmd] = useState([])
+      const [Smdid, setSmdid] = useState('')
+      const [Division, setDivision]= useState([])
+      const [Divisionid, setDivisionid]= useState('')
+      const [enable, setEnable] = useState(true)
+
+         
+    //Here We fetch the SMD division data from server 
+        useEffect(()=>{
+          async function getSmd()
+          {
+            await axios.get('/smddetail').then((res)=>{
+               
+                // console.log(res.data)
+                setSmd(res.data)
+            }).catch((err)=>{
+              console.log(err)
+            })
+          }
+          getSmd()
+        },[])      
+       
+
+        const handleSmd = async (e)=>{           
+
+            const Smdname = e.target.value
+           
+
+            if(Smdname!='')
+            {
+                   
+                await axios.get(`/smddetail/${Smdname}`).then((res)=>{
+                    
+                    setDivision(res.data)
+                    setSmdid(Smdname)
+                    setEnable(false)
+
+                   
+                    }).catch((err)=>{
+                  console.log(err)
+                })
+
+               
+            }
+            else
+            {
+                setDivision([])
+                setEnable(true)
+
+            }
+        }
+
+
+        const handeDivision = async (e)=>{
+           setDivisionid(e.target.value)
+            
+        }
+
+
+        // console.log(Smdid,Divisionid)
+       
+       
+        
+        
+        
+      
+               
 
   return (
         <div className='auth'>
@@ -179,10 +232,16 @@ const handleLogin= async (e)=>{
                               </div>
 
                               <div className='input-field'>
-                                  <p>Select Division</p>
-                                  <select name="division" onChange={handleInput} value={user.division} id="divsion">
-                                  <option value=''>--Select Organization--</option>
-                                  <option value='Agricultural Education'>Agricultural Education </option>
+                                  <p>Select SMD</p>
+                                  <select name="division" onChange={(e)=>handleSmd(e)} id="smd">
+                                  <option value=''>--Select SMD--</option> 
+                                  {
+                                    Smd.map((data)=>
+                                      
+                                        <option value={data.name}>{data.name}</option>
+                                    )
+                                  }                                                                  
+                                  {/* <option value='Agricultural Education'>Agricultural Education </option>
                                   <option value='Agricultural Engineering'>Agricultural Engineering</option>
                                   <option value='Agricultural Extension'>Agricultural Extension</option>
                                   <option value='Animal Science'>Animal Science</option>
@@ -193,7 +252,21 @@ const handleLogin= async (e)=>{
                                   <option value='Administration'>Administration</option>
                                   <option value='Finance'>Finance</option>
                                   <option value='Social Science'>Social Science</option>
-                                  <option value='Technical'>Technical</option>
+                                  <option value='Technical'>Technical</option> */}
+                                  </select>
+                              </div>
+                              <div className='input-field'>
+                                  <p>Select Division</p>
+                                  <select disabled={enable} onChange={(e)=>{handeDivision(e)}} id="division">
+                                  <option value=''>--Select Division--</option>
+                                  {
+                                     Division.map((resp)=>
+                                        resp.division.map((res)=>
+                                        <option value={res}>{res}</option>
+                                        )
+                                    )
+                                  }
+                                 
                                   </select>
                               </div>
                               <div className='input-field'>
