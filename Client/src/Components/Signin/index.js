@@ -108,7 +108,7 @@ const handleLogin= async (e)=>{
     }
     else{
     try{
-        const resp = await axios.post('/Signin', {
+        axios.post('/Signin', {
             email,
             password
         }).then((resp)=>{

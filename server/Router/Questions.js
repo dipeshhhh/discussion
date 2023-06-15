@@ -100,39 +100,54 @@ router.get('/Question/:id', async(req,res)=>{
     
 })
 
-router.get('/Question-detail/:id', (req,res)=>{
+router.get('/Question-detail/:id', (req, res) => {
 
-    
+
     const id = new ObjectId(req.params.id)
-        
-   
+
+
     Question.aggregate([
-            {
-                $match: {_id:id},
-            },
-            {
-                $lookup: {
-                    from:'answers',
-                    localField:'_id',
-                    foreignField:'question_id',
-                    as:'result'
-                }
+        {
+            $match: { _id: id },
+        },
+        {
+            $lookup: {
+                from: 'answers',
+                localField: '_id',
+                foreignField: 'question_id',
+                as: 'result'
             }
-            
-        ]).exec()
-            .then((resp) => {
+        }
 
-                return res.status(200).send(resp)
+    ]).exec()
+        .then((resp) => {
 
-            })
-            .catch((e) => {
-                console.log("Error:", e)
-                res.status(400).send(e)
-            })
-        
-     
-   
-    
+            return res.status(200).send(resp)
+
+        })
+        .catch((e) => {
+            console.log("Error:", e)
+            res.status(400).send(e)
+        })
+})
+
+
+router.get('/deletepost/:id', (req, res) => {
+
+
+    const id = new ObjectId(req.params.id)
+
+
+    Question.deleteOne({_id:id})
+        .then((resp) => {
+
+            return res.status(200).send(resp)
+
+        })
+        .catch((e) => {
+            console.log("Error:", e)
+            res.status(400).send(e)
+        })
 })
 
 module.exports = router;
