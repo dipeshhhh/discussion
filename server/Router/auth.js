@@ -3,23 +3,42 @@ const router = express.Router();
 require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
-const SmdDivision = require('../DB/SMDDivision')
+const Groupdivision = require('../DB/Group')
 
 //Signup Page query
+
+
 router.post('/Signup', async (req,res)=>{
-    const {name, email, Divisionid, Smdid, password,status} = req.body;
-        
+
+   let {name, email, Divisionid, Smdid, password,status} = req.body;
+    
+
     try{
+      
     const userExist = await Users.findOne({email:email})
     if(!userExist)
     {
-        const data = new Users({name, email, Divisionid, Smdid, password,status});
-        const result = await data.save()
-        
-        if(result)
+        let Group=[]
+       
+       
+       const data =await Groupdivision.find({division:Divisionid},{_id:0, name:1})
+       
+    for(var i=0;i<data.length;i++)
+    {
+        Group.push(data[i].name)
+    
+    }
+
+    
+
+       const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status});
+       const result = await fetch.save()
+       if(result)
         {
         res.status(201).json({message: 'inserted'})
         }
+        
+        
     }
     else{
         return res.status(422).json({err:'Email already Exist'})
@@ -80,25 +99,4 @@ router.get('/user-detail/:id',(req,res)=>{
        res.status(400).send(e)
     })
 })
-
-
-router.get('/smddetail', (req,res)=>{
-
-    SmdDivision.find({},{name:1}).then((resp)=>{
-        res.status(200).send(resp)
-    }).catch((e)=>{
-        res.status(400).send(e)
-    })
-})
-
-router.get('/smddetail/:name', (req,res)=>{
-
-    SmdDivision.find({name:req.params.name},{division:1}).limit(1).then((resp)=>{
-
-        res.status(200).send(resp)
-    }).catch((e)=>{
-        res.status(400).send(e)
-    })
-})
-
 module.exports = router;

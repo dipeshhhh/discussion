@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState,useEffect} from 'react'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // quill css 
 import './question.css'
@@ -11,11 +11,30 @@ const Question = () => {
   const [error, setError] = useState('');  
   const [title, setTitle] =useState('')
   const [group,setGroup] = useState('')
+  const [groupid,setGroupid] = useState('')
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
   const handleQuill = (value) => {
       setBody(value)
     }
+
+  useEffect(()=>{
+      async function getGroup()
+      {
+        await axios.get(`/group/${auth}`).then((res)=>{
+           
+            // console.log(res.data)
+            setGroupid(res.data)
+          
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }
+      getGroup()
+    },[])  
+
+    
+ 
 
    const handleFileChange = (event) => {
        
@@ -93,6 +112,8 @@ const Question = () => {
         {
           setLoading(false);
         } 
+
+
         
          
           
@@ -133,10 +154,14 @@ const Question = () => {
         <div className='question-option'>
           <div className='group'>
             <h3>Groups</h3>
-            <small>Please Select in Which do you want post</small>
-            <select value={group} onChange={(e)=> setGroup(e.target.value)}>
-            <option>--Select Organization--</option>
-            <option>Agricultural Education </option>
+            <small>Please Select the group</small>
+            <select value={group} onChange={(e)=>setGroup(e.target.value)}>
+            <option value=''>--Select Group--</option>
+            {
+              groupid.Group?.map((resp)=>
+              <option value={resp}>{resp}</option>
+              )
+            }
             </select>          
              
           

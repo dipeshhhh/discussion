@@ -154,14 +154,20 @@ const handleLogin= async (e)=>{
           getSmd()
         },[])      
        
-
+        //Handle SMD select options
         const handleSmd = async (e)=>{           
-
+            
+            setSmdid('')
+            setDivision([])
+            
             const Smdname = e.target.value
-           
+            
 
             if(Smdname!='')
             {
+               
+                
+
                    
                 await axios.get(`/smddetail/${Smdname}`).then((res)=>{
                     
@@ -178,20 +184,22 @@ const handleLogin= async (e)=>{
             }
             else
             {
+                setDivisionid('')
+                setSmdid('')       
                 setDivision([])
                 setEnable(true)
 
             }
         }
 
-
+        //handle division select options
         const handeDivision = async (e)=>{
            setDivisionid(e.target.value)
             
         }
 
 
-        // console.log(Smdid,Divisionid)
+        console.log(Smdid,Divisionid)
        
        
         
