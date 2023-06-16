@@ -6,6 +6,7 @@ const User = require('../DB/module')
 const multer  = require('multer');
 const { default: mongoose } = require('mongoose');
 const { ObjectId } = require('mongodb');
+var fs = require('fs');
 
 
 const storage = multer.diskStorage({
@@ -138,11 +139,14 @@ router.get('/deletepost/:id', (req, res) => {
     const id = new ObjectId(req.params.id)
 
 
-    Question.deleteOne({_id:id})
+    Question.findOne({_id:id},{_id:0,file:1})
         .then((resp) => {
+           
+           fs.unlinkSync(resp.file)
 
-            return res.status(200).send(resp)
-
+           Question.deleteOne({_id:id}).then((response)=>{
+                return res.status(200).send(response)
+           })     
         })
         .catch((e) => {
             console.log("Error:", e)
