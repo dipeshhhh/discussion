@@ -57,8 +57,7 @@ const AllQuestions = ({question}) => {
     {
       
         axios.get(`/deletepost/${e}`).then((resp)=>{                  
-        window.location.reload(false)
-        alert('Post Deleted Successfully')
+        window.location.reload(false)        
         }) 
     }    
   }

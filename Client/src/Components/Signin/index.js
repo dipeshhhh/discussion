@@ -108,7 +108,7 @@ const handleLogin= async (e)=>{
     }
     else{
     try{
-        axios.post('/Signin', {
+        const resp = await axios.post('/Signin', {
             email,
             password
         }).then((resp)=>{
@@ -164,11 +164,7 @@ const handleLogin= async (e)=>{
             
 
             if(Smdname!='')
-            {
-               
-                
-
-                   
+            {                   
                 await axios.get(`/smddetail/${Smdname}`).then((res)=>{
                     
                     setDivision(res.data)
