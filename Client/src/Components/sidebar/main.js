@@ -4,7 +4,9 @@ import FilterListIcon from '@mui/icons-material/FilterList';
 import AllQuestions from './AllQuestions';
 import './css/main.css'
 const main = ({questions}) => {
-   
+
+  
+
   return (
     <div className='main'>
       <div className='main-container'>

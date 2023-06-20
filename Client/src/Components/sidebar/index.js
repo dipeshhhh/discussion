@@ -7,7 +7,7 @@ import axios from 'axios'
 
 const Index = () => {
 
-  const [questions, setQuestions] = useState([])
+  let [questions, setQuestions] = useState([])
   const auth = sessionStorage.getItem('username')
   useEffect(()=>{
     async function getQuestion()

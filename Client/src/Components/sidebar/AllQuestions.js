@@ -11,20 +11,19 @@ import axios from 'axios';
 
 const AllQuestions = ({question}) => {
 
- 
-
- 
 
   let result = (question.result).map((resp)=>{
       return resp
   })
 
+ result.reverse()
+  
+ 
+
   function truncate(str, n)
   {
     return str.length > n ? str.substr(0, n-1)+ '...': str
-  }
-
-  
+  }  
 
   
   
