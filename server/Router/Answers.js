@@ -23,15 +23,15 @@ router.post('/Answer', async(req,res)=>{
        
     console.log(req.body)
 
-    const { question_id, reply, auth, group } = req.body;
+    const { question_id, reply, auth, file} = req.body;
 
     console.log(req.body)
 
     try{
-        const data = new Answer({question_id,reply,auth,group})
+        const data = new Answer({question_id,reply,auth,file})
           
         const result = await data.save().then((doc)=>{
-            res.status(201).send({
+            res.status(200).send({
                 status:true,
                 data:doc
             })

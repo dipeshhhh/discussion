@@ -4,9 +4,9 @@ const AnswerSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Questions"
     },   
-    reply:String,
+    body:String,
     auth:String,
-    group:String,
+    file:String,  
     created_at:{
         type:Date,
         default:Date.now()

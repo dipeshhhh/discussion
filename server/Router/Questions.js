@@ -12,7 +12,7 @@ var fs = require('fs');
 const storage = multer.diskStorage({
         destination:function(req,file,cb)
         {
-            cb(null,'./Uploads')
+            cb(null,'./Uploads/questions')
         },
         filename:function(req,file,cb)
         {
@@ -41,13 +41,9 @@ router.post('/Question', upload,async(req,res)=>{
        
     }
     )
-
     This code for Check file uploaded or not
     */    
-   
-    
-
-  
+     
     try{   
         const data = new Question({auth, title, body, file, group});
         const result = await data.save()
@@ -152,6 +148,20 @@ router.get('/deletepost/:id', (req, res) => {
             console.log("Error:", e)
             res.status(400).send(e)
         })
+})
+
+router.get('/Q_download/:id',(req,resp)=>{
+
+    const id = new ObjectId(req.params.id)
+
+    Question.findOne({_id:id},{_id:0,file:1}).then((response)=>{
+
+        return resp.download(response.file)
+    })
+    .catch((e) => {
+        console.log("Error:", e)
+        resp.status(400).send(e)
+    })
 })
 
 module.exports = router;

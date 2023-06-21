@@ -66,7 +66,12 @@ const Question = () => {
       console.log('missing')
       setError("Title Character should be about 200 Characters");
       setLoading(false);
-      } 
+      }
+      else if(body.length >1500)
+      {
+        setError("Body Character should be about 1500 Characters");
+      setLoading(false);
+      }
     
       else if (!file)
       {        
@@ -112,15 +117,7 @@ const Question = () => {
         {
           setLoading(false);
         } 
-
-
-        
-         
-          
-           
-             
-        
-       
+    
       }
     } 
 

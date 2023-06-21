@@ -6,19 +6,83 @@ import {NavLink} from 'react-router-dom'
 import parse from 'html-react-parser'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // quill css 
-import AttachFileIcon from '@mui/icons-material/AttachFile';
+import AttachFileIcon from '@mui/icons-material/AttachFile'
 import './index.css'
-import ReplyAllIcon from '@mui/icons-material/ReplyAll';
+import ReplyAllIcon from '@mui/icons-material/ReplyAll'
+import FileDownload from 'js-file-download'
+import Axios from 'axios'
 
 
 const Mainquestion = (details) => {   
 
   let detail = details.details
 
-const [enable, setEnable] = useState(true)
+
+  const question_id = detail._id
+
   // let answer = detail.result
 
-  const reply = ()=>{
+  const auth = sessionStorage.getItem('username')
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');  
+  const [body, setBody] = useState('')
+  const [file,setFile] = useState('')
+  const handleQuill = (value) => {
+    setBody(value)
+  }
+
+  
+
+const answer = async (e)=>{  
+  e.preventDefault()   
+
+  const data = new FormData()
+
+    data.append('file', file)
+    data.append('body',body)
+    data.append('auth',auth)
+    data.append('question_id',question_id)
+
+    // console.log(file,body,auth,question_id) //Check  value of comment
+
+    console.log(body)
+    console.log(file)
+
+    if(!body)
+    {
+      setError("Please comment first");
+        setLoading(false);
+    }    
+    if(file)
+    {
+      if(file.size/1024 > 5120 || file.type.split('/').pop()!='pdf')
+      {
+        setError("Please upload file in below mentioned format");
+        setLoading(false); 
+         
+      }    
+    }
+    else
+    {
+      console.log('hello brother')
+    }
+    
+     
+     
+    
+  }
+
+const handleFileChange = (event) => {       
+   
+  setFile(event.target.files[0])   
+  }
+
+
+
+
+  //Reply button code for hide and unhide
+const [enable, setEnable] = useState(true)
+const reply = ()=>{
     if(enable ==true)
     {
       setEnable(false)
@@ -27,6 +91,18 @@ const [enable, setEnable] = useState(true)
     {
       setEnable(true)
     }
+  }  
+
+  //Here the code for download Post Attachment
+  const download = (e) =>{  
+   Axios({
+    url:`/Q_download/${e}`,
+    method:'GET',
+    responseType:'blob'
+   }).then((resp)=>{
+      
+    FileDownload(resp.data,'file.pdf')    
+  })
   }  
 
   
@@ -43,7 +119,7 @@ const [enable, setEnable] = useState(true)
               <div className='main-desc'>
                 <div className='info'>
                   <p>{new Date(detail?.created_at).toLocaleString()}</p>   
-                 <a href={'localhost:5000/upload'+detail.file} download='file'><AttachFileIcon/></a>                
+                  <a onClick={(e)=>download(detail._id)}><AttachFileIcon/></a>             
                 </div>
               </div>
           <div className='all-questions'>
@@ -104,23 +180,30 @@ const [enable, setEnable] = useState(true)
             </div>
           </div>
         </div>
-        <ReplyAllIcon className='icon-reply'  onClick={()=>reply()}/>
+        <ReplyAllIcon className='icon-reply'  onClick={()=>reply()}/>        
         <div className='answer' hidden={enable}>
         <div className='main-answer'>
         <h3>You can Answer</h3>
-        <ReactQuill theme="snow" className='react-quill'  style={{height
+        <ReactQuill theme="snow" value={body} onChange={handleQuill} className='react-quill'  style={{height
         :"200px"}}/> 
       </div>
 
       <div className='file-attach'>
             <h3>Attach file (only PDF with 5 MB)</h3>
-            <input label="File upload" type="file" name='file' 
+            <input label="File upload" type="file" name='file' onChange={handleFileChange} 
               placeholder="Select file..." />
           </div>          
-      <button style={{
+      <button onClick={answer} style={{
           margin: "10px 0",
           maxWidth: "fit-content",
-        }}>Post your Answer</button>
+        }}>
+           {loading ? "Commenting..." : "Post Comment"}
+        </button>       
+        {error !== "" && (
+          <p style={{ color: "red", fontSize: "14px" }} >
+            {error}
+          </p>
+        )} 
 
         </div>
         
