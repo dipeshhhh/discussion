@@ -8,14 +8,12 @@ const app = express();
 const PORT = process.env.PORT;
 
 // Link the router file
-app.use(express.json());
-app.use(require('./Router/auth'));
+app.use(express.json())
+app.use(require('./Router/auth'))
+app.use(require('./Router/Questions'))
+app.use(require('./Router/Answers'))
+app.use(require('./Router/Group'))
 
-//collect data by body with json format
-// const middleware = (req,res,next)=>{
-//         console.log('hi.. middleware');
-//         next();
-// }
 
 app.listen(PORT, ()=>{
         console.log(`server running on port no. ${PORT}`)
