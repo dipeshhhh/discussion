@@ -1,23 +1,48 @@
-import React, { useState } from 'react';
+import React, { useState ,useEffect } from 'react';
 import './css/header.css';
 import logo from '../images/logo.png';
-import InboxIcon from '@mui/icons-material/Inbox';
-import { Avatar } from '@mui/material';
 import { Link } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom'
+import axios from 'axios';
+
 
 const Header = () => {
-  const [showIcons, setShowIcons] = useState(false);
+  const navigate = useNavigate()
+ 
+  const auth = sessionStorage.getItem('username')
+  // console.log(auth)
+  const logout = () => {
+        sessionStorage.clear('username')
+        
+        navigate('/auth')
+  }   
 
-  const handlePageChange = () => {
-    setShowIcons(true);
-  };
+  const [userdetail , setUserDetail] = useState('')
+
+  useEffect(()=>{
+    async function getUser()
+    {
+      await axios.get(`/user-detail/${auth}`).then((res)=>{
+        
+        
+        setUserDetail(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+    getUser()
+  },[]) 
+
+
+  // const user = userdetail[0]
   
+  console.log(userdetail.name)
 
-  return (
+   return (
     <header>
       <div className='header-container'>
         <div className='header-left'>
-          <Link to="/" onClick={handlePageChange} >
+          <Link to="/" >
             <img src={logo} alt="" />
           </Link>
           <h3>          </h3>
@@ -26,14 +51,26 @@ const Header = () => {
           <h1 className='header-title'><font style={{color:'#006633'}}>Discussion Forum</font></h1>
           <h2 className='header-title2'><font style={{color:'#006633'}}>ICAR (Indian Council Of Agricultural Research)</font></h2>
         </div>
-        <div className='header-right'>
-          {showIcons && (
-            <div className='header-right-container'>
-              <Avatar />
-              <InboxIcon />
-            </div>
-          )}
-        </div>
+
+        {
+          auth ? 
+              <div className='header-right'>
+               
+                     <h4>User Name</h4>
+                  
+               
+                <div className='header-right-container'>
+                  <p href="#" onClick={logout} >
+                    <i class="fa-solid fa-right-from-bracket"></i>  Log out
+                  </p>
+                </div>
+
+              </div> 
+              :
+            <p></p>
+        }
+
+        
       </div>
     </header>
   );

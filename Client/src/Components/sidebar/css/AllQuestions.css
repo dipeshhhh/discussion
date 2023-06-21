@@ -76,6 +76,20 @@
     font-size: small;
     color:#0151f0d8;
 }
-
-
+.react-button {
+    color:rgb(159, 0, 0);    
+    margin-left: inherit;
+    
+}
+.pagination {
+    padding: 10px;
+    margin: 15px 0;
+    display: flex;
+    justify-content: center;
+}
+.pagination> span {
+    padding: 15px 20px;
+    border: 1px solid gray;
+    cursor: pointer;
+}
 

@@ -7,24 +7,28 @@ import Auth from './Components/Signin/index'
 import './App.css';
 import Errorpage from './Components/Error/errorpage';
 import {Routes, Route, Redirect} from 'react-router-dom'
-
-
+import PrivateComponent from './Components/PrivateComponent';
 
 function App() {
    
   
 
   return (
+    
   <>
    <div className='App'>
+    
    <Header/>
     <Routes>
-     <Route exact path='/' element={<Index/>}></Route>
-     <Route exact path='/add-question' element={<Question/>}></Route>
-     <Route exact path='/view-question' element={<ViewQuestion/>}></Route>
+      <Route element={<PrivateComponent/>}>
+      <Route exact path='/' element={<Index/>}></Route>
+      <Route exact path='/add-question' element={<Question/>}></Route>
+      <Route exact path='/view-question' element={<ViewQuestion/>}></Route>
+      <Route exact path='*' element={<Errorpage/>}></Route>
+      </Route>
+          
      <Route exact path='/auth' element={<Auth/>}></Route>
      
-     <Route exact path='*' element={<Errorpage/>}></Route>
     </Routes> 
     </div>
   
