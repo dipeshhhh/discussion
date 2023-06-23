@@ -4,6 +4,7 @@ import logo from '../images/logo.png';
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
+import { ToastContainer } from 'react-toastify';
 
 
 const Header = () => {
@@ -39,9 +40,23 @@ const Header = () => {
   console.log(userdetail.name)
 
    return (
+
+    
     <header>
-      <div className='header-container'>
-        <div className='header-left'>
+      <ToastContainer
+            position='top-center'
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+
+           <div className='header-container'>
+          <div className='header-left'>          
           <Link to="/" >
             <img src={logo} alt="" />
           </Link>
@@ -50,7 +65,7 @@ const Header = () => {
         <div className='header-center'>
           <h1 className='header-title'><font style={{color:'#006633'}}>Discussion Forum</font></h1>
           <h2 className='header-title2'><font style={{color:'#006633'}}>ICAR (Indian Council Of Agricultural Research)</font></h2>
-        </div>
+        </div>              
 
         {
           auth ? 
@@ -68,9 +83,7 @@ const Header = () => {
               </div> 
               :
             <p></p>
-        }
-
-        
+        }           
       </div>
     </header>
   );

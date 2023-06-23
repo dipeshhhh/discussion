@@ -44,7 +44,6 @@ const Question = () => {
 
     const add_question = async(e) => {
       
-    
     e.preventDefault() 
     setLoading(true)
 
@@ -80,7 +79,6 @@ const Question = () => {
       }
       else if(file.type.split('/').pop()!='pdf')
         {
-
           setError("Please upload file in pdf format");
           setLoading(false);
           
