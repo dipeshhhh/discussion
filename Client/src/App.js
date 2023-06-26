@@ -19,7 +19,6 @@ function App() {
 
 
    <div className='App'>
-  
    <Header/>
    
     <Routes>
@@ -31,9 +30,8 @@ function App() {
       </Route>
           
      <Route exact path='/auth' element={<Auth/>}></Route>
-     
+  
     </Routes>
-     
     </div>
   
    </>

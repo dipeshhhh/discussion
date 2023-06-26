@@ -11,8 +11,8 @@ import './index.css'
 import ReplyAllIcon from '@mui/icons-material/ReplyAll'
 import FileDownload from 'js-file-download'
 import Axios from 'axios'
-import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 const Mainquestion = (details) => {   
 
@@ -32,19 +32,54 @@ const Mainquestion = (details) => {
     setBody(value)
   }
 
-  const handleFileChange = (event) => {       
+    const handleFileChange = (event) => {       
    
     setFile(event.target.files[0])   
     }
 
 const answer = async (e)=>{  
   e.preventDefault()   
-   }
 
+  const data = new FormData()
 
+    data.append('file', file)
+    data.append('body',body)
+    data.append('auth',auth)
+    data.append('question_id',question_id)
 
+    // console.log(file,body,auth,question_id) //Check  value of comment
 
+    console.log(body)
+    console.log(file)
 
+    if(!body)
+    {
+      setError("Please comment first");
+        setLoading(false);
+    }    
+    if(file)
+    {
+      if(file.size/1024 > 5120 || file.type.split('/').pop()!='pdf')
+      {
+        setError("Please upload file in below mentioned format");
+        setLoading(false); 
+         
+      }    
+    }
+    else
+    {
+      console.log('hello brother')
+    }
+    
+     
+     
+    
+  }
+
+const handleFileChange = (event) => {       
+   
+  setFile(event.target.files[0])   
+  }
 
   //Reply button code for hide and unhide
 const [enable, setEnable] = useState(true)
@@ -132,8 +167,8 @@ const reply = ()=>{
                 <HistoryIcon />
                 </div>
               </div>
-            
-              <div className='question-anser'>
+
+              <div className='question-answer'>
              dsfsdfsdfsdfsdfsdfsdfsdfsd
                 <div className='author'>
                   <small>asked "Timestamp"</small>
@@ -158,7 +193,7 @@ const reply = ()=>{
             <h3>Attach file (only PDF with 5 MB)</h3>
             <input label="File upload" type="file" name='file' onChange={handleFileChange} 
               placeholder="Select file..." />
-             
+  
             {
               localStorage.getItem('img')
               ?
@@ -166,9 +201,7 @@ const reply = ()=>{
               :
               <></>
             }  
-            
-
-
+           
           </div>          
       <button onClick={answer} style={{
           margin: "10px 0",

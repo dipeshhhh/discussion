@@ -3,38 +3,58 @@
     padding: 20px 0px 10px 10px;
     height: 100%;
     flex:0.5;
-    max-width: 200px;
-    border-right: 1px solid #ddd;
+    /* max-width: 350px; */
+    max-width: 22%;
+    /* border-right: 1px solid #ddd; */
 }
 
 .sidebar-container{
-    margin: 10px 0;
+    margin: 6px 0;
     display: flex;
-    width: 100%;
-     
+    width: 21.5%;
+    position:fixed;
 }
 
 .sidebar-options{
     display: flex;
     flex-direction: column;
-    width: 200px;
+    width: 100%;
+}
 
+.sidebar-option-category-title{
+    font-size: medium;
+    color: #005760;
+    margin-top: 16px;
 }
 
 .sidebar-option{
     display: flex;
-    flex-direction: column;
-    margin:10px 0;
+    flex-direction: row;
+    padding:12px 0;
     font-size: 15px; 
-    
+    color: #005760;
+    align-items: center;
+    /* color: var(--primary-color); */
 }
+/* .sidebar-option.active{
+    border-right:5px solid green;    
+} */
 
-a{
+.sidebar-container a, .sidebar-container p{
     text-decoration: none;
-    color: rgba(0,0,0,0.5);
+    color: #005760;
+    font-size: large;
+    font-weight: 500;
+    padding-left: 5px;
+    /* margin-left: 10px; */
+    width: 99%;
+    /* color: rgba(0,0,0,0.5); */
 }
-a:hover{
-    color:#000;
+.sidebar-container a:hover, .sidebar-container p:hover{
+    /* color:#000; */
+    color: var(--primary-color);
+    background-color: var(--primary-faded-color);
+    cursor: pointer;
 }
 
 .sidebar-option > p{
@@ -48,22 +68,27 @@ a:hover{
 .link-tag{
     display: flex;
     flex-direction: column;
-    padding: 5px 0;
+    padding: 2px 0;
     width: 100%;
 }
 .link-tag:hover{
-    border-right:5px solid green
+    /* border-right:5px solid green */
+    border-left:5px solid green
+}
+.link-title{
+    margin-left: 10px;
 }
 .tags{
     display: flex;
     flex-direction: column;
     color:rgba(0,0,0,0.5);
-    margin: 0px 20px;
+    margin: 0px 0px 0px 20px;
 }
-.tags>p{
+/* .tags>p{
     margin:5px 0;
 }
 .tags>p:hover{
     color:#000;
-    border-right:5px solid green
-}
+    border-right:5px solid green;
+    cursor: pointer;
+} */

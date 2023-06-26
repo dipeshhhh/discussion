@@ -23,7 +23,7 @@ header{
     flex-direction: row;
     align-items: center;
     margin-top: 0px 10px;
-
+    /* margin-left: 2.5vw; */
 }
 .header-left > img{
    width:70px;
@@ -64,13 +64,20 @@ header{
   }
 
 .header-right{
-    /* display: flex; */
+    display: flex;
+    flex-direction: column;
+    align-items: end;
 }
 
 .header-right > h4{
     color: rgb(15, 93, 21);
-    animation: blinker 1s linear infinite;
+    /* animation: blinker 1s linear infinite; */
+    text-align: right;
 }
+.header-right > h4:hover{
+    cursor: pointer;
+}
+
 @keyframes blinker {
     50% {
       opacity: 0;
@@ -80,14 +87,14 @@ header{
 .header-right-container{  
     display: flex;
     align-content: center;
-    padding: 5px 10px;
 }
 
 .header-right-container> p {
    cursor: pointer;
-   margin-top: 12px;
+   margin-top: 9px;
 }
-p:hover{
+.header-right-container p:hover{
+
     color:#a71c0c;
 }
 

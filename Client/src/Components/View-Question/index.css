@@ -19,9 +19,20 @@
     margin: 0 5px;
   }
   
+  .info > a {
+    color: var(--primary-color) !important;
+  }
+  .info > a:hover {
+    cursor: pointer;
+    color: var(--primary-hover-color);
+  }
+
   .arrow {
-    font-size: 2rem;
+    font-size: 1.25rem;
     color: rgba(0, 0, 0, 0.25);
+  }
+  .arrow:hover{
+    cursor: pointer;
   }
   
   .all-options > .MuiSvgIcon-root {
@@ -41,24 +52,6 @@
     flex-wrap: wrap;
   }
 
-  .all-questions{
-    flex-Direction: column;
-  
-  }
-
-
-  .all-questions > p{
-    margin-Bottom: 20px;
-    font-size: 1.3rem;
-    font-Weight: 300;
-  }
-  .all-questions-container{
-    border-Bottom: 1px solid #eee;
-       
-  }
-
-  
-
   .main-answer{
     font-Size: 22px;
     margin: 10px 0;
@@ -68,7 +61,8 @@
     color: rgba(0, 0, 0, 0.8);
     font-weight: 500;
     font-size: large;
-}
+  }
+
   
   .file-attach{
     font-Size: 22px;

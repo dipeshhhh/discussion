@@ -2,6 +2,13 @@ import React from 'react'
 import './css/AllQuestions.css'
 import { NavLink } from 'react-router-dom'
 import { Avatar } from '@mui/material';
+
+// ========= TEMPORARILY ADDED =========
+import BookmarkIcon from '@mui/icons-material/Bookmark'
+import HistoryIcon from '@mui/icons-material/History'
+// =====================================
+
+
 import parse from 'html-react-parser'
 import DeleteIcon from '@mui/icons-material/Delete';
 import { useEffect, useState } from 'react'
@@ -75,7 +82,19 @@ const AllQuestions = ({question}) => {
     <div className='all-questions-container'>
       <div className='all-questions-left'>
         <div className='all-options'>
-          
+
+          {/* ========= TEMPORARILY ADDED =========  */}
+          <p className="arrow">▲</p>
+
+          <p className="arrow">0</p>
+
+          <p className="arrow">▼</p>
+
+          <BookmarkIcon />
+
+          <HistoryIcon />
+          {/* ===================================== */}
+  
           {/* <div className='all-option'>
             <p>1</p>
             <span>Reply</span>
