@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 
+import { ToastContainer } from 'react-toastify';
+
 
 const Header = () => {
   const navigate = useNavigate()
@@ -33,15 +35,29 @@ const Header = () => {
     getUser()
   },[]) 
 
-
   // const user = userdetail[0]
   
   console.log(userdetail.name)
 
    return (
+
+    
     <header>
-      <div className='header-container'>
-        <div className='header-left'>
+      <ToastContainer
+            position='top-center'
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
+
+       <div className='header-container'>
+          <div className='header-left'>      
+            
           <Link to="/" >
             <img src={logo} alt="" />
           </Link>
@@ -52,13 +68,13 @@ const Header = () => {
           <h2 className='header-title2'><font style={{color:'#006633'}}>ICAR (Indian Council Of Agricultural Research)</font></h2>
         </div>
 
+
         {
           auth ? 
               <div className='header-right'>
                
                      <h4>{userdetail.name}</h4>
                      {/* <h4>User Name</h4> */}
-                  
                
                 <div className='header-right-container'>
                   <p href="#" onClick={logout} >
@@ -69,9 +85,7 @@ const Header = () => {
               </div> 
               :
             <p></p>
-        }
 
-        
       </div>
     </header>
   );

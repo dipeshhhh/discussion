@@ -8,6 +8,9 @@ import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import { Helmet } from 'react-helmet';
 
+import { ToastContainer, toast } from 'react-toastify';
+  import 'react-toastify/dist/ReactToastify.css';
+
 const Index = () => {
     const navigate = useNavigate()
 
@@ -117,13 +120,20 @@ const handleLogin= async (e)=>{
             // const User = resp.data.userExist._id
             // const UserDivision = resp.data.userExist.division       
             sessionStorage.setItem('username',UserName)
-            alert('Welcome to ICAR Discussion Forum')           
+          
+            // alert('Welcome to ICAR Discussion Forum')           
+
+            toast.success('Login successfully') 
             navigate('/')
             
         })
         }
         catch(err) {
-            setError(err.response.data.err)
+
+            // setError(err.response.data.err)
+
+            toast.error(err.response.data.err)
+
             setLoading(false);
         }
     
@@ -195,7 +205,9 @@ const handleLogin= async (e)=>{
         }
 
 
-        console.log(Smdid,Divisionid)
+
+        // console.log(Smdid,Divisionid)
+
        
        
         

@@ -12,6 +12,7 @@ import ReplyAllIcon from '@mui/icons-material/ReplyAll'
 import FileDownload from 'js-file-download'
 import Axios from 'axios'
 
+import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 const Mainquestion = (details) => {   
 
@@ -31,7 +32,10 @@ const Mainquestion = (details) => {
     setBody(value)
   }
 
-  
+    const handleFileChange = (event) => {       
+   
+    setFile(event.target.files[0])   
+    }
 
 const answer = async (e)=>{  
   e.preventDefault()   
@@ -76,9 +80,6 @@ const handleFileChange = (event) => {
    
   setFile(event.target.files[0])   
   }
-
-
-
 
   //Reply button code for hide and unhide
 const [enable, setEnable] = useState(true)
@@ -166,7 +167,7 @@ const reply = ()=>{
                 <HistoryIcon />
                 </div>
               </div>
-            
+
               <div className='question-answer'>
              dsfsdfsdfsdfsdfsdfsdfsdfsd
                 <div className='author'>
@@ -192,6 +193,15 @@ const reply = ()=>{
             <h3>Attach file (only PDF with 5 MB)</h3>
             <input label="File upload" type="file" name='file' onChange={handleFileChange} 
               placeholder="Select file..." />
+  
+            {
+              localStorage.getItem('img')
+              ?
+              <PictureAsPdfIcon/>
+              :
+              <></>
+            }  
+           
           </div>          
       <button onClick={answer} style={{
           margin: "10px 0",

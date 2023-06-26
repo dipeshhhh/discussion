@@ -44,7 +44,6 @@ const Question = () => {
 
     const add_question = async(e) => {
       
-    
     e.preventDefault() 
     setLoading(true)
 
@@ -74,8 +73,9 @@ const Question = () => {
       }
     
       else if (!file)
-      {        
+      {      
         setError("Please attach the file");
+
         setLoading(false);
       }
       else if(file.type.split('/').pop()!='pdf')
@@ -182,7 +182,7 @@ const Question = () => {
       </div>
       <button className='button' onClick={add_question}>
       {loading ? "Posting..." : "Post"}     
-        </button>    
+        </button>  
       </div>
         {/* {error !== "" && (
       <p style={{ color: "red", fontSize: "14px"}} >

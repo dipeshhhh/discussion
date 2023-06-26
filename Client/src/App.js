@@ -16,9 +16,11 @@ function App() {
   return (
     
   <>
+
+
    <div className='App'>
-    
    <Header/>
+   
     <Routes>
       <Route element={<PrivateComponent/>}>
       <Route exact path='/' element={<Index/>}></Route>
@@ -28,8 +30,8 @@ function App() {
       </Route>
           
      <Route exact path='/auth' element={<Auth/>}></Route>
-     
-    </Routes> 
+  
+    </Routes>
     </div>
   
    </>
