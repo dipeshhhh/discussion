@@ -18,7 +18,7 @@ const Header = () => {
         
         navigate('/auth')
   }   
-
+  
   const [userdetail , setUserDetail] = useState('')
 
   useEffect(()=>{
@@ -85,7 +85,7 @@ const Header = () => {
               </div> 
               :
             <p></p>
-
+        }
       </div>
     </header>
   );
