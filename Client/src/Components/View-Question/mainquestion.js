@@ -57,8 +57,7 @@ const Mainquestion = (details) => {
 
     /*************code Handle the file uploading file*******************/  
   const handleFileChange = (event) => {
-    event.preventDefault()
-    setLoading(true)
+    event.preventDefault()  
     
     if(event)
     {
