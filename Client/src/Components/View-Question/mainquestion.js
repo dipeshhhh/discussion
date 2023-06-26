@@ -76,11 +76,6 @@ const answer = async (e)=>{
     
   }
 
-const handleFileChange = (event) => {       
-   
-  setFile(event.target.files[0])   
-  }
-
   //Reply button code for hide and unhide
 const [enable, setEnable] = useState(true)
 const reply = ()=>{
