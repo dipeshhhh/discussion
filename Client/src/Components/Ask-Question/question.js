@@ -3,8 +3,13 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // quill css 
 import './question.css'
 import axios from 'axios'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from 'react-router-dom'
 
 const Question = () => {
+
+  const navigate = useNavigate()
 
   const auth = sessionStorage.getItem('username')
   const [loading, setLoading] = useState(false);
@@ -93,17 +98,16 @@ const Question = () => {
      
       else
       {   
-        if(window.confirm('Please enter to confirm'))
+        if(window.confirm('Please confirm for Post'))
         {
 
           try {
             axios.post("/Question",data).then(res => {
   
                   console.log(res)
-                  alert('Post Uploaded Successfully')
-                  window.location.reload(false)
+                  toast.success('Post uploaded sucessfully')
+                  navigate('/')
                   setLoading(false)
-  
   
                 })
           }

@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import HistoryIcon from '@mui/icons-material/History'
 import { Avatar } from '@mui/material'
@@ -11,20 +11,42 @@ import './index.css'
 import ReplyAllIcon from '@mui/icons-material/ReplyAll'
 import FileDownload from 'js-file-download'
 import Axios from 'axios'
-
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+import {useNavigate} from 'react-router-dom'
 
 const Mainquestion = (details) => {   
 
-  let detail = details.details
+  const navigate = useNavigate()
 
-
+  let detail = details.details  
   const question_id = detail._id
 
-  // let answer = detail.result
+  /**********Comment Fetch through question id***********/
+  
+  const [answerdata, setAnswerData] = useState()
 
+  useEffect(()=>{
+    async function getAnswerDetails()
+    {
+      await Axios.get(`/Answer-detail/${question_id}`).then((resp) =>{          
+             
+        setAnswerData(resp.data)
+      })
+      .catch((err)=>{
+        console.log(err)
+      })
+
+    }
+    getAnswerDetails()
+   
+  },[]) 
+  
+
+/*******************************************************/
   const auth = sessionStorage.getItem('username')
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');  
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
@@ -32,49 +54,75 @@ const Mainquestion = (details) => {
     setBody(value)
   }
 
-    const handleFileChange = (event) => {       
+
+    /*************code Handle the file uploading file*******************/  
+  const handleFileChange = (event) => {
+    event.preventDefault()
+    setLoading(true)
+    
+    if(event)
+    {
+      const files = event.target.files[0]
    
-    setFile(event.target.files[0])   
-    }
-
-const answer = async (e)=>{  
-  e.preventDefault()   
-
-  const data = new FormData()
-
-    data.append('file', file)
-    data.append('body',body)
-    data.append('auth',auth)
-    data.append('question_id',question_id)
-
-    // console.log(file,body,auth,question_id) //Check  value of comment
-
-    console.log(body)
-    console.log(file)
-
-    if(!body)
+    if(files.size/1024 > 5120 || files.type.split('/').pop()!='pdf')
     {
-      setError("Please comment first");
-        setLoading(false);
-    }    
-    if(file)
-    {
-      if(file.size/1024 > 5120 || file.type.split('/').pop()!='pdf')
-      {
-        setError("Please upload file in below mentioned format");
-        setLoading(false); 
-         
-      }    
+      setError("Please upload file as per above creteria");
+      setLoading(false)
     }
     else
     {
-      console.log('hello brother')
-    }
-    
+      // const reader = new FileReader()
+
+      // reader.addEventListener('load', ()=>{
+      //   localStorage.setItem('document',reader.result)
+      // })
+
+      // reader.readAsDataURL(files)      
      
-     
+      setFile(event.target.files[0])
+    } } }   
     
-  }
+    // const downloadfile = ()=>{
+    //   FileDownload(localStorage.getItem('document'),'file.pdf')
+    // }
+
+  /***********************************************/ 
+  /* Handle the answer button for Comment*/
+      const answer = async (e)=>{  
+      e.preventDefault()
+      setLoading(true)
+    
+      const data = new FormData()
+    
+        data.append('file', file)
+        data.append('body',body)
+        data.append('auth',auth)
+        data.append('question_id',question_id)
+    
+        if(!body)
+        {
+          setError("Please fill the Body Part");
+          setLoading(false)
+        }
+        else {
+          if (window.confirm('Please click to confirm Comment')) {
+            Axios.post('/Answer', data).then((res) => {
+
+              if (res) {
+                toast.success('Comment Successfully')
+                window.location.reload(false)
+              }
+            })
+
+          }
+
+
+        }
+    
+       }
+
+    /***********************************/   
+    
 
   //Reply button code for hide and unhide
 const [enable, setEnable] = useState(true)
@@ -147,7 +195,10 @@ const reply = ()=>{
             </div>
           </div>
           <div className='all-questions'>
-            <p>Number of Comments</p> 
+            <p>Number of Comments</p>
+            {
+              answerdata?.map((resp)=>
+
             <div className='all-questions-container'>
             <div className='all-questions-left'>
                 <div className='all-options'>
@@ -164,16 +215,18 @@ const reply = ()=>{
               </div>
 
               <div className='question-answer'>
-             dsfsdfsdfsdfsdfsdfsdfsdfsd
+             {parse(resp.body)}
                 <div className='author'>
-                  <small>asked "Timestamp"</small>
+                  <small>{new Date(resp?.created_at).toLocaleString()}</small>
                   <div className='auth-details'>
                   <Avatar/>
-                  <p>Author Name</p>
+                  <p>{String(resp?.auth).split('@')[0]}</p>
                   </div>
                 </div>
               </div>
             </div>
+             )
+            }   
           </div>
         </div>
         <ReplyAllIcon className='icon-reply'  onClick={()=>reply()}/>        
