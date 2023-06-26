@@ -167,7 +167,7 @@ const reply = ()=>{
                 </div>
               </div>
             
-              <div className='question-anser'>
+              <div className='question-answer'>
              dsfsdfsdfsdfsdfsdfsdfsdfsd
                 <div className='author'>
                   <small>asked "Timestamp"</small>

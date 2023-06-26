@@ -1,15 +1,28 @@
 .all-questions{
     display: flex;
+    flex-Direction: column;
     width: 100%;
     padding: 20px 0px;
     border-bottom: 1px solid #eee;
+}
+.all-questions > p{
+    margin-Bottom: 20px;
+    font-size: 1.3rem;
+    font-Weight: 300;
 }
 
 .all-questions-container{
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    width: 100%;
+    background-color: white;
+    border-Bottom: 1px solid #eee;
+    border-radius: var(--rounded-border-radius);
+    width: auto;
+    margin-bottom: 16px;
+    padding: 16px;
+    box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 12%),
+     2px 5px 18px 0px rgb(0 139 41 / 10%);
 }
 
 .all-questions-left{
@@ -40,26 +53,37 @@
     display: flex;
     flex-direction: column;
     width: 100%;
+    border-radius: var(--rounded-border-radius);
+    position: relative;
 }
 
 .question-answer > a{
-    color: #0151f0d8;
-    font-size:1.1rem;
+    /* color: #0151f0d8; */
+    color: var(--primary-color);
     margin-bottom: 10px;
+    font-size: larger;
+    width: fit-content;
+    font-weight: 500;
 }
 
 .question-answer > a:hover{
-    color: #02215fd8;
-    font-size:1.1rem;
-    margin-bottom: 10px;
+    /* color: #02215fd8; */
+    color: var(--persian-green);
 }
 
 .author{
     display: flex;
     flex-direction: column;
+    align-items: end;
     margin-left:auto;
-    }
-
+    margin-top: 16px;
+    position: absolute;
+    right: 0;
+    bottom: 0;
+}
+.author:hover{
+    cursor: pointer;
+}
 .author >small{
     color:rgba(0.0.0.0.7);
     margin-bottom: 5px;
@@ -67,15 +91,39 @@
 
 .author-details{
     display: flex;
+    flex-direction: row;
     align-items: center;
-
+    margin: 0 10px;
+    margin-right: 0px;
+    color: var(--primary-color);
 }
 
 .author-details > p{
     margin-left: 5px;
     font-size: small;
-    color:#0151f0d8;
+    align-items: center;
+    /* color:#0151f0d8; */
 }
+.auth-details{
+    color: var(--primary-color);
+    display: flex;
+    flex-direction: row;
+    align-items: center !important;
+    margin-right: 0px !important;
+}
+.auth-details p{
+    margin-left: 5px;
+    align-items: center !important;
+  }
+.auth-details:hover, .author-details:hover{
+    cursor: pointer;
+    color: var(--persian-green);
+}
+.auth-details .css-2s90m6-MuiAvatar-root, .author-details .css-2s90m6-MuiAvatar-root{
+    height: 1rem !important;
+    width: 1rem !important;
+}
+
 .react-button {
     color:rgb(159, 0, 0);    
     margin-left: inherit;

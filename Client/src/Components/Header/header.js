@@ -56,7 +56,8 @@ const Header = () => {
           auth ? 
               <div className='header-right'>
                
-                     <h4>User Name</h4>
+                     <h4>{userdetail.name}</h4>
+                     {/* <h4>User Name</h4> */}
                   
                
                 <div className='header-right-container'>

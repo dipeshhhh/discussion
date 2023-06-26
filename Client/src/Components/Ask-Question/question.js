@@ -75,7 +75,7 @@ const Question = () => {
     
       else if (!file)
       {        
-        setError("Please Attached the file");
+        setError("Please attach the file");
         setLoading(false);
       }
       else if(file.type.split('/').pop()!='pdf')
@@ -173,19 +173,22 @@ const Question = () => {
               placeholder="Select file..." />
           </div>
         </div>
-        </div>
-      </div>
-      <button className='button' onClick={add_question}>
-      {loading ? "Posting..." : "Post"}     
-        </button>    
         {error !== "" && (
       <p style={{ color: "red", fontSize: "14px"}} >
           {error}
       </p>
       )}    
+        </div>
       </div>
-      
-
+      <button className='button' onClick={add_question}>
+      {loading ? "Posting..." : "Post"}     
+        </button>    
+      </div>
+        {/* {error !== "" && (
+      <p style={{ color: "red", fontSize: "14px"}} >
+          {error}
+      </p>
+      )}     */}
     </div>
   )
 }

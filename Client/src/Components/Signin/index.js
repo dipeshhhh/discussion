@@ -212,12 +212,13 @@ const handleLogin= async (e)=>{
         <div className='auth-container'>
                 <div className='landing_page'>
                     <div className='pull-right'>
-                      <div className='ICAR-Sign'>
-                          <img src={Img} alt="" style={{ height: "150px"}} />
-
-                      </div>
                       <div className='auth-login'>
                           <div className='auth-login-container'>
+
+                            <div className='ICAR-Sign'>
+                                <img src={Img} alt="" style={{ height: "150px"}} />
+                            </div>
+                            
                             {
                                 register ? (<>
                                     <div className='input-field'>
