@@ -5,7 +5,7 @@ const QuestionSchema = new mongoose.Schema({
     auth:String,
     created_at:{
         type:Date,
-        default:Date.now()
+        //default:Date.now()
     },
     file:String,
     group:String

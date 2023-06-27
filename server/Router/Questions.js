@@ -24,11 +24,13 @@ var upload = multer({storage:storage}).single('file')
 
 router.post('/Question', upload,async(req,res)=>{
  
-    console.log(req.body,req.file)
+    // console.log(req.body,req.file)
    
     const { title, body, auth, group } = req.body;
      
     const file = req.file.path
+    
+    const created_at = new Date();   
     
  /*     
     upload(req,res, function(err)
@@ -45,7 +47,7 @@ router.post('/Question', upload,async(req,res)=>{
     */    
      
     try{   
-        const data = new Question({auth, title, body, file, group});
+        const data = new Question({auth, title, body, file, group,created_at});
         const result = await data.save()
 
         if(result)

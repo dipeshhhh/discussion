@@ -9,7 +9,7 @@ const AnswerSchema = new mongoose.Schema({
     file:String,  
     created_at:{
         type:Date,
-        default:Date.now()
+        //default:Date.now()
     }
     
 })

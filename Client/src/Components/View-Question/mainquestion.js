@@ -41,10 +41,23 @@ const Mainquestion = (details) => {
     }
     getAnswerDetails()
    
-  },[]) 
+  },[])    
   
-
 /*******************************************************/
+
+/**********************Answer Attachment download******************************/
+
+const downloadanswer = (e) =>{
+  Axios({
+    url:`/A_download/${e}`,
+    method:'GET',
+    responseType:'blob'
+   }).then((resp)=>{     
+    FileDownload(resp.data,'file.pdf')    
+  })
+} 
+
+
   const auth = sessionStorage.getItem('username')
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');  
@@ -154,6 +167,7 @@ const reply = ()=>{
       
       <div className='main-container'>
         <div className='main-top'>
+        <h2 className='main-question'>{detail?.title}</h2>
           <h2 className='main-question'></h2>
             <NavLink to='/add-question'>
               <button>Ask Question</button>
@@ -197,7 +211,6 @@ const reply = ()=>{
             <p>Number of Comments</p>
             {
               answerdata?.map((resp)=>
-
             <div className='all-questions-container'>
             <div className='all-questions-left'>
                 <div className='all-options'>
@@ -216,6 +229,13 @@ const reply = ()=>{
               <div className='question-answer'>
              {parse(resp.body)}
                 <div className='author'>
+                  {
+                    resp?.file ?
+                    <a onClick={(e)=>downloadanswer(resp?._id)}><AttachFileIcon/></a>
+                    :
+                    <></>
+                  }
+                
                   <small>{new Date(resp?.created_at).toLocaleString()}</small>
                   <div className='auth-details'>
                   <Avatar/>
@@ -239,15 +259,7 @@ const reply = ()=>{
       <div className='file-attach'>
             <h3>Attach file (only PDF with 5 MB)</h3>
             <input label="File upload" type="file" name='file' onChange={handleFileChange} 
-              placeholder="Select file..." />
-  
-            {
-              localStorage.getItem('img')
-              ?
-              <PictureAsPdfIcon/>
-              :
-              <></>
-            }  
+              placeholder="Select file..." />             
            
           </div>          
       <button onClick={answer} style={{

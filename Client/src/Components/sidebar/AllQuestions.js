@@ -23,8 +23,7 @@ const AllQuestions = ({question}) => {
       return resp
   })
 
- result.reverse()
-  
+ result.reverse()  
  
 
   function truncate(str, n)

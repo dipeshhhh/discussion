@@ -5,6 +5,8 @@ import AllQuestions from './AllQuestions';
 import './css/main.css'
 const main = ({questions}) => {
 
+  console.log(questions)
+
   
 
   return (
