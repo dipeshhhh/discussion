@@ -81,8 +81,8 @@ const Index = () => {
                     status
                     
                 }).then((resp)=>{
-                    swal("Signup Successfully")
-                    window.location.reload(false)
+                    toast.success('Registration Sucessfully')
+                    navigate('/')
                     setLoading(false)
                 })
             }

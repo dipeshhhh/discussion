@@ -52,7 +52,7 @@ router.post('/Question', upload,async(req,res)=>{
 
         if(result)
         {
-            console.log(result)
+           
         res.status(200).json({message: 'inserted'})
         }
         else{
