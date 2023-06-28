@@ -155,6 +155,7 @@ const reply = ()=>{
       
       <div className='main-container'>
         <div className='main-top'>
+        <h2 className='main-question'>{detail?.title}</h2>
           <h2 className='main-question'></h2>
             <NavLink to='/add-question'>
               <button>Ask Question</button>
