@@ -5,7 +5,7 @@ import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 
-import { ToastContainer } from 'react-toastify';
+import { ToastContainer ,toast} from 'react-toastify';
 
 
 const Header = () => {
@@ -14,8 +14,8 @@ const Header = () => {
   const auth = sessionStorage.getItem('username')
   // console.log(auth)
   const logout = () => {
-        sessionStorage.clear('username')
-        
+        sessionStorage.clear('username')       
+        toast.success('Logout Sucessfully')
         navigate('/auth')
   }   
   

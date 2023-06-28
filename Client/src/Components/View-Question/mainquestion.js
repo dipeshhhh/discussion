@@ -63,6 +63,7 @@ const downloadanswer = (e) =>{
   const [error, setError] = useState('');  
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
+  const [bthidden, setBthidden]=useState(false)
   const handleQuill = (value) => {
     setBody(value)
   }
@@ -70,16 +71,14 @@ const downloadanswer = (e) =>{
 
     /*************code Handle the file uploading file*******************/  
   const handleFileChange = (event) => {
-    event.preventDefault()  
+    event.preventDefault()
     
-    if(event)
-    {
       const files = event.target.files[0]
    
     if(files.size/1024 > 5120 || files.type.split('/').pop()!='pdf')
     {
-      setError("Please upload file as per above creteria");
-      setLoading(false)
+      setBthidden(true)
+      setError("Please upload file as per above creteria");      
     }
     else
     {
@@ -89,10 +88,14 @@ const downloadanswer = (e) =>{
       //   localStorage.setItem('document',reader.result)
       // })
 
-      // reader.readAsDataURL(files)      
-     
+      // reader.readAsDataURL(files)
+      setError("");      
+      setBthidden(false)
       setFile(event.target.files[0])
-    } } }   
+    } 
+
+    
+   }   
     
     // const downloadfile = ()=>{
     //   FileDownload(localStorage.getItem('document'),'file.pdf')
@@ -262,7 +265,7 @@ const reply = ()=>{
               placeholder="Select file..." />             
            
           </div>          
-      <button onClick={answer} style={{
+      <button hidden={bthidden} onClick={answer} style={{
           margin: "10px 0",
           maxWidth: "fit-content",
         }}>
