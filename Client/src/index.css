@@ -29,6 +29,17 @@
   /* border: 2px solid black; */
 }
 
+/* Scrollbar */
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+background: lightgray;
+}
+::-webkit-scrollbar-thumb {
+background: var(--primary-color);
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',

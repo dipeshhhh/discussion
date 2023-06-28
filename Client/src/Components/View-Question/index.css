@@ -24,7 +24,7 @@
   }
   .info > a:hover {
     cursor: pointer;
-    color: var(--primary-hover-color);
+    color: var(--secondary-color-forlink) !important;
   }
 
   .arrow {
@@ -52,9 +52,18 @@
     flex-wrap: wrap;
   }
 
+  .answer{
+    background-color: white;
+    border-radius: 10px;
+    margin-top: 16px;
+    padding: 16px;
+    box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 12%),
+     2px 5px 18px 0px rgb(0 139 41 / 10%);
+  }
+
   .main-answer{
     font-Size: 22px;
-    margin: 10px 0;
+    margin-bottom: 10px;
     font-Weight: 400;
   }
   .main-answer > h3{
@@ -66,18 +75,12 @@
   
   .file-attach{
     font-Size: 22px;
-    margin: 60px 0;
-    font-Weight: 500;
-    
+    /* margin: 60px 0; */
+    margin: 60px 0 16px 0;
+    font-Weight: 500;    
   }
   .file-attach > h3{
     color: rgba(0, 0, 0, 0.8);
     font-weight: 500;
     font-size: large;
   }
-  .icon-reply{
-    color: dodgerblue;
-  }
-  
-  
-  
