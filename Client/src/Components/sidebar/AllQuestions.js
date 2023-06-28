@@ -6,6 +6,8 @@ import { Avatar } from '@mui/material';
 // ========= TEMPORARILY ADDED =========
 import BookmarkIcon from '@mui/icons-material/Bookmark'
 import HistoryIcon from '@mui/icons-material/History'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 // =====================================
 
 
@@ -23,7 +25,8 @@ const AllQuestions = ({question}) => {
       return resp
   })
 
- result.reverse()  
+ result.reverse()
+  
  
 
   function truncate(str, n)
@@ -83,15 +86,16 @@ const AllQuestions = ({question}) => {
         <div className='all-options'>
 
           {/* ========= TEMPORARILY ADDED =========  */}
-          <p className="arrow">▲</p>
 
-          <p className="arrow">0</p>
+          {/* Add/remove 'active' class to make icon visible/invisible */}
+          <p className="option-icon expand"><ExpandLessIcon /></p>
 
-          <p className="arrow">▼</p>
+          <p className="option-icon expand active"><ExpandMoreIcon /></p>
 
-          <BookmarkIcon />
+          <BookmarkIcon className="option-icon" />
 
-          <HistoryIcon />
+          <HistoryIcon className="option-icon" />
+
           {/* ===================================== */}
   
           {/* <div className='all-option'>
@@ -112,7 +116,7 @@ const AllQuestions = ({question}) => {
            {data?.title}
             
           </NavLink>
-        <div style={{width:"90%"}}>
+        <div style={{width:"90%", "margin-bottom": "16px"}}>
           
              
           <div>{parse(truncate(data.body, 200))}</div>
@@ -128,9 +132,9 @@ const AllQuestions = ({question}) => {
         
       
         
-        <small>{new Date(data?.created_at).toLocaleString()}</small>      
+        {/* <small>{new Date(data?.created_at).toLocaleString()}</small>       */}
+        <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>      
         <div className='author-details'>
-       
           <Avatar/>
           <p>{String(data?.auth).split('@')[0]}</p>
         </div>
