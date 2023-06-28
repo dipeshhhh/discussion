@@ -41,23 +41,10 @@ const Mainquestion = (details) => {
     }
     getAnswerDetails()
    
-  },[])    
+  },[]) 
   
+
 /*******************************************************/
-
-/**********************Answer Attachment download******************************/
-
-const downloadanswer = (e) =>{
-  Axios({
-    url:`/A_download/${e}`,
-    method:'GET',
-    responseType:'blob'
-   }).then((resp)=>{     
-    FileDownload(resp.data,'file.pdf')    
-  })
-} 
-
-
   const auth = sessionStorage.getItem('username')
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');  
@@ -70,7 +57,8 @@ const downloadanswer = (e) =>{
 
     /*************code Handle the file uploading file*******************/  
   const handleFileChange = (event) => {
-    event.preventDefault()  
+    event.preventDefault()
+    setLoading(true)
     
     if(event)
     {
@@ -167,7 +155,6 @@ const reply = ()=>{
       
       <div className='main-container'>
         <div className='main-top'>
-        <h2 className='main-question'>{detail?.title}</h2>
           <h2 className='main-question'></h2>
             <NavLink to='/add-question'>
               <button>Ask Question</button>
@@ -207,10 +194,51 @@ const reply = ()=>{
               </div>
             </div>
           </div>
+          
+          <div className="reply-button" onClick={()=>reply()}>
+            {/* <ReplyAllIcon onClick={()=>reply()}/> Answer */}
+            <ReplyAllIcon className='icon-reply'/> Answer
+          </div>
+          <div className='answer' hidden={enable}>
+            <div className='main-answer'>
+              <h3>You can Answer</h3>
+              <ReactQuill theme="snow" value={body} onChange={handleQuill} className='react-quill'  style={{height
+              :"200px"}}/> 
+            </div>
+
+            <div className='file-attach'>
+              <h3>Attach file (only PDF with 5 MB)</h3>
+              <input label="File upload" type="file" name='file' onChange={handleFileChange} 
+                placeholder="Select file..." />
+    
+              {
+                localStorage.getItem('img')
+                ?
+                <PictureAsPdfIcon/>
+                :
+                <></>
+              }  
+            
+            </div>          
+            <button onClick={answer} style={{
+                margin: "10px 0",
+                maxWidth: "fit-content",
+              }}>
+                {loading ? "Commenting..." : "Post Comment"}
+              </button>       
+              {error !== "" && (
+                <p style={{ color: "red", fontSize: "14px" }} >
+                  {error}
+                </p>
+              )} 
+
+          </div>
+
           <div className='all-questions'>
             <p>Number of Comments</p>
             {
               answerdata?.map((resp)=>
+
             <div className='all-questions-container'>
             <div className='all-questions-left'>
                 <div className='all-options'>
@@ -229,14 +257,7 @@ const reply = ()=>{
               <div className='question-answer'>
              {parse(resp.body)}
                 <div className='author'>
-                  {
-                    resp?.file ?
-                    <a onClick={(e)=>downloadanswer(resp?._id)}><AttachFileIcon/></a>
-                    :
-                    <></>
-                  }
-                
-                  <small>{new Date(resp?.created_at).toLocaleString()}</small>
+                  <small>on {new Date(resp?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
                   <div className='auth-details'>
                   <Avatar/>
                   <p>{String(resp?.auth).split('@')[0]}</p>
@@ -248,34 +269,7 @@ const reply = ()=>{
             }   
           </div>
         </div>
-        <ReplyAllIcon className='icon-reply'  onClick={()=>reply()}/>        
-        <div className='answer' hidden={enable}>
-        <div className='main-answer'>
-        <h3>You can Answer</h3>
-        <ReactQuill theme="snow" value={body} onChange={handleQuill} className='react-quill'  style={{height
-        :"200px"}}/> 
-      </div>
-
-      <div className='file-attach'>
-            <h3>Attach file (only PDF with 5 MB)</h3>
-            <input label="File upload" type="file" name='file' onChange={handleFileChange} 
-              placeholder="Select file..." />             
-           
-          </div>          
-      <button onClick={answer} style={{
-          margin: "10px 0",
-          maxWidth: "fit-content",
-        }}>
-           {loading ? "Commenting..." : "Post Comment"}
-        </button>       
-        {error !== "" && (
-          <p style={{ color: "red", fontSize: "14px" }} >
-            {error}
-          </p>
-        )} 
-
-        </div>
-        
+        {/* Previous answer icon and body position here */}        
       </div>
   )
 }
