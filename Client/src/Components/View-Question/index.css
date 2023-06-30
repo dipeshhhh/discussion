@@ -11,7 +11,7 @@
   
   .info > p {
     color: rgba(0, 0, 0, 0.4);
-    margin: 0 10px;
+    margin-right: 10px;
   }
   
   .info > p > span {
@@ -67,6 +67,23 @@
   .view-pdf:not(.active){
     display: none;
   }
+  .view-pdf-button{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    color: var(--primary-color);
+  }
+  .view-pdf-button:hover{
+    cursor: pointer;
+    color: var(--secondary-color-forlink);
+  }
+  .visibility-icon{
+    height: 1rem !important;
+  }
+  .view-pdf-button > p{
+    margin-left: 0.1rem;
+    font-weight: 400;
+  }
 
   .icon-reply{
     color: var(--primary-color);
@@ -81,6 +98,12 @@
   .icon-reply:hover{
     cursor: pointer;
     color: var(--secondary-color-forlink);
+  }
+  .icon-reply.red-colored{
+    color: var(--red-crayola);
+  }
+  .icon-reply.red-colored:hover{
+    color: var(--red-crayola-bright);
   }
 
   .answer{

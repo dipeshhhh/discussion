@@ -17,6 +17,9 @@ import { Avatar } from '@mui/material';
 import AttachFileIcon from '@mui/icons-material/AttachFile';
 import FileDownloadIcon from '@mui/icons-material/FileDownload';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
+import VisibilityIcon from '@mui/icons-material/Visibility';
+import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import CancelIcon from '@mui/icons-material/Cancel';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 
 const Mainquestion = (details) => {
@@ -156,6 +159,11 @@ const Mainquestion = (details) => {
     changePage(+1);
   }
 
+  const [isAttachmentHidden, setAttachmentHidden] = useState(true);
+  const toggleAttachmentHidden = () => {
+    setAttachmentHidden(!isAttachmentHidden);
+  }
+
   /***********************************/
 
   return (
@@ -180,6 +188,30 @@ const Mainquestion = (details) => {
           <div className="all-questions-container">
             <div className="question-answer">
               <p>{parse(detail.body)}</p>
+
+              <small className="view-pdf-button" onClick={toggleAttachmentHidden}>
+                { isAttachmentHidden ? <VisibilityIcon className="visibility-icon" /> : <VisibilityOffIcon className="visibility-icon" /> }
+                <p>{ isAttachmentHidden ? "Preview attachment" : "Hide attachment" }</p>
+              </small>
+              <div className={ isAttachmentHidden ? "view-pdf" : "view-pdf active" }>
+                <center>
+                  <PDFViewer>
+                    <Document file="./bash.pdf" onLoadSuccess={onDocumentLoadSuccess}>
+                      <Page height="A4" pageNumber={pageNumber} />
+                    </Document>
+                  </PDFViewer>
+                  <p>
+                    Page {pageNumber} of {numPages}
+                  </p>
+                  {pageNumber > 1 && (
+                    <button onClick={changePageBack}>Previous Page</button>
+                  )}
+                  {pageNumber < numPages && (
+                    <button onClick={changePageNext}>Next Page</button>
+                  )}
+                </center>
+              </div>
+
               <div className="author">
                 <small></small>
                 <div className="auth-details">
@@ -189,30 +221,11 @@ const Mainquestion = (details) => {
               </div>
             </div>
           </div>
-        </div>
-        <div className="view-pdf active">
-          <p className="view-pdf-title">View attachment</p>
-          <center>
-            <PDFViewer>
-              <Document file="./bash.pdf" onLoadSuccess={onDocumentLoadSuccess}>
-                <Page height="A4" pageNumber={pageNumber} />
-              </Document>
-            </PDFViewer>
-            <p>
-              Page {pageNumber} of {numPages}
-            </p>
-            {pageNumber > 1 && (
-              <button onClick={changePageBack}>Previous Page</button>
-            )}
-            {pageNumber < numPages && (
-              <button onClick={changePageNext}>Next Page</button>
-            )}
-          </center>
-        </div>
+        </div>        
         <div>
-          <div className="icon-reply" onClick={() => reply()}>
-            <ReplyAllIcon /> 
-            <p>Answer</p>
+          <div className={ enable ? "icon-reply" : "icon-reply red-colored"} onClick={() => reply()}>
+            { enable ? <ReplyAllIcon /> : <CancelIcon />}
+            <p>{ enable ? "Answer" : "Cancel" }</p>
           </div>
           <div className="answer" hidden={enable}>
             <div className="main-answer">
