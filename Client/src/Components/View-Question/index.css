@@ -52,6 +52,37 @@
     flex-wrap: wrap;
   }
 
+  .view-pdf{
+    /* border: 2px solid black; */
+    border-radius: 10px;
+    margin-bottom: 16px;
+    /* padding: 16px; */
+    /* background-color: white; */
+    font-Weight: 300;
+  }
+  .view-pdf .view-pdf-title{
+    margin-Bottom: 20px;
+    font-size: 1.3rem;
+  }
+  .view-pdf:not(.active){
+    display: none;
+  }
+
+  .icon-reply{
+    color: var(--primary-color);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 500;
+  }
+  .icon-reply p{
+    margin-left: 5px;
+  }
+  .icon-reply:hover{
+    cursor: pointer;
+    color: var(--secondary-color-forlink);
+  }
+
   .answer{
     background-color: white;
     border-radius: 10px;

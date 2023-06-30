@@ -1,13 +1,18 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { NavLink } from 'react-router-dom'
 import FilterListIcon from '@mui/icons-material/FilterList';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import AllQuestions from './AllQuestions';
 import './css/main.css'
-const main = ({questions}) => {
 
+
+const main = ({questions}) => {
   
+  const [isGroupHidden, setGroupHidden] = useState(true);
+  const toggleGroup = () => {
+      setGroupHidden(!isGroupHidden);
+    }
 
   return (
     <div className='main'>
@@ -21,14 +26,14 @@ const main = ({questions}) => {
         <div className='main-dec'>
 
           <div className='group-selector'> {/* NOTE: go through this section of the code */}
-            <div className='selected-group-icon-name'>
+            <div className='selected-group-icon-name' onClick={toggleGroup}>
               <div className='expand-group-icons'>
                 {/* ONCLICK: add/remove 'active' in these icon's class and in 'selected-group' div's class upon clicking on 'group-selector' to show/hide the appropriate icon and the group list*/}
-                <ExpandMoreIcon className='expand-group-icon active' />
-                <ExpandLessIcon className='expand-group-icon' />
+                <ExpandMoreIcon className={ isGroupHidden ? 'expand-group-icon active' : 'expand-group-icon'} />
+                <ExpandLessIcon className={ !isGroupHidden ? 'expand-group-icon active' : 'expand-group-icon'} />
 
                 {/* add 'active' class when new notification is there, remove 'active' class when notification is seen by the user */}
-                {/* Optional: if you want to show no. of notification you can insert them in here, but you need to change css of 'badge' class from 'color:var(--notification-badge-color);' to 'color:white;' */}
+                {/* Optional: if you want to show no. of notification you can insert them in here, but you will need to change it's foreground color in css */}
                 {/* <span className='badge'>0</span> */}
                 <span className='badge active'>0</span>
               </div>
@@ -41,7 +46,7 @@ const main = ({questions}) => {
             </div>
             
             {/* ADD/REMOVE 'active' class in this div ('group-list' div) to see it */}
-            <div className='group-list'>
+            <div className={ !isGroupHidden ? 'group-list active' : 'group-list'}>
             {/* <div className='group-list active'> */}
               {/* Add all the group the user is in here */}
               {/* 'Crop Sciences', 'Horticulture' and 'Animal Sciences' for example */}

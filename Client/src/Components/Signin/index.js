@@ -332,7 +332,8 @@ const handleLogin= async (e)=>{
                             } style={{
                                     marginTop:'10px',
                                     textAlign:'center',
-                                    color:'#0095ff',
+                                    // color:'#0095ff',
+                                    color:'var(--secondary-color-forlink)',
                                     textDecoration:'underline',
                                     cursor:'pointer'
                               }}>{ register ? 'Login' : 'Register'}?</p>

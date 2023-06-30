@@ -8,6 +8,7 @@ import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
 import TagIcon from '@mui/icons-material/Tag';
 import PeopleIcon from '@mui/icons-material/People';
 import ExploreIcon from '@mui/icons-material/Explore';
+import GroupsIcon from '@mui/icons-material/Groups';
 
 const sidebar = () => {
   return (
@@ -52,6 +53,39 @@ const sidebar = () => {
                             <ExploreIcon />
                             <span className="link-title">Explore Collections</span>
                         </NavLink>
+
+                        <span className="sidebar-option-category-title">
+                            {/* <GroupsIcon/>  */}
+                            GROUPS
+                        </span>
+
+                        <div className="sidebar-groups">
+                            {/* User's groups */}
+                            {/* 'Crop Sciences', 'Horticulture', 'Animal Sciences' as examples below */}
+                            <NavLink href="" className='link-tag sidebar-option'>
+                                <GroupsIcon className='transparent' />
+                                <span className="link-title">
+                                    Crop Sciences
+                                    <span className='badge sidebar-badge'>0</span>
+                                </span>
+                            </NavLink>
+                            <NavLink href="" className='link-tag sidebar-option'>
+                                <GroupsIcon className='transparent' />
+                                <span className="link-title">
+                                    Horticulture
+                                    {/* add/remove 'active' class to show/hide the notification badge */}
+                                    <span className='badge sidebar-badge active'>0</span>
+                                </span>
+                            </NavLink>
+                            <NavLink href="" className='link-tag sidebar-option'>
+                                <GroupsIcon className='transparent' />
+                                <span className="link-title">
+                                    Animal Sciences
+                                    <span className='badge sidebar-badge active'>0</span>
+                                </span>
+                            </NavLink>
+                        </div>
+
                         {/* <div className='tags'>
                             <p className='sidebar-option'>Tag</p>
                             <p className='sidebar-option'> Users</p>                            

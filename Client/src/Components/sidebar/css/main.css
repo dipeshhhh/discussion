@@ -82,6 +82,9 @@ button{
     flex-direction: row;
     align-items: center !important;
 }
+.selected-group:hover{
+    color: var(--primary-color);
+}
 .expand-group-icons{
     display: inherit;
     align-items: inherit;
@@ -98,7 +101,7 @@ button{
     position: absolute;
     top: -6px;
     right: 0px;
-    padding: 0.5ch 1ch;
+    padding: 0.4ch 1ch;
     font-size: xx-small;
     border-radius: 100%;
 }
@@ -107,8 +110,8 @@ button{
 }
 .list-badge{
     right: 87%;
-    top: 32.5%;
-    padding: 0.5ch 1.1ch;
+    top: 15px;
+    padding: 0.4ch 1.1ch !important;
 }
 .selected-group{ 
     margin-left: 0.5ch;
