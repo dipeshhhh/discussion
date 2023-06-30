@@ -77,12 +77,33 @@
 }
 .link-title{
     margin-left: 10px;
+    position: relative;
+}
+/* .group-link-tag{
+    padding-left: 33px !important;
+    max-width: inherit !important;
+} */
+.sidebar-badge{
+    right: 100% !important;
+    top: 18.8% !important;
+    padding: 0.3ch 1ch !important;
+    margin-right: 15px;
 }
 .tags{
     display: flex;
     flex-direction: column;
     color:rgba(0,0,0,0.5);
     margin: 0px 0px 0px 20px;
+}
+.transparent{
+    visibility: hidden;
+}
+.sidebar-groups{
+    width: 100% !important;
+    max-height: 145px !important;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    /* overflow: auto; */
 }
 /* .tags>p{
     margin:5px 0;
