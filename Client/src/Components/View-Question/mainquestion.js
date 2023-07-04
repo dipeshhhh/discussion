@@ -137,35 +137,6 @@ const Mainquestion = (details) => {
   };
 
   /***********************************/
-
-  // Code for viewing PDF attachment
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-    setPageNumber(1);
-  }
-
-  function changePage(offSet) {
-    setPageNumber((prevPageNumber) => prevPageNumber + offSet);
-  }
-
-  function changePageBack() {
-    changePage(-1);
-  }
-
-  function changePageNext() {
-    changePage(+1);
-  }
-
-  const [isAttachmentHidden, setAttachmentHidden] = useState(true);
-  const toggleAttachmentHidden = () => {
-    setAttachmentHidden(!isAttachmentHidden);
-  }
-
-  /***********************************/
-
   return (
     <div className="main">
       <div className="main-container">
@@ -187,30 +158,7 @@ const Mainquestion = (details) => {
         <div className="all-questions">
           <div className="all-questions-container">
             <div className="question-answer">
-              <p>{parse(detail.body)}</p>
-
-              <small className="view-pdf-button" onClick={toggleAttachmentHidden}>
-                { isAttachmentHidden ? <VisibilityIcon className="visibility-icon" /> : <VisibilityOffIcon className="visibility-icon" /> }
-                <p>{ isAttachmentHidden ? "Preview attachment" : "Hide attachment" }</p>
-              </small>
-              <div className={ isAttachmentHidden ? "view-pdf" : "view-pdf active" }>
-                <center>
-                  <PDFViewer>
-                    <Document file="./bash.pdf" onLoadSuccess={onDocumentLoadSuccess}>
-                      <Page height="A4" pageNumber={pageNumber} />
-                    </Document>
-                  </PDFViewer>
-                  <p>
-                    Page {pageNumber} of {numPages}
-                  </p>
-                  {pageNumber > 1 && (
-                    <button onClick={changePageBack}>Previous Page</button>
-                  )}
-                  {pageNumber < numPages && (
-                    <button onClick={changePageNext}>Next Page</button>
-                  )}
-                </center>
-              </div>
+              <p>{parse(detail.body)}</p>             
 
               <div className="author">
                 <small></small>

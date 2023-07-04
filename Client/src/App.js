@@ -2,6 +2,7 @@ import React from 'react';
 import Header from './Components/Header/header'
 import Index from './Components/sidebar/index'
 import Question from './Components/Ask-Question/question'
+import GroupQuestion from './Components/Group-Question/index'
 import ViewQuestion from './Components/View-Question/index'
 import Auth from './Components/Signin/index'
 import './App.css';
@@ -26,6 +27,7 @@ function App() {
       <Route exact path='/' element={<Index/>}></Route>
       <Route exact path='/add-question' element={<Question/>}></Route>
       <Route exact path='/view-question' element={<ViewQuestion/>}></Route>
+      <Route exact path='/group-question' element={<GroupQuestion/>}></Route>
       <Route exact path='*' element={<Errorpage/>}></Route>
       </Route>
           

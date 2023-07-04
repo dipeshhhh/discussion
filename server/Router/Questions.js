@@ -131,6 +131,14 @@ router.get('/Question-detail/:id', (req, res) => {
 })
 
 
+router.get('/group-question/:id', (req,res)=>{
+
+    Question.find({group:req.params.id})
+        .then((resp)=>{
+            res.send(resp)
+        })
+})
+
 router.get('/deletepost/:id', (req, res) => {
 
 
@@ -165,6 +173,8 @@ router.get('/Q_download/:id',(req,resp)=>{
         resp.status(400).send(e)
     })
 })
+
+
 
 module.exports = router;
 

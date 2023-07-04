@@ -2,22 +2,16 @@ import React, { useEffect, useState } from 'react';
 import './css/AllQuestions.css';
 import { NavLink } from 'react-router-dom';
 import { Avatar } from '@mui/material';
-
-import BookmarkIcon from '@mui/icons-material/Bookmark';
-import HistoryIcon from '@mui/icons-material/History';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-import AttachFileIcon from '@mui/icons-material/AttachFile';
-
-import { Document, Page, PDFViewer } from '@react-pdf/renderer';
 import parse from 'html-react-parser';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 
 const AllQuestions = ({ question }) => {
   let result = question.result.map((resp) => {
-    // return resp;
-    return { ...resp, isAttachmentHidden: true };
+    return resp;
+   
   });
 
   result.reverse();
@@ -53,32 +47,10 @@ const AllQuestions = ({ question }) => {
       });
     }
   };
-
-  // Code for viewing pdf attachment
-  const [numPages, setNumPages] = useState(null);
-  const [pageNumber, setPageNumber] = useState(1);
-  const [resultState, setResult] = useState(result);
-
-  function onDocumentLoadSuccess({ numPages }) {
-    setNumPages(numPages);
-    setPageNumber(1);
-  }
-
-  function changePage(offSet) {
-    setPageNumber((prevPageNumber) => prevPageNumber + offSet);
-  }
-
-  function changePageBack() {
-    changePage(-1);
-  }
-
-  function changePageNext() {
-    changePage(+1);
-  }
-
+  
   return (
     <div className='all-questions'>
-      {resultState.map((data, index) => (
+      {result.map((data, index) => (
         <div className='all-questions-container' key={data._id}>
           <div className='all-questions-left'>
             <div className='all-options'>
@@ -88,15 +60,7 @@ const AllQuestions = ({ question }) => {
               <p className='option-icon expand active'>
                 <ExpandMoreIcon />
               </p>
-              {/* <AttachFileIcon className='option-icon' /> */}
-              <AttachFileIcon
-                className='option-icon'
-                onClick={() => {
-                  const updatedResult = [...resultState];
-                  updatedResult[index].isAttachmentHidden = !updatedResult[index].isAttachmentHidden;
-                  setResult(updatedResult);
-                }}
-              />
+                           
             </div>
           </div>
 
@@ -104,22 +68,7 @@ const AllQuestions = ({ question }) => {
             <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>
             <div style={{ width: '90%', marginBottom: '16px' }}>
               <div>{parse(truncate(data.body, 200))}</div>
-            </div>
-
-            <div className={data.isAttachmentHidden ? 'view-pdf' : 'view-pdf active'}>
-              <center>
-                <PDFViewer>
-                  <Document file='./bash.pdf' onLoadSuccess={onDocumentLoadSuccess}>
-                    <Page height='A4' pageNumber={pageNumber} />
-                  </Document>
-                </PDFViewer>
-                <p>
-                  Page {pageNumber} of {numPages}
-                </p>
-                {pageNumber > 1 && <button onClick={changePageBack}>Previous Page</button>}
-                {pageNumber < numPages && <button onClick={changePageNext}>Next Page</button>}
-              </center>
-            </div>
+            </div>           
 
             <div className='author'>
               {status ? (

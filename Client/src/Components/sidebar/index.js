@@ -23,12 +23,27 @@ const Index = () => {
     getQuestion()
   },[])
 
+  const [group, setGroup] = useState('')
 
+  useEffect(()=>{
+    async function getGroup()
+    {
+      await axios.get(`/group/${auth}`).then((res)=>{        
+         
+          setGroup(res.data)
+        
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+    getGroup()
+  },[])  
+  
   return (
     <div className='stack-index'>
 
         <div className='stack-index-content'>
-            <Sidebar/>
+            <Sidebar group={group}/>
             <Main questions= {questions} />
         </div>
     </div>

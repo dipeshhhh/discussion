@@ -1,12 +1,13 @@
 import React from 'react'
 import { NavLink } from 'react-router-dom'
 import FilterListIcon from '@mui/icons-material/FilterList';
-
-import AllQuestions from './AllQuestions';
+import AllQuestions from './groupQuestion';
 import './css/main.css'
 
 
-const main = ({questions}) => {
+const main = () => {
+
+  
   
   return (
     <div className='main'>
@@ -46,17 +47,16 @@ const main = ({questions}) => {
           </div>
         </div>
         </div>
-        <div className='questions'>
-          {questions.map((_q,index)=> (<>
-          <div key= {index} className='question'>
+        <div className='questions'>         
+          <div className='question'>
             
-            <AllQuestions question={_q}/>
+            <AllQuestions/>
           
         
               
             
              </div>
-             </> ))}
+             
         </div>
         
       </div>
