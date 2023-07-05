@@ -116,15 +116,11 @@ const handleLogin= async (e)=>{
             password
         }).then((resp)=>{
             const UserName = resp.data.userExist.email
-            // const UserID = resp.data.userExist._id 
-            // const User = resp.data.userExist._id
-            // const UserDivision = resp.data.userExist.division       
             sessionStorage.setItem('username',UserName)
-          
-            // alert('Welcome to ICAR Discussion Forum')           
-
-            toast.success('Login successfully') 
+                  
+            toast.success('Login successfully')           
             navigate('/')
+            window.location.reload(false); 
             
         })
         }

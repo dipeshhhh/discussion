@@ -28,18 +28,16 @@ const Question = () => {
       {
         await axios.get(`/group/${auth}`).then((res)=>{
            
-            // console.log(res.data)
-            setGroupid(res.data)
           
+        setGroupid(res)
+      
         }).catch((err)=>{
           console.log(err)
         })
       }
       getGroup()
-    },[])  
-
-    
- 
+    },[])     
+   
 
    const handleFileChange = (event) => {
        
@@ -159,10 +157,11 @@ const Question = () => {
             <select value={group} onChange={(e)=>setGroup(e.target.value)}>
             <option value=''>--Select Group--</option>
             {
-              groupid.Group?.map((resp)=>
-              <option value={resp}>{resp}</option>
-              )
-            }
+                groupid.data?.map((resp)=>
+                <option value={resp._id}>{resp.name}</option>
+                )
+            }                       
+          
             </select>          
              
           

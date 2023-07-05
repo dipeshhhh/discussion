@@ -36,7 +36,7 @@ const Index = () => {
     {
       await axios.get(`/group/${auth}`).then((res)=>{        
          
-          setGroup(res.data)
+          setGroup(res)
         
       }).catch((err)=>{
         console.log(err)

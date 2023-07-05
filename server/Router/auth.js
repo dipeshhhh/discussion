@@ -21,15 +21,13 @@ router.post('/Signup', async (req,res)=>{
         let Group=[]
        
        
-       const data =await Groupdivision.find({division:Divisionid},{_id:0, name:1})
+       const data =await Groupdivision.find({division:Divisionid},{_id:1})
        
     for(var i=0;i<data.length;i++)
     {
-        Group.push(data[i].name)
+        Group.push(data[i]._id)
     
     }
-
-    
 
        const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status});
        const result = await fetch.save()

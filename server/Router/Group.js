@@ -4,6 +4,8 @@ require('../DB/conn');
 const SmdDivision = require('../DB/SMDDivision')
 const Group = require('../DB/Group')
 const User = require('../DB/module')
+const { default: mongoose } = require('mongoose');
+const { ObjectId } = require('mongodb')
 
 
 
@@ -30,12 +32,15 @@ router.get('/smddetail/:name', (req,res)=>{
 //Group detail fetch from user collection
 router.get('/group/:id',(req,res)=>{
 
-    
+       
     User.find({email:req.params.id},{_id:0, Group:1})
      .then((resp)=>{
-        resp.map((rsp)=>{
-            res.status(200).send(rsp)
-        })
+            resp.map((rsp)=>{
+                   Group.find({_id:rsp.Group},{name:1})
+                   .then((grsp)=>{
+                        res.send(grsp)
+                   })
+       })
        
     }).catch((e)=>{
         res.status(400).send(e)
