@@ -5,11 +5,9 @@ import AllQuestions from './groupQuestion';
 import './css/main.css'
 
 
-const main = () => {
+const main = ({g_id}) => {
 
-  
-  
-  return (
+     return (
     <div className='main'>
       <div className='main-container'>
       <div className='main-top'>
@@ -50,7 +48,7 @@ const main = () => {
         <div className='questions'>         
           <div className='question'>
             
-            <AllQuestions/>
+            <AllQuestions group_id={g_id}/>
           
         
               

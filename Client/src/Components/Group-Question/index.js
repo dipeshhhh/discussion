@@ -8,28 +8,14 @@ import axios from 'axios'
 const Index = () => {
 
     let search = window.location.search
-  const params =new URLSearchParams(search)
-  const id = params.get('id')
+  let params =new URLSearchParams(search)
+  let id = params.get('id')
+      
+  console.log(id)
 
- 
-    
-//   let [questions, setQuestions] = useState([])
+
  const auth = sessionStorage.getItem('username')
-//   useEffect(()=>{
-//     async function getQuestion()
-//     {
-//       await axios.get(`/Question/${auth}`).then((res)=>{
-        
-//         // console.log(res.data)
-//         setQuestions(res.data)
-//       }).catch((err)=>{
-//         console.log(err)
-//       })
-//     }
-//     getQuestion()
-//   },[]) 
-
-const [group, setGroup] = useState('')
+ const [group, setGroup] = useState('')
 
   useEffect(()=>{
     async function getGroup()
@@ -50,7 +36,7 @@ const [group, setGroup] = useState('')
 
         <div className='stack-index-content'>
             <Sidebar group={group}/>
-            <Main id={id}/>
+            <Main g_id={id}/>
         </div>
     </div>
   )

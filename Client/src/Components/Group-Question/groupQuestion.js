@@ -8,10 +8,29 @@ import parse from 'html-react-parser';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 
-const GroupQuestion = () => {
+const GroupQuestion = ({group_id}) => {
 
 
-    
+  let [questions, setQuestions] = useState([])
+  
+  useEffect(()=>{
+    async function getQuestion()
+    {
+      await axios.get(`/group-question/${group_id}`).then((res)=>{
+         
+        setQuestions(res)
+
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+    getQuestion()
+  },[]) 
+
+  function truncate(str, n) {
+    return str.length > n ? str.substr(0, n - 1) + '...' : str;
+  }
+
 
   // useEffect(()=>{
   //   async function getQuestion(){
@@ -66,8 +85,10 @@ const GroupQuestion = () => {
 //   };
   
   return (
-    <div className='all-questions'>      
-        <div className='all-questions-container'>
+    <div className='all-questions'> 
+        {
+          questions.data?.map((data, index)=>(
+             <div className='all-questions-container' key={data._id}>
           <div className='all-questions-left'>
             <div className='all-options'>
               <p className='option-icon expand'>
@@ -81,9 +102,9 @@ const GroupQuestion = () => {
           </div>
 
           <div className='question-answer'>
-            <NavLink> </NavLink>
+          <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>
             <div style={{ width: '90%', marginBottom: '16px' }}>
-              <div></div>
+              <div>{parse(truncate(data.body, 200))}</div>
             </div>           
 
             <div className='author'>
@@ -96,7 +117,7 @@ const GroupQuestion = () => {
             </div>
           </div>
         </div>
-      
+        ))}
     </div>
   );
 };

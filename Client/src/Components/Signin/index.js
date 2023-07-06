@@ -88,7 +88,7 @@ const Index = () => {
             }
             catch(err)
             {
-                setError(err.response.data.err)
+                toast.error(err.response.data.err)
                 setLoading(false);
             }          
            
@@ -119,8 +119,7 @@ const handleLogin= async (e)=>{
             sessionStorage.setItem('username',UserName)
                   
             toast.success('Login successfully')           
-            navigate('/')
-            window.location.reload(false); 
+            navigate('/')    
             
         })
         }

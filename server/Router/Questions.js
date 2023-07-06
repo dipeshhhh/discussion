@@ -132,10 +132,15 @@ router.get('/Question-detail/:id', (req, res) => {
 
 
 router.get('/group-question/:id', (req,res)=>{
+   
 
     Question.find({group:req.params.id})
         .then((resp)=>{
-            res.send(resp)
+            return res.status(200).send(resp)
+        })
+        .catch((e) => {
+            console.log("Error:", e)
+            res.status(400).send(e)
         })
 })
 
