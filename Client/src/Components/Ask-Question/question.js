@@ -21,14 +21,37 @@ const Question = () => {
   const [file,setFile] = useState('')
   const handleQuill = (value) => {
       setBody(value)
+    
+      
+      
     }
+/**********Words Count for body & title part***********/
+    var text = body.replace(/<[^>]*>/g,'')
+              
+    text=text.trim();
+    let word = text.split(' ')
+   
+    let clearList =word.filter((function(elm){
+      return elm != '';
+    }))
+
+    let char = clearList.length   
+
+    var t_text = title.trim()
+    let t_word = t_text.split(' ')
+    let t_clearList = t_word.filter((function(element){
+      return element != ''
+    }))
+
+    let t_char = t_clearList.length
+    /***************************************/    
 
   useEffect(()=>{
       async function getGroup()
       {
         await axios.get(`/group/${auth}`).then((res)=>{
            
-          
+        console.log(res.data) 
         setGroupid(res)
       
         }).catch((err)=>{
@@ -41,8 +64,8 @@ const Question = () => {
 
    const handleFileChange = (event) => {
        
-        setFile(event.target.files[0])      
-     
+        setFile(event.target.files[0]) 
+                
     };  
 
     const add_question = async(e) => {
@@ -137,22 +160,33 @@ const Question = () => {
          <div className='question-option'>
           <div className='title'>
             <h3>Title</h3>
-            <small>Be specific and imagine you're asking a question to Group Member</small>
-            <input type="text" value={title} onChange={(e)=> setTitle(e.target.value)}
-             
-            placeholder='Add the question title' />
+            <small>Be specific and imagine you're asking a question to Group Member</small>            
+          <input type="text" value={title} onChange={(e)=> setTitle(e.target.value)}
+           
+              placeholder='Add the question title' />
           </div>
+          <p>
+              <span dangerouslySetInnerHTML={{__html:t_char}}>
+                </span> &nbsp;  words
+             </p>
         </div>
           <div className='question-option'>
           <div className='body'>
             <h3>Body</h3>
             <small>Include all the information someone would need to answer your question</small>
-             <ReactQuill value={body} onChange={handleQuill} className='react-quill'theme='snow'/>
+             <ReactQuill value={body} id='textbox' onChange={handleQuill} className='react-quill'theme='snow'/>
              </div>
+             <p>
+              <span dangerouslySetInnerHTML={{__html:char}}>
+                </span> &nbsp;  words
+             </p>
         </div>
         <div className='question-option'>
           <div className='group'>
             <h3>Groups</h3>
+            {
+
+            }
             <small>Please Select the group</small>
             <select value={group} onChange={(e)=>setGroup(e.target.value)}>
             <option value=''>--Select Group--</option>

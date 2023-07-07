@@ -26,7 +26,7 @@ const Header = () => {
     {
       await axios.get(`/user-detail/${auth}`).then((res)=>{
         
-        
+       
         setUserDetail(res.data)
       }).catch((err)=>{
         console.log(err)
