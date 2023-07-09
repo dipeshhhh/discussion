@@ -12,13 +12,14 @@ const Question = () => {
   const navigate = useNavigate()
 
   const auth = sessionStorage.getItem('username')
-  const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');  
   const [title, setTitle] =useState('')
   const [group,setGroup] = useState('')
   const [groupid,setGroupid] = useState('')
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
+  const [user, setUser] = useState('')
   const handleQuill = (value) => {
       setBody(value)
     
@@ -37,6 +38,11 @@ const Question = () => {
 
     let char = clearList.length   
 
+    if(char>150)
+    {
+      char = 'You should write only 150'
+    }
+
     var t_text = title.trim()
     let t_word = t_text.split(' ')
     let t_clearList = t_word.filter((function(element){
@@ -44,6 +50,11 @@ const Question = () => {
     }))
 
     let t_char = t_clearList.length
+
+    if(t_char>20)
+    {
+      t_char= 'you should write only 20'
+    }
     /***************************************/    
 
   useEffect(()=>{
@@ -59,7 +70,22 @@ const Question = () => {
         })
       }
       getGroup()
-    },[])     
+    },[])   
+    
+  useEffect(()=>{
+    async function user_detail()
+    {
+      await axios.get(`/user-detail/${auth}`).then((res)=>{
+           
+        setUser(res.data)
+      
+        }).catch((err)=>{
+          console.log(err)
+        })
+
+    }
+    user_detail()
+  }, [])  
    
 
    const handleFileChange = (event) => {
@@ -185,20 +211,25 @@ const Question = () => {
           <div className='group'>
             <h3>Groups</h3>
             {
-
-            }
-            <small>Please Select the group</small>
-            <select value={group} onChange={(e)=>setGroup(e.target.value)}>
-            <option value=''>--Select Group--</option>
-            {
-                groupid.data?.map((resp)=>
-                <option value={resp._id}>{resp.name}</option>
-                )
-            }                       
-          
-            </select>          
+          user.status==1 ? 
              
+              <p>
+                Your Subject is : {user.Divisionid}
+              </p>
+              :
+               // <small>Please Select the group</small>
+              
+              <select value={group} onChange={(e)=>setGroup(e.target.value)}>
+          <option value=''>--Select Group--</option>
+          {
+              groupid.data?.map((resp)=>
+              <option value={resp._id}>{resp.name}</option>
+              )
+          } 
+                    </select>
+        }          
           
+              
           </div>
         </div>
 

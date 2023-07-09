@@ -33,10 +33,11 @@ router.get('/smddetail/:name', (req,res)=>{
 router.get('/group/:id',(req,res)=>{
 
        
-    User.find({email:req.params.id},{_id:0, Group:1, status:1})
+    User.find({email:req.params.id},{_id:0,Group:1})
      .then((resp)=>{
-            resp.map((rsp)=>{
-                   Group.find({_id:rsp.Group},{name:1})
+        
+            resp.map((rsp)=>{               
+                                  Group.find({_id:rsp.Group},{name:1})
                    .then((grsp)=>{
                           res.send(grsp)
                    })

@@ -91,7 +91,7 @@ router.post('/Signin', async (req, res) => {
 //User Details fetch 
 router.get('/user-detail/:id',(req,res)=>{
 
-    Users.findOne({email:req.params.id}).then((resp)=>{
+    Users.findOne({email:req.params.id},{name:1, email:1, Divisionid:1,status:1}).then((resp)=>{
         res.status(200).send(resp)
     }).catch((e)=>{
        res.status(400).send(e)
