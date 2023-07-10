@@ -107,7 +107,7 @@ const Question = () => {
     data.append('auth',auth)
     data.append('group',group)
      
-    if(!title || !body || !group)
+    if(!title || !body)
       {       
         setError("Something missing");
         setLoading(false);
