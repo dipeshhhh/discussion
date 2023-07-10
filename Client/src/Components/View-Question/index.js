@@ -36,7 +36,7 @@ const Index = () => {
     {
       await axios.get(`/group/${auth}`).then((res)=>{        
          
-          setGroup(res)
+          setGroup(res.data)
         
       }).catch((err)=>{
         console.log(err)
@@ -58,7 +58,7 @@ const Index = () => {
         questiondata?.map((_id,index)=>(
           <>
             <div key={index}className='stack-index-content'>
-            <Sidebar group={group}/>
+            <Sidebar Subject={group}/>
             <Main details={_id}/>
 
             </div>   

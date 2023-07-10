@@ -150,7 +150,7 @@ const handleLogin= async (e)=>{
           {
             await axios.get('/smddetail').then((res)=>{
                
-                // console.log(res.data)
+                //console.log(res.data)
                 setSmd(res.data)
             }).catch((err)=>{
               console.log(err)
@@ -274,7 +274,7 @@ const handleLogin= async (e)=>{
                                   {
                                      Division.map((resp)=>
                                         resp.division.map((res)=>
-                                        <option value={res}>{res}</option>
+                                        <option value={res._id}>{res}</option>
                                         )
                                     )
                                   }

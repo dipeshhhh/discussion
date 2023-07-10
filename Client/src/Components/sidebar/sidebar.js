@@ -6,9 +6,8 @@ import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
 
 
-const sidebar = ({group}) => { 
+const sidebar = ({Subject}) => { 
   
-    
   return (
     <div className='sidebar'>
         <div className='sidebar-container'>
@@ -20,16 +19,21 @@ const sidebar = ({group}) => {
                             <span className="link-title">Home</span>
                         </NavLink>
 
-                        <span className="sidebar-option-category-title"> Your Group</span>                
-                        { 
-                          group.data?.map((resp)=>                          
-                        <NavLink to={`/Group-Question?id=${resp._id}`} className='link-tag sidebar-option'>
+                        <span className="sidebar-option-category-title">Your Subject</span>  
+                        
+                        <NavLink className='link-tag sidebar-option'>
                             <PeopleIcon />
-                            <span className="link-title">{resp.name}</span>
+                            <span className="link-title">{Subject.Smdid}</span>
+                        </NavLink> 
+                        {/* { 
+                          group.data?.map((resp)=>                          
+                        <NavLink to={`/Group-Question?id=${resp}`} className='link-tag sidebar-option'>
+                            <PeopleIcon />
+                            <span className="link-title">{resp}</span>
                         </NavLink>                                                            
                     ) 
                                            
-                }
+                } */}
                     </div>            
 
             </div>

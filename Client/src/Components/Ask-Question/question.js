@@ -7,6 +7,15 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useNavigate} from 'react-router-dom'
 
+import Checkbox from '@mui/material/Checkbox';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
+import CheckBoxIcon from '@mui/icons-material/CheckBox';
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
+
 const Question = () => {
 
   const navigate = useNavigate()
@@ -20,13 +29,14 @@ const Question = () => {
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
   const [user, setUser] = useState('')
+  const [members, setMembers]= useState('')
   const handleQuill = (value) => {
       setBody(value)
     
       
       
     }
-/**********Words Count for body & title part***********/
+/*********  Words Count for body & title part   ***********/
     var text = body.replace(/<[^>]*>/g,'')
               
     text=text.trim();
@@ -61,8 +71,7 @@ const Question = () => {
       async function getGroup()
       {
         await axios.get(`/group/${auth}`).then((res)=>{
-           
-        console.log(res.data) 
+              
         setGroupid(res)
       
         }).catch((err)=>{
@@ -76,7 +85,7 @@ const Question = () => {
     async function user_detail()
     {
       await axios.get(`/user-detail/${auth}`).then((res)=>{
-           
+          
         setUser(res.data)
       
         }).catch((err)=>{
@@ -105,7 +114,8 @@ const Question = () => {
     data.append('title',title)
     data.append('body',body)
     data.append('auth',auth)
-    data.append('group',group)
+    data.append('subject',user.Divisionid)
+    //data.append('group',group)
      
     if(!title || !body)
       {       
@@ -173,6 +183,29 @@ const Question = () => {
     } 
 
 
+   /**************Handle user Regarding the Subjects **************/ 
+     
+   useEffect(()=>{
+    async function getMembers()
+    {
+            
+      await axios.get(`/Member/${user.Divisionid}`).then((res)=>{
+      console.log(res.data)
+      setMembers(res.data)
+    
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+    getMembers()
+  },[])  
+
+   const handleMember = (e) =>{
+    const {name, checked} =e.target
+    console.log(name)
+   }
+
+
   return (
 
     
@@ -217,21 +250,47 @@ const Question = () => {
                 Your Subject is : {user.Divisionid}
               </p>
               :
-               // <small>Please Select the group</small>
+               <small>Please Select the group</small>
               
-              <select value={group} onChange={(e)=>setGroup(e.target.value)}>
-          <option value=''>--Select Group--</option>
-          {
-              groupid.data?.map((resp)=>
-              <option value={resp._id}>{resp.name}</option>
-              )
-          } 
-                    </select>
+          //     <select value={group} onChange={(e)=>setGroup(e.target.value)}>
+          // <option value=''>--Select Group--</option>
+          // {
+          //     groupid.data?.map((resp)=>
+          //     <option value={resp._id}>{resp.name}</option>
+          //     )
+          // } 
+          //           </select>
         }          
           
               
           </div>
         </div>
+
+        <Autocomplete
+      multiple
+      id="checkboxes-tags-demo"
+      options={members}
+      disableCloseOnSelect
+      getOptionLabel={(option) => option.name}
+      renderOption={(props, option, { selected }) => (
+        <li {...props}>
+          <Checkbox
+            icon={icon}
+            checkedIcon={checkedIcon}
+            style={{ marginRight: 8 }}
+            checked={selected}
+            onChange={handleMember}
+            name={option.email}
+          />
+          {option.name}
+        </li>
+      )}
+      style={{ width: 500 }}
+      renderInput={(params) => (
+        <TextField {...params} label="Checkboxes" placeholder="Favorites" />
+      )}
+    />
+
 
 
         <div className='question-option'>
@@ -262,3 +321,11 @@ const Question = () => {
 }
 
 export default Question
+
+
+// const members = [
+//   { email: 'nitin@icar.gov.in', name: 'nitin' },
+//   { email: 'anil@icar.gov.in', name: 'anil' },
+//   { email: 'chhavi@icar.gov.in', name: 'chhavi' }
+// ]
+

@@ -3,6 +3,7 @@ const QuestionSchema = new mongoose.Schema({
     title:String,
     body:String,
     auth:String,
+    subject:String,
     created_at:{
         type:Date,
         //default:Date.now()

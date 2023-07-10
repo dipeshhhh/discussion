@@ -26,7 +26,7 @@ router.post('/Question', upload,async(req,res)=>{
  
     // console.log(req.body,req.file)
    
-    const { title, body, auth, group } = req.body;
+    const { title, body, auth, subject } = req.body;
      
     const file = req.file.path
     
@@ -47,7 +47,7 @@ router.post('/Question', upload,async(req,res)=>{
     */    
      
     try{   
-        const data = new Question({auth, title, body, file, group,created_at});
+        const data = new Question({auth, title, body, file, subject,created_at});
         const result = await data.save()
 
         if(result)
@@ -75,8 +75,8 @@ router.get('/Question/:id', async(req,res)=>{
             {
                 $lookup: {
                     from:'questions',
-                    localField:'Group',
-                    foreignField:'group',
+                    localField:'Divisionid',
+                    foreignField:'subject',
                     as:'result'
                 }
             },
