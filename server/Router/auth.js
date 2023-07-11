@@ -101,7 +101,6 @@ router.get('/user-detail/:id',(req,res)=>{
 //Get Member of a Specific Subject
 
 router.get('/Member/:id',(req,res)=>{
-
     
     Users.find({Divisionid:req.params.id},{_id:0,email:1,name:1}).then((resp)=>{
         

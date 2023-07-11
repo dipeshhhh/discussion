@@ -29,7 +29,8 @@ const Question = () => {
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
   const [user, setUser] = useState('')
-  const [members, setMembers]= useState('')
+  //const [members, setMembers]= useState('')
+  const [member, setMember] = useState('')
   const handleQuill = (value) => {
       setBody(value)
     
@@ -158,6 +159,7 @@ const Question = () => {
         if(window.confirm('Please confirm for Post'))
         {
 
+          console.log(member)
           try {
             axios.post("/Question",data).then(res => {
   
@@ -191,7 +193,7 @@ const Question = () => {
             
       await axios.get(`/Member/${user.Divisionid}`).then((res)=>{
       console.log(res.data)
-      setMembers(res.data)
+      //setMembers(res.data)
     
       }).catch((err)=>{
         console.log(err)
@@ -202,9 +204,17 @@ const Question = () => {
 
    const handleMember = (e) =>{
     const {name, checked} =e.target
-    console.log(name)
-   }
+    console.log(`${name} is ${checked}`)
 
+    if(checked)
+    {
+      setMember([...member,name])
+    }
+    else{
+      setMember(member.filter((e)=> e!=name))
+    }
+   }   
+   
 
   return (
 
@@ -266,6 +276,13 @@ const Question = () => {
           </div>
         </div>
 
+                {/* <small>Select your Post for All or Specific User</small>
+            <select>
+         <option value=''>--Select --</option>
+          <option value="All">All Group Member</option>
+          <option value="Specific">Specific User</option>  
+           </select> */}
+
         <Autocomplete
       multiple
       id="checkboxes-tags-demo"
@@ -273,6 +290,7 @@ const Question = () => {
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
+           
         <li {...props}>
           <Checkbox
             icon={icon}
@@ -281,13 +299,13 @@ const Question = () => {
             checked={selected}
             onChange={handleMember}
             name={option.email}
-          />
+          />                  
           {option.name}
         </li>
       )}
       style={{ width: 500 }}
       renderInput={(params) => (
-        <TextField {...params} label="Checkboxes" placeholder="Favorites" />
+        <TextField {...params}  label="Checkboxes" placeholder="Favorites" />
       )}
     />
 
@@ -323,9 +341,9 @@ const Question = () => {
 export default Question
 
 
-// const members = [
-//   { email: 'nitin@icar.gov.in', name: 'nitin' },
-//   { email: 'anil@icar.gov.in', name: 'anil' },
-//   { email: 'chhavi@icar.gov.in', name: 'chhavi' }
-// ]
+const members = [
+  { email: 'nitin@icar.gov.in', name: 'nitin' },
+  { email: 'anil@icar.gov.in', name: 'anil' },
+  { email: 'chhavi@icar.gov.in', name: 'chhavi' }
+]
 
