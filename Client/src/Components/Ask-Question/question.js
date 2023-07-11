@@ -29,7 +29,7 @@ const Question = () => {
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
   const [user, setUser] = useState('')
-  //const [members, setMembers]= useState('')
+  const [members, setMembers]= useState('')
   const [member, setMember] = useState('')
   const handleQuill = (value) => {
       setBody(value)
@@ -69,33 +69,75 @@ const Question = () => {
     /***************************************/    
 
   useEffect(()=>{
-      async function getGroup()
-      {
-        await axios.get(`/group/${auth}`).then((res)=>{
+  //     async function getGroup()
+  //     {
+  //       await axios.get(`/group/${auth}`).then((res)=>{
               
-        setGroupid(res)
+  //       setGroupid(res)
       
-        }).catch((err)=>{
-          console.log(err)
-        })
-      }
-      getGroup()
-    },[])   
-    
-  useEffect(()=>{
-    async function user_detail()
-    {
-      await axios.get(`/user-detail/${auth}`).then((res)=>{
-          
-        setUser(res.data)
+  //       }).catch((err)=>{
+  //         console.log(err)
+  //       })
+  //     }
+  //     getGroup()  
+    let userDetails = new Promise(async(resolve,reject)=>{
+      const response = await axios.get(`/user-detail/${auth}`)        
+       resolve(response.data)  
+    })
+    userDetails.then(
+      async function(value)
+      {
+      const M_Data = await axios.get(`/Member/${value.Divisionid}`)
       
-        }).catch((err)=>{
-          console.log(err)
-        })
+      setUser(value.Divisionid)
+      setMembers(M_Data.data)
 
+      },
+      function(error)
+      {
+        console.log(error)
+      }
+    )
+      async function user_detail()
+   {
+      const response = await axios.get(`/user-detail/${auth}`)
+      console.log(response)
+       setUser(response.data)  
+    //   .then((res)=>{
+    //     console.log(res.data)
+    //   setUser(res.data)      
+    
+    //   }).catch((err)=>{
+    //     console.log(err)
+    //   })
+     }
+  //  user_detail()
+  //  console.log(user)
+
+    async function getMembers()
+    {          
+      const M_Data = await axios.get(`/Member/${user.Divisionid}`)
+      console.log(M_Data)
+      // .then((res)=>{
+      // console.log(res.data)
+      // //setMembers(res.data)
+    
+      // }).catch((err)=>{
+      //   console.log(err)
+      // })
     }
-    user_detail()
-  }, [])  
+   // getMembers()
+
+    }, [])
+    
+  // useEffect(()=>{
+  //   async function user_detail()
+  //   {
+     
+
+  //   }
+  //   user_detail()
+  // }, [])  
    
 
    const handleFileChange = (event) => {
@@ -217,8 +259,7 @@ const Question = () => {
    
 
   return (
-
-    
+   
     <div className='add-question'>
       <div className='add-question-container'>
       <div className='head-title'>
@@ -341,9 +382,9 @@ const Question = () => {
 export default Question
 
 
-const members = [
-  { email: 'nitin@icar.gov.in', name: 'nitin' },
-  { email: 'anil@icar.gov.in', name: 'anil' },
-  { email: 'chhavi@icar.gov.in', name: 'chhavi' }
-]
+// const members = [
+//   { email: 'nitin@icar.gov.in', name: 'nitin' },
+//   { email: 'anil@icar.gov.in', name: 'anil' },
+//   { email: 'chhavi@icar.gov.in', name: 'chhavi' }
+// ]
 
