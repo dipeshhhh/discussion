@@ -102,7 +102,7 @@ router.get('/user-detail/:id',(req,res)=>{
 
 router.get('/Member/:id',(req,res)=>{
     
-    Users.find({Divisionid:req.params.id},{_id:0,email:1,name:1}).then((resp)=>{
+       Users.find({$and: [{Divisionid:req.params.id},{email:{$ne:'anil.rai@icar.gov.in'}}]} ,{_id:0,email:1,name:1}).then((resp)=>{
         
         res.status(200).send(resp)
     }).catch((e)=>{

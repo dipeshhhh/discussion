@@ -31,6 +31,7 @@ const Question = () => {
   const [user, setUser] = useState('')
   const [members, setMembers]= useState('')
   const [member, setMember] = useState('')
+  const [gStatus, setGStatus]= useState(true)
   const handleQuill = (value) => {
       setBody(value)
     
@@ -89,7 +90,7 @@ const Question = () => {
       {
       const M_Data = await axios.get(`/Member/${value.Divisionid}`)
       
-      setUser(value.Divisionid)
+      setUser(value)
       setMembers(M_Data.data)
 
       },
@@ -97,47 +98,11 @@ const Question = () => {
       {
         console.log(error)
       }
-    )
-      async function user_detail()
-   {
-      const response = await axios.get(`/user-detail/${auth}`)
-      console.log(response)
-       setUser(response.data)  
-    //   .then((res)=>{
-    //     console.log(res.data)
-    //   setUser(res.data)      
-    
-    //   }).catch((err)=>{
-    //     console.log(err)
-    //   })
-     }
-  //  user_detail()
-  //  console.log(user)
-
-    async function getMembers()
-    {          
-      const M_Data = await axios.get(`/Member/${user.Divisionid}`)
-      console.log(M_Data)
-      // .then((res)=>{
-      // console.log(res.data)
-      // //setMembers(res.data)
-    
-      // }).catch((err)=>{
-      //   console.log(err)
-      // })
-    }
-   // getMembers()
+    )   
 
     }, [])
     
-  // useEffect(()=>{
-  //   async function user_detail()
-  //   {
-     
-
-  //   }
-  //   user_detail()
-  // }, [])  
+  
    
 
    const handleFileChange = (event) => {
@@ -201,7 +166,7 @@ const Question = () => {
         if(window.confirm('Please confirm for Post'))
         {
 
-          console.log(member)
+        
           try {
             axios.post("/Question",data).then(res => {
   
@@ -228,35 +193,44 @@ const Question = () => {
 
 
    /**************Handle user Regarding the Subjects **************/ 
+
+
      
-   useEffect(()=>{
-    async function getMembers()
-    {
-            
-      await axios.get(`/Member/${user.Divisionid}`).then((res)=>{
-      console.log(res.data)
-      //setMembers(res.data)
-    
-      }).catch((err)=>{
-        console.log(err)
-      })
-    }
-    getMembers()
-  },[])  
+   const groupMember= (e)=>{
+        const val = e.target.value
+        
+        if(val == 0)
+        {  
+          setGStatus(true)
+          setMember([])
+          let Member = members.map((resp)=>{ return (resp.email)})
+          setMember(Member)
+          Member.push(auth)
+                    
+             
+        }
+        else
+        {
+          setMember([auth])
+          setGStatus(false)
+        } 
+   }
 
    const handleMember = (e) =>{
     const {name, checked} =e.target
     console.log(`${name} is ${checked}`)
 
     if(checked)
-    {
+    {      
       setMember([...member,name])
+      
     }
     else{
       setMember(member.filter((e)=> e!=name))
     }
-   }   
-   
+   } 
+     
+   console.log(member)
 
   return (
    
@@ -317,14 +291,26 @@ const Question = () => {
           </div>
         </div>
 
-                {/* <small>Select your Post for All or Specific User</small>
-            <select>
-         <option value=''>--Select --</option>
-          <option value="All">All Group Member</option>
-          <option value="Specific">Specific User</option>  
-           </select> */}
+        <div className='question-option'>
+          <div className='group'>
+            <h3>Groups</h3>
+           
+               <small>Please Select the group</small>
+              
+             <select onChange={(e)=>{groupMember(e)}}>
+           <option value=''>--Select Group--</option>             
+              <option value='0'>To All Member Subject</option>
+              <option value='1'>To Specific Member Subject</option>
+       
+                    </select>
+                      
+              
+          </div>
+        </div>
+            
 
         <Autocomplete
+        hidden={gStatus}
       multiple
       id="checkboxes-tags-demo"
       options={members}
@@ -346,7 +332,7 @@ const Question = () => {
       )}
       style={{ width: 500 }}
       renderInput={(params) => (
-        <TextField {...params}  label="Checkboxes" placeholder="Favorites" />
+        <TextField {...params}  label="Search Group Member Name" placeholder="Favorites" />
       )}
     />
 
@@ -387,4 +373,3 @@ export default Question
 //   { email: 'anil@icar.gov.in', name: 'anil' },
 //   { email: 'chhavi@icar.gov.in', name: 'chhavi' }
 // ]
-
