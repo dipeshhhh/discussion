@@ -36,7 +36,7 @@ router.get('/group/:id',(req,res)=>{
     User.find({email:req.params.id},{_id:0,Smdid:1})
      .then((resp)=>{       
        
-            resp.map((rsp)=>{
+            resp.map((rsp)=>{              
                              
                 //                   Group.find({_id:rsp.Group},{name:1})
                 //    .then((grsp)=>{
@@ -47,6 +47,20 @@ router.get('/group/:id',(req,res)=>{
     }).catch((e)=>{
         res.status(400).send(e)
     })
+})
+
+router.get('/main_group/:id',(req,res)=>{
+        User.find({email:req.params.id},{_id:0,Group:1})
+        .then((resp)=>{
+            resp.map((rsp)=>{
+                
+                Group.find({_id:rsp.Group},{name:1})
+                   .then((grsp)=>{
+                          res.send(grsp)
+                    })
+
+            })
+        })
 })
 
 module.exports = router;

@@ -4,6 +4,7 @@ const QuestionSchema = new mongoose.Schema({
     body:String,
     auth:String,
     subject:String,
+    member:[String],
     created_at:{
         type:Date,
         //default:Date.now()

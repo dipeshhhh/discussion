@@ -100,9 +100,10 @@ router.get('/user-detail/:id',(req,res)=>{
 
 //Get Member of a Specific Subject
 
-router.get('/Member/:id',(req,res)=>{
+router.get('/Member',(req,res)=>{
     
-       Users.find({$and: [{Divisionid:req.params.id},{email:{$ne:'anil.rai@icar.gov.in'}}]} ,{_id:0,email:1,name:1}).then((resp)=>{
+   
+       Users.find({$and: [{Divisionid:req.query.id_1},{email:{$ne:req.query.id_2}}]} ,{_id:0,email:1,name:1}).then((resp)=>{
         
         res.status(200).send(resp)
     }).catch((e)=>{

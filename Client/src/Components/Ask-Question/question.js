@@ -31,6 +31,7 @@ const Question = () => {
   const [user, setUser] = useState('')
   const [members, setMembers]= useState('')
   const [member, setMember] = useState('')
+  const [bthidden, setBthidden] = useState(false);
   const [gStatus, setGStatus]= useState(true)
   const handleQuill = (value) => {
       setBody(value)
@@ -70,17 +71,18 @@ const Question = () => {
     /***************************************/    
 
   useEffect(()=>{
-  //     async function getGroup()
-  //     {
-  //       await axios.get(`/group/${auth}`).then((res)=>{
-              
-  //       setGroupid(res)
+   /************This is *************/ 
+      async function getGroup()
+      {
+        await axios.get(`/main_group/${auth}`).then((res)=>{
+            
+       setGroupid(res)
       
-  //       }).catch((err)=>{
-  //         console.log(err)
-  //       })
-  //     }
-  //     getGroup()  
+        }).catch((err)=>{
+          console.log(err)
+        })
+      }      
+      getGroup()  
     let userDetails = new Promise(async(resolve,reject)=>{
       const response = await axios.get(`/user-detail/${auth}`)        
        resolve(response.data)  
@@ -88,10 +90,10 @@ const Question = () => {
     userDetails.then(
       async function(value)
       {
-      const M_Data = await axios.get(`/Member/${value.Divisionid}`)
-      
-      setUser(value)
-      setMembers(M_Data.data)
+      const M_Data = await axios.get('/Member',{params:{id_1:value.Divisionid,id_2:auth}})
+       
+        setUser(value)
+        setMembers(M_Data.data)
 
       },
       function(error)
@@ -106,9 +108,17 @@ const Question = () => {
    
 
    const handleFileChange = (event) => {
-       
-        setFile(event.target.files[0]) 
-                
+              
+        const files = event.target.files[0];
+
+    if (files.size / 1024 > 5120 || files.type.split('/').pop() !== 'pdf') {
+      setBthidden(true);
+      setError('Please upload file as per the specified criteria');
+    } else {
+      setError('');
+      setBthidden(false);
+      setFile(event.target.files[0]);
+    }                
     };  
 
     const add_question = async(e) => {
@@ -117,12 +127,13 @@ const Question = () => {
     setLoading(true)
 
     const data = new FormData()
-
+      
     data.append('file', file)
     data.append('title',title)
     data.append('body',body)
     data.append('auth',auth)
     data.append('subject',user.Divisionid)
+    data.append('Members', member)
     //data.append('group',group)
      
     if(!title || !body)
@@ -141,25 +152,11 @@ const Question = () => {
         setError("Body Character should be about 1500 Characters");
       setLoading(false);
       }
-    
-      else if (!file)
-      {      
-        setError("Please attach the file");
-
+      else if(member.length<=1)
+      {
+        setError("Please Select the Group Member");
         setLoading(false);
-      }
-      else if(file.type.split('/').pop()!='pdf')
-        {
-
-          setError("Please upload file in pdf format");
-          setLoading(false);
-          
-        }
-        else if (file.size/1024 > 5120) 
-        {          
-          setError("Please Upload file less than 5MB");
-          setLoading(false);
-        }        
+      }          
      
       else
       {   
@@ -198,9 +195,14 @@ const Question = () => {
      
    const groupMember= (e)=>{
         const val = e.target.value
-        
-        if(val == 0)
-        {  
+        if(val == '')
+        {
+          setGStatus(true)
+          setMember([])          
+        }
+        else if(val == 0)
+        {
+          setError(" ");            
           setGStatus(true)
           setMember([])
           let Member = members.map((resp)=>{ return (resp.email)})
@@ -209,14 +211,18 @@ const Question = () => {
                     
              
         }
-        else
+        else if(val == 1)
         {
+          setError(" "); 
           setMember([auth])
           setGStatus(false)
-        } 
+        }
+       
    }
 
    const handleMember = (e) =>{
+
+    setError(" "); 
     const {name, checked} =e.target
     console.log(`${name} is ${checked}`)
 
@@ -275,27 +281,32 @@ const Question = () => {
                 Your Subject is : {user.Divisionid}
               </p>
               :
-               <small>Please Select the group</small>
+
               
-          //     <select value={group} onChange={(e)=>setGroup(e.target.value)}>
-          // <option value=''>--Select Group--</option>
-          // {
-          //     groupid.data?.map((resp)=>
-          //     <option value={resp._id}>{resp.name}</option>
-          //     )
-          // } 
-          //           </select>
+              //  <small>Please Select the group</small>
+              
+              <select value={group} onChange={(e)=>setGroup(e.target.value)}>
+          <option value=''>--Select Group--</option>
+         
+          {
+              groupid.data?.map((resp)=>
+              <option value={resp._id}>{resp.name}</option>
+              )
+          } 
+                    </select>      
         }          
           
               
           </div>
         </div>
-
-        <div className='question-option'>
+        {
+          user.status==1 ? 
+          
+          <div className='question-option'>
           <div className='group'>
-            <h3>Groups</h3>
+            <h3>Member</h3>
            
-               <small>Please Select the group</small>
+               <small>Please Select the Member</small>
               
              <select onChange={(e)=>{groupMember(e)}}>
            <option value=''>--Select Group--</option>             
@@ -306,10 +317,13 @@ const Question = () => {
                       
               
           </div>
-        </div>
-            
+        </div>          
 
-        <Autocomplete
+          :
+          <p>hi... you Super Admin</p>
+        }
+
+<Autocomplete
         hidden={gStatus}
       multiple
       id="checkboxes-tags-demo"
@@ -336,6 +350,9 @@ const Question = () => {
       )}
     />
 
+                   
+
+        
 
 
         <div className='question-option'>
@@ -352,7 +369,7 @@ const Question = () => {
       )}    
         </div>
       </div>
-      <button className='button' onClick={add_question}>
+      <button hidden={bthidden} className='button' onClick={add_question}>
       {loading ? "Posting..." : "Post"}     
         </button>  
       </div>

@@ -26,13 +26,14 @@ router.post('/Question', upload,async(req,res)=>{
  
     // console.log(req.body,req.file)
    
-    const { title, body, auth, subject } = req.body;
-     
-    const file = req.file.path
-    
+    const { title, body, auth, subject,Members} = req.body;
+      
     const created_at = new Date();   
+   
+    const member = Members.split(',')
+
     
- /*     
+ /* for upload the file     
     upload(req,res, function(err)
     {
         if (err) {
@@ -44,25 +45,56 @@ router.post('/Question', upload,async(req,res)=>{
     }
     )
     This code for Check file uploaded or not
-    */    
-     
-    try{   
-        const data = new Question({auth, title, body, file, subject,created_at});
-        const result = await data.save()
+    */  
 
-        if(result)
-        {
-           
-        res.status(200).json({message: 'inserted'})
+    if(req.file)
+    {
+        const file = req.file.path 
+
+        try{   
+            const data = new Question({auth, title, body, file, subject,created_at,member});
+            const result = await data.save()
+    
+            if(result)
+            {
+               
+            res.status(200).json({message: 'inserted'})
+            }
+            else{
+            console.log('error')
+            return res.status(402).json({ err: 'not inserted' }) 
+            }
         }
-        else{
-        console.log('error')
-        return res.status(402).json({ err: 'not inserted' }) 
+        catch (err){
+            console.log(err);
         }
+
     }
-    catch (err){
-        console.log(err);
+
+    else
+    {
+
+        try{   
+            const data = new Question({auth, title, body, subject,created_at,member});
+            const result = await data.save()
+    
+            if(result)
+            {
+               
+            res.status(200).json({message: 'inserted'})
+            }
+            else{
+            console.log('error')
+            return res.status(402).json({ err: 'not inserted' }) 
+            }
+        }
+        catch (err){
+            console.log(err);
+        }
+
     }
+     
+    
 })
 
 router.get('/Question/:id', async(req,res)=>{
