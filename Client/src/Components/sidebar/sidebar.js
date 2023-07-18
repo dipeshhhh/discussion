@@ -23,7 +23,7 @@ const sidebar = ({Subject}) => {
                         
                         <NavLink className='link-tag sidebar-option'>
                             <PeopleIcon />
-                            <span className="link-title">{Subject.Smdid}</span>
+                            <span className="link-title">{Subject.Divisionid}</span>
                         </NavLink> 
                         {/* { 
                           group.data?.map((resp)=>                          

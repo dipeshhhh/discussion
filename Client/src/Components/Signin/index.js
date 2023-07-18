@@ -20,7 +20,7 @@ const Index = () => {
         if(auth)
         {
           navigate('/')
-        }
+        }        
       })
 
     const [loading, setLoading] = useState(false);
@@ -268,9 +268,9 @@ const handleLogin= async (e)=>{
                                   </select>
                               </div>
                               <div className='input-field'>
-                                  <p>Select Division</p>
+                                  <p>Select Subject</p>
                                   <select disabled={enable} onChange={(e)=>{handeDivision(e)}} id="division">
-                                  <option value=''>--Select Division--</option>
+                                  <option value=''>--Select Subject--</option>
                                   {
                                      Division.map((resp)=>
                                         resp.division.map((res)=>
@@ -289,7 +289,7 @@ const handleLogin= async (e)=>{
                                   placeholder='Enter the password'/>
                               </div>
                               <div className='input-field'>
-                                  <p>Confirm Pasword</p>
+                                  <p>Confirm Password</p>
                                   <input type="password" name='cpassword' autoComplete='off'
                                   value={user.cpassword}
                                   onChange={handleInput}

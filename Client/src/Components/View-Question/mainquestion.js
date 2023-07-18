@@ -150,9 +150,19 @@ const Mainquestion = (details) => {
         <div className="main-desc">
           <div className="info">
             <p>on {new Date(detail?.created_at).toLocaleString().replace(/,/g, ' at ')}</p>
+
+          {
+            detail.file ?
+
             <a onClick={(e) => download(detail._id)}>
-              <FileDownloadIcon />
-            </a>
+            <FileDownloadIcon />
+          </a>
+            :
+            <></>
+
+          }          
+
+           
           </div>
         </div>
         <div className="all-questions">

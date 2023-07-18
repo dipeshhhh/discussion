@@ -53,7 +53,7 @@ const Question = () => {
 
     if(char>150)
     {
-      char = 'You should write only 150'
+      char = 'You should write only 150 word'
     }
 
     var t_text = title.trim()
@@ -64,9 +64,10 @@ const Question = () => {
 
     let t_char = t_clearList.length
 
-    if(t_char>20)
+    if(t_char>25)
     {
-      t_char= 'you should write only 20'
+      t_char= 'you should write only 25 word'
+      
     }
     /***************************************/    
 
@@ -141,15 +142,14 @@ const Question = () => {
         setError("Something missing");
         setLoading(false);
       }      
-      else if (title.length > 250)
-      {
-      console.log('missing')
-      setError("Title Character should be about 200 Characters");
+      else if (t_clearList.length > 25)
+      {      
+      setError("You Should write only 25 Word in Title");
       setLoading(false);
       }
-      else if(body.length >1500)
+      else if(clearList.length >150)
       {
-        setError("Body Character should be about 1500 Characters");
+        setError("You Should write only 150 Word in Body");
       setLoading(false);
       }
       else if(member.length<=1)
