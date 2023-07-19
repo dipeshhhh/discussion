@@ -7,7 +7,7 @@ import './css/main.css'
 
 
 const main = ({questions}) => {
-  
+ 
   return (
     <div className='main'>
       <div className='main-container'>
@@ -46,7 +46,7 @@ const main = ({questions}) => {
           </div>
         </div>
         </div>
-        <div className='questions'>
+        {/* <div className='questions'>
           {questions.map((_q,index)=> (<>
           <div key= {index} className='question'>
             
@@ -57,6 +57,16 @@ const main = ({questions}) => {
             
              </div>
              </> ))}
+        </div> */}
+
+        <div className='questions'>
+         
+          <div className='question'>
+            
+            <AllQuestions question={questions}/>            
+            
+             </div>
+           
         </div>
         
       </div>

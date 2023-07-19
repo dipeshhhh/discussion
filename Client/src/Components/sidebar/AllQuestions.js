@@ -9,10 +9,12 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 
 const AllQuestions = ({ question }) => {
-  let result = question.result.map((resp) => {
+ 
+  let result = question?.map((resp) => {   
+    
     return resp;
    
-  });
+  }); 
 
   result.reverse();
 

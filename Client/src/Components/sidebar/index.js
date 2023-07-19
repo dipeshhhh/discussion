@@ -12,9 +12,8 @@ const Index = () => {
   useEffect(()=>{
     async function getQuestion()
     {
-      await axios.get(`/Question/${auth}`).then((res)=>{
-        
-        // console.log(res.data)
+      await axios.get(`/subject_question/${auth}`).then((res)=>{     
+       
         setQuestions(res.data)
       }).catch((err)=>{
         console.log(err)

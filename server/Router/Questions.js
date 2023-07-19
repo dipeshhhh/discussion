@@ -131,6 +131,15 @@ router.get('/Question/:id', async(req,res)=>{
     
 })
 
+
+router.get('/subject_question/:id',(req,res)=>{
+       
+    Question.find({member:req.params.id}).then((resp)=>{
+        return res.status(200).send(resp)
+    })   
+
+})
+
 router.get('/Question-detail/:id', (req, res) => {
 
 
