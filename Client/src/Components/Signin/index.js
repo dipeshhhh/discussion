@@ -14,14 +14,25 @@ import { ToastContainer, toast } from 'react-toastify';
 const Index = () => {
     const navigate = useNavigate()
 
-    //if user already login then it will not redirect to auth page
-    useEffect (()=>{
-        const auth = sessionStorage.getItem('username')
-        if(auth)
-        {
-          navigate('/')
-        }        
-      })
+    //if user already login then it will not redirect to auth page 
+
+        let myPromise = new Promise((resolve,reject)=>{
+
+            const auth = sessionStorage.getItem('username')
+            resolve(auth)
+        })
+        myPromise.then(
+            async function(value)
+            {
+                if(value)
+                {                              
+                    navigate('/auth') 
+
+                }               
+                
+            }
+                )       
+  
 
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
@@ -116,10 +127,22 @@ const handleLogin= async (e)=>{
             password
         }).then((resp)=>{
             const UserName = resp.data.userExist.email
-            sessionStorage.setItem('username',UserName)
+
+            let myPromise = new Promise((resolve,reject)=>{
+                resolve(sessionStorage.setItem('username',UserName))
+            })
+
+            myPromise.then(
+                async function ()
+                {
+                    toast.success('Login successfully')           
+                     navigate('/') 
+                }
+                    )
+            
+            
                   
-            toast.success('Login successfully')           
-            navigate('/')    
+               
             
         })
         }

@@ -33,11 +33,7 @@ const Header = () => {
       })
     }
     getUser()
-  },[]) 
-
-  // const user = userdetail[0]
-  
-  console.log(userdetail.name)
+  },[])  
 
    return (
 
