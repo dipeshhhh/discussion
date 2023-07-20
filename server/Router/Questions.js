@@ -7,6 +7,8 @@ const multer  = require('multer');
 const { default: mongoose } = require('mongoose');
 const { ObjectId } = require('mongodb');
 var fs = require('fs');
+const crone = require('node-cron');
+const { type } = require('os');
 
 
 const storage = multer.diskStorage({
@@ -219,6 +221,83 @@ router.get('/Q_download/:id',(req,resp)=>{
         resp.status(400).send(e)
     })
 })
+
+
+
+/************************Delete Question Thread After 30 days if no activity in Post************************************/
+// crone.schedule('1 * * * *', ()=>{
+    
+// })
+
+const getdata = async ()=>{   
+
+    
+    
+    Question.find({},{created_at:1, file:1}).then((resp)=>{
+
+         const time =new Date()
+    
+         let time_diff = []
+         let day_diff = []
+         let day_id =[]        
+         let file =[]
+
+       for(i=0;i<resp.length;i++)
+       {
+            time_diff = time.getTime() - resp[i].created_at.getTime()
+            
+            day_diff.push(Math.ceil(time_diff/(1000 * 60 * 60 * 24)))   
+            
+            if(day_diff[i]>5)
+         {               
+            day_id.push(resp[i]._id)
+
+            file.push(resp[i].file)
+         }           
+       }   
+       
+       for(z=0;z<day_id.length;z++)
+       {
+        if(file[z])
+        {
+            fs.unlinkSync(file[z])
+
+            Question.deleteMany({_id:day_id[z]}).then(()=>{
+                console.log('file has been deleted')
+              })
+              .catch((e)=>{
+                console.log(e)
+              })
+        }
+
+        else
+        {
+            Question.deleteMany({_id:day_id[z]}).then(()=>{
+                console.log('file has been deleted')
+              })
+              .catch((e)=>{
+                console.log(e)
+              })
+
+        }       
+       }   
+       
+    }) 
+   
+    
+    
+} 
+
+getdata()  
+   
+/*************************************************************************/
+   
+
+
+
+
+
+
 
 
 
