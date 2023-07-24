@@ -20,7 +20,7 @@
     "i": "^0.3.7",
     "js-file-download": "^0.4.12",
     "multiselect-react-dropdown": "^2.0.25",
-    "npm": "^9.8.0",
+    "npm": "^9.8.1",
     "npx": "^10.2.2",
     "react": "^18.2.0",
     "react-client-session": "^0.0.8",
