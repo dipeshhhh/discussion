@@ -2,7 +2,7 @@ import React from 'react';
 import Header from './Components/Header/header'
 import Index from './Components/sidebar/index'
 import Question from './Components/Ask-Question/question'
-import Mul from './Components/Ask-Question/mul';
+import Comment from './Components/Ask-Question/comment';
 import GroupQuestion from './Components/Group-Question/index'
 import ViewQuestion from './Components/View-Question/index'
 import Auth from './Components/Signin/index'
@@ -28,7 +28,7 @@ function App() {
       <Route exact path='/' element={<Index/>}></Route>
       <Route exact path='/add-question' element={<Question/>}></Route>
       <Route exact path='/view-question' element={<ViewQuestion/>}></Route>
-      <Route exact path='/mul' element={<Mul/>}></Route>
+      <Route exact path='/comment' element={<Comment/>}></Route>
       <Route exact path='/group-question' element={<GroupQuestion/>}></Route>
       <Route exact path='*' element={<Errorpage/>}></Route>
       </Route>

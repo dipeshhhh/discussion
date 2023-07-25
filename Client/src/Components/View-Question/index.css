@@ -138,3 +138,12 @@
     font-weight: 500;
     font-size: large;
   }
+  .question-answer
+  {
+    flex-direction: column;
+    border: 1px;
+  
+
+  }
+
+  
