@@ -4,10 +4,7 @@ const AnswerSchema = new mongoose.Schema({
         type:mongoose.Schema.Types.ObjectId,
         ref:"Questions"
     },
-    parentId:{
-        type:mongoose.Schema.Types.ObjectId,
-        ref:"Answers"
-    },  
+    comments:[{}],  
     body:String,
     auth:String,
     file:String,    

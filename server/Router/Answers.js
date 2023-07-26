@@ -78,7 +78,7 @@ router.get('/Answer-detail/:id',(req,res)=>{
 
     const id = new ObjectId(req.params.id) 
 
-    Answer.find({question_id:id},{question_id:0}).then((resp)=>{
+    Answer.find({question_id:id},{}).then((resp)=>{
             res.status(200).send(resp)
     }).catch((err)=>{
         res.status(400).send(e)
