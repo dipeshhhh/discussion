@@ -11,7 +11,6 @@ import './App.css';
 import Errorpage from './Components/Error/errorpage';
 import {Routes, Route, Redirect} from 'react-router-dom'
 import PrivateComponent from './Components/PrivateComponent';
-import Home from './Components/Ask-Question/comment';
 
 function App() {
    
@@ -32,7 +31,6 @@ function App() {
       <Route exact path='/view-question' element={<ViewQuestion/>}></Route>
       <Route exact path='/comment' element={<Comment/>}></Route>
       <Route exact path='/group-question' element={<GroupQuestion/>}></Route>
-      <Route exact path='/comments' element={<Home/>}></Route>
       <Route exact path='*' element={<Errorpage/>}></Route>
       <Route exact path='/comments' element={<Comments/>}></Route>
       </Route>
