@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import FileDownload from 'js-file-download';
 import Axios from 'axios';
 import { Document, Page, PDFViewer } from '@react-pdf/renderer';
+import Reply from './Reply';
 import './index.css';
 
 import BookmarkIcon from '@mui/icons-material/Bookmark';
@@ -26,6 +27,45 @@ const Mainquestion = (details) => {
   const navigate = useNavigate();
   let detail = details.details;
   const question_id = detail._id;
+
+  // NEED: Replies from database
+  const replies = [
+    {
+      _id: "someId",
+      replied_to: "64c013b493b6f8d6e655d2b1",
+      text: "This is reply body text",
+      auth: "Author of this reply",
+      created_at: "2023-07-26T17:49:54.625+00:00",
+      replies: [
+        // Nested replies for the first reply (if any)
+        {
+          _id: "nestedReplyId1",
+          replied_to: "someId", // ID of the parent reply
+          text: "This is a nested reply",
+          auth: "Author of the nested reply",
+          created_at: "2023-07-26T17:49:54.625+00:00",
+          replies: [] // More nested replies can be added here
+        },
+        {
+          _id: "nestedReplyId1",
+          replied_to: "someId", // ID of the parent reply
+          text: "This is a nested reply",
+          auth: "Author of the nested reply",
+          created_at: "2023-07-26T17:49:54.625+00:00",
+          replies: [] // More nested replies can be added here
+        },
+      ],
+    },
+    {
+      _id: "someOtherId",
+      replied_to: "64c02eee93b6f8d6e655d32b",
+      text: "This is another reply",
+      auth: "Author of this reply",
+      created_at: "2023-07-26T17:49:54.625+00:00",
+      replies: [],
+    },
+  ];
+  
 
   /**********Comment Fetch through question id***********/
 
@@ -137,6 +177,16 @@ const Mainquestion = (details) => {
   };
 
   /***********************************/
+
+  // Code to toggle replies visibility
+  const [showReplies, setShowReplies] = useState({});
+  const toggleReplies = (answerId) => {
+    setShowReplies((prevState) => ({
+      ...prevState,
+      [answerId]: !prevState[answerId],
+    }));
+  };
+  /***********************************/
   return (
     <div className="main">
       <div className="main-container">
@@ -224,32 +274,63 @@ const Mainquestion = (details) => {
         <div className="all-questions">
           <p>Number of Comments</p>
           {answerdata?.map((resp) => (
-            <div className="all-questions-container">
-              <div className="all-questions-left">
-                <div className="all-options">
-                  <p className="arrow">▲</p>
-                  <p className="arrow">0</p>
-                  <p className="arrow">▼</p>
-                  <BookmarkIcon />
-                  <HistoryIcon />
-                </div>
-              </div>
-              <div className="question-answer">
-                {parse(resp.body)}
-                <div className="author">
-                  {resp?.file ? (
-                    <a onClick={(e) => downloadanswer(resp?._id)}>
-                      <AttachFileIcon />
-                    </a>
-                  ) : (
-                    <></>
-                  )}
-                  <small>on {new Date(resp?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
-                  <div className="auth-details">
-                    <Avatar />
-                    <p>{String(resp?.auth).split('@')[0]}</p>
+            <div key={resp._id}>
+              <div className="all-questions-container">
+                <div className="all-questions-left">
+                  <div className="all-options">
+                    <p className="arrow">▲</p>
+                    <p className="arrow">0</p>
+                    <p className="arrow">▼</p>
+                    <BookmarkIcon />
+                    <HistoryIcon />
                   </div>
                 </div>
+                <div className="question-answer">
+                  {parse(resp.body)}
+                  <div 
+                    className="answer-reply-buttons"
+                    onClick={() => toggleReplies(resp._id)}
+                  >
+                    <small className="answer-reply-button">
+                      {showReplies[resp._id] ? "Hide replies" : "Show replies"}
+                    </small>
+                    <small className="answer-reply-button">Reply</small>
+                  </div>
+                  <div className="author">
+                    {resp?.file ? (
+                      <a onClick={(e) => downloadanswer(resp?._id)}>
+                        <AttachFileIcon />
+                      </a>
+                    ) : (
+                      <></>
+                    )}
+                    <small>on {new Date(resp?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
+                    <div className="auth-details">
+                      <Avatar />
+                      <p>{String(resp?.auth).split('@')[0]}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div 
+                id={"replies-to-"+resp?._id} 
+                className={`replies-container ${showReplies[resp._id] ? "active" : ""}`}
+              >
+                {replies.filter((reply)=>{
+                  return(reply.replied_to == resp._id)
+                  }).map((reply)=>{
+                    return(
+                      <Reply
+                        key = {reply._id}
+                        id = {reply._id}
+                        text = {reply.text}
+                        created_at = {reply.created_at}
+                        auth = {reply.auth}
+                        replies = {reply.replies}
+                      />
+                    )
+                  })
+                }
               </div>
             </div>
           ))}
