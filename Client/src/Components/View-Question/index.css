@@ -145,5 +145,51 @@
   
 
   }
+  .answer-reply-buttons, .reply-to-reply-buttons{
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+  }
+  .reply-to-reply-buttons{
+    left: 16px;
+  }
+  .answer-reply-button, .reply-to-reply-button{
+    color: var(--secondary-color);
+  }
+  .answer-reply-button:hover, .reply-to-reply-button:hover{
+    cursor: pointer;
+    color: var(--secondary-color-forlink);
+  }
 
+  .replies-container.active{
+    display: flex;
+    flex-direction: column;
+  }
+  .replies-container:not(.active){
+    display: none;
+  }
+  .reply{
+    padding: 16px;
+    border-radius: 10px;
+    background-color: rgb(243, 243, 243);
+    /* margin-top: 16px; */
+    margin-bottom: 16px;
+    box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 12%),
+     2px 5px 18px 0px rgb(0 139 41 / 10%);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .reply-body{
+    border-left: 2px solid lightgray;
+    display: flex;
+    flex-direction: row;
+    position: relative;
+  }
+  .reply-buttons{
+    margin-right: 16px;
+  }
   
