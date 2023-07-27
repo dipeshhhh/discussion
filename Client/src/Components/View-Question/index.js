@@ -6,7 +6,14 @@ import axios from 'axios'
 const Index = () => {
 
   const [questiondata, setQuestionData] = useState()
-  const auth = sessionStorage.getItem('username')
+  
+  const userData = sessionStorage.getItem('username')
+  let auth =''
+  if(userData)
+  {
+    const data = userData.split(',')
+    auth = data[0]  
+  }
 
   let search = window.location.search
   const params =new URLSearchParams(search)

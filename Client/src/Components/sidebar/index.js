@@ -8,7 +8,15 @@ import axios from 'axios'
 const Index = () => {
 
   let [questions, setQuestions] = useState([])
-  const auth = sessionStorage.getItem('username')
+  
+  const userData = sessionStorage.getItem('username')
+  let auth =''
+  if(userData)
+  {
+    const data = userData.split(',')
+    auth = data[0]  
+  }
+
   useEffect(()=>{
     async function getQuestion()
     {

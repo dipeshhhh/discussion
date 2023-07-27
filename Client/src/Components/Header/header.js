@@ -12,7 +12,15 @@ const Header = () => {
   const navigate = useNavigate()
  
   const auth = sessionStorage.getItem('username')
-  // console.log(auth)
+  
+
+  let userData =''
+  
+  if(auth)
+  {
+     userData = auth.split(',')
+  }
+
   const logout = () => {
         sessionStorage.clear('username')       
         toast.success('Logout Sucessfully')
@@ -66,10 +74,10 @@ const Header = () => {
 
 
         {
-          auth ? 
+          auth && 
               <div className='header-right'>
                
-                     <h4>{userdetail.name}</h4>
+                     <h4>{userData[1]}</h4>
                      {/* <h4>User Name</h4> */}
                
                 <div className='header-right-container'>
@@ -79,8 +87,7 @@ const Header = () => {
                 </div>
 
               </div> 
-              :
-            <p></p>
+            
         }
       </div>
     </header>

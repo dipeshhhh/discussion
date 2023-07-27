@@ -26,7 +26,7 @@ const Index = () => {
             {
                 if(value)
                 {                              
-                    navigate('/auth') 
+                    navigate('/') 
 
                 }               
                 
@@ -126,7 +126,7 @@ const handleLogin= async (e)=>{
             email,
             password
         }).then((resp)=>{
-            const UserName = resp.data.userExist.email
+            const UserName = [resp.data.userExist.email,resp.data.userExist.name]
 
             let myPromise = new Promise((resolve,reject)=>{
                 resolve(sessionStorage.setItem('username',UserName))

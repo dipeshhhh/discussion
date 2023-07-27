@@ -98,7 +98,14 @@ const Mainquestion = (details) => {
     });
   };
 
-  const auth = sessionStorage.getItem('username');
+  const userData = sessionStorage.getItem('username')
+  let auth =''
+  if(userData)
+  {
+    const data = userData.split(',')
+    auth = data[0]  
+  }
+  
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [body, setBody] = useState('');
