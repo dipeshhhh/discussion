@@ -2,10 +2,22 @@ import React from 'react';
 import './header.css';
 import logo from './logo.png';
 import { Link } from 'react-router-dom';
+import { ToastContainer ,toast} from 'react-toastify';
 
 const Header = () => {   
   return (    
     <header>
+      <ToastContainer
+            position='top-center'
+            autoClose={2000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
       <div className='header-container'>
         <div className='header-left'>
           <Link to="/" >

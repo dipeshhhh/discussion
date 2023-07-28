@@ -22,9 +22,20 @@ const Header = () => {
   }
 
   const logout = () => {
+
+
+       const singout = new Promise (async(res,rej)=>{
+     
+       const out = await axios.post('/SignOut',{userData})
+       res(out)
+       })
+       singout.then((out)=>{           
         sessionStorage.clear('username')       
         toast.success('Logout Sucessfully')
         navigate('/auth')
+       })
+
+    
   }   
   
   const [userdetail , setUserDetail] = useState('')
@@ -74,10 +85,10 @@ const Header = () => {
 
 
         {
-          auth && 
+          auth ? 
               <div className='header-right'>
                
-                     <h4>{userData[1]}</h4>
+                     <h4>{userData[1].toUpperCase()}</h4>
                      {/* <h4>User Name</h4> */}
                
                 <div className='header-right-container'>
@@ -87,6 +98,8 @@ const Header = () => {
                 </div>
 
               </div> 
+              :
+              <p></p>
             
         }
       </div>

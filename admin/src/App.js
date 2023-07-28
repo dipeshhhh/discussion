@@ -5,6 +5,7 @@ import ManageQuestions from "./Components/main/ManageQuestions";
 import ManageAnswers from "./Components/main/ManageAnswers";
 import ManageReplies from "./Components/main/ManageReplies";
 import Header from './Components/Header/header';
+import Signin from './Components/Signin/Signin'
 import Errorpage from './Components/Error/errorpage';
 import {Routes, Route, Redirect, BrowserRouter as Router} from 'react-router-dom';
 
@@ -16,6 +17,7 @@ function App() {
         <Header />
         <Routes>
           <Route exact path='/' element={<AuthenticateUsers/>}></Route>
+          <Route exact path='admin/Sigin' element={<Signin/>}></Route>
           <Route exact path='/admin/authenticate-users' element={<AuthenticateUsers/>}></Route>        
           <Route exact path='/admin/manage-users' element={<ManageUsers/>}></Route>        
           <Route exact path='/admin/manage-questions' element={<ManageQuestions/>}></Route>        

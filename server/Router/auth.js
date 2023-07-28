@@ -19,6 +19,8 @@ router.post('/Signup', async (req,res)=>{
     if(!userExist)
     {
         let Group=[]
+
+        const login =0
        
        
        const data =await Groupdivision.find({division:Divisionid},{_id:1})
@@ -29,7 +31,7 @@ router.post('/Signup', async (req,res)=>{
     
     }
 
-       const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status});
+       const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status,login});
        const result = await fetch.save()
        if(result)
         {
@@ -58,6 +60,7 @@ router.post('/Signin', async (req, res) => {
 
         const userExist = await Users.findOne({ email: email })
 
+
         
         if (userExist) {
             const verified = await bcyrpt.compare(password, userExist.password);
@@ -65,6 +68,52 @@ router.post('/Signin', async (req, res) => {
             if(userExist.status === 0)
             {
                 return res.status(402).json({ err: 'User is not Activated' }) 
+            }
+            else if(userExist.login == 1)
+            {
+
+                return res.status(402).json({ err: 'Your are already login in other Tab' })
+            }
+            
+            else if (verified) {
+
+                Users.updateOne({email:email},{$set:{login:1}}).then(()=>{
+
+                    return res.status(200).json({userExist})
+                })              
+                
+
+            }
+            else {
+                return res.status(402).json({ err: 'wrong credentail' })
+            }
+        }
+        else {
+            return res.status(402).json({ err: 'wrong credentail' })
+        }
+
+    }
+    catch (err) {
+        console.log(err);
+    }
+}
+)
+
+router.post('/SignAdmin', async (req, res) => {
+    const { email, password } = req.body;
+    try {
+        if (!email || !password) {
+            return res.status(422).json({ eror: 'something missing' })
+        }
+
+        const userExist = await Users.findOne({ email: email })
+        
+        if (userExist) {
+            const verified = await bcyrpt.compare(password, userExist.password);
+
+            if(userExist.status < 2)
+            {
+                return res.status(402).json({ err: 'Wrong Credentails' }) 
             }
             
             else if (verified) {
@@ -86,6 +135,15 @@ router.post('/Signin', async (req, res) => {
     }
 }
 )
+
+router.post('/SignOut',(req,res)=>{
+
+    Users.updateOne({email:req.body.userData[0]},{$set:{login:0}}).then((resp)=>{
+        return res.status(200).send(resp)
+    })
+
+})
+
 
 
 //User Details fetch 

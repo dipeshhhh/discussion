@@ -275,19 +275,8 @@ const handleLogin= async (e)=>{
                                       
                                         <option value={data.name}>{data.name}</option>
                                     )
-                                  }                                                                  
-                                  {/* <option value='Agricultural Education'>Agricultural Education </option>
-                                  <option value='Agricultural Engineering'>Agricultural Engineering</option>
-                                  <option value='Agricultural Extension'>Agricultural Extension</option>
-                                  <option value='Animal Science'>Animal Science</option>
-                                  <option value='Crop Science'>Crop Science</option>
-                                  <option value='Fisheries Science'>Fisheries Science</option>
-                                  <option value='Horticulture Science'>Horticulture Science</option>
-                                  <option value='Natural Resource Management'>Natural Resource Management</option>
-                                  <option value='Administration'>Administration</option>
-                                  <option value='Finance'>Finance</option>
-                                  <option value='Social Science'>Social Science</option>
-                                  <option value='Technical'>Technical</option> */}
+                                  }                                                        
+                                 
                                   </select>
                               </div>
                               <div className='input-field'>

@@ -22,6 +22,10 @@ const Userschema = new mongoose.Schema({
         type:String,
         required:true
     },
+    login:{
+        type:Number,
+        required:true
+    },
     status:{
         type:Number,
         required:true
