@@ -9,7 +9,10 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
+import Cookies from 'js-cookie';
+
 
 import { ToastContainer, toast } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
@@ -18,6 +21,27 @@ const defaultTheme = createTheme();
 
 export default function SignIn() {
 
+  const navigate = useNavigate()
+
+
+  let myPromise = new Promise((resolve,reject)=>{
+
+    const auth = Cookies.get('auth')
+    resolve(auth)
+  })
+  myPromise.then(
+    async function(value)
+    {
+        if(value)
+        {                              
+            navigate('/') 
+
+        }               
+        
+    }
+        )  
+
+ 
     const [loading, setLoading] = useState(false);   
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
@@ -45,15 +69,21 @@ export default function SignIn() {
       setLoading(false);
     }
     else
-    {
+    {    
+
       try{
         const resp = await axios.post('/SignAdmin', {
             email,
             password
         }).then((resp)=>{
-                      //const UserName = [resp.data.userExist.email,resp.data.userExist.name]
 
-           toast.success('you are the right person')       
+          const UserName = [resp.data.userExist.email,resp.data.userExist.name]  
+          const expirationTime = new Date(new Date().getTime() + 6000000);
+          console.log(expirationTime)
+          Cookies.set('auth',UserName)          
+          toast.success('Registration Sucessfully')
+          navigate('/')
+          setLoading(false)          
             
         })
         }

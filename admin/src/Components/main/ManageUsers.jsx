@@ -1,10 +1,11 @@
-import React from "react";
+import React, {useEffect,useState} from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../SearchBar/SearchBar.jsx";
 import { Avatar } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import "./css/UserContainer.css";
+import axios from 'axios'
 
 // This is a sample array of json objects,
 // ! WARNING: Keep the const name 'users', or change it everywhere in this code ;)
@@ -36,24 +37,24 @@ function User(props){
     // Handle user timeout (temporary ban) here
   }
   return(
-    <div className="user-container" key={props.key}>
+    <div className="user-container" key={props.id}>
       <div className="user-profile-picture-container">
         {/* must be 120px X 120px */}
         { props.profilePicture ? <img src={props.profilePicture} className="user-profile-picture" /> : <Avatar className="user-profile-picture" /> }
       </div>
       <div className="user-info-container">
-        <p className="user-info">Name: {props.name}</p>
+        <p className="user-info">Name: {props.name.toUpperCase()}</p>
         <p className="user-info">Email: {props.email}</p>
-        <p className="user-info">Smdid: {props.smdid}</p>
-        <p className="user-info">Division: {props.Divisionid}</p>
-        <p className="user-info">
+        <p className="user-info">Smdid: {props.Smdid.toUpperCase()}</p>
+        <p className="user-info">Division: {props.Divisionid.toUpperCase()}</p>
+        {/* <p className="user-info">
           Groups: 
           {
             props.Group.map((group) => {
               return <span> {group}, </span>;
             })
           }
-        </p>
+        </p> */}
       </div>
       <div className="admin-buttons">
         <EditIcon
@@ -75,6 +76,15 @@ function User(props){
 }
 
 function ManageUsers() {
+
+
+  const [users, setUsers] = useState('') 
+  useEffect(()=>{
+    axios.post('/authenticate').then((resp)=>{
+      setUsers(resp)
+  })
+  },[])  
+
   return(
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Sidebar />
@@ -83,13 +93,13 @@ function ManageUsers() {
           <SearchBar placeholder="Search users" />
         </div>
         <div className="users-container">
-          {users.map((user)=>{
+          {users.data?.map((user)=>{
             return(
               <User
-                key={user._id} 
+                id={user._id} 
                 name={user.name}
                 email={user.email}
-                smdid={user.smdid}
+                Smdid={user.Smdid}
                 Divisionid={user.Divisionid}
                 Group={user.Group}
               />

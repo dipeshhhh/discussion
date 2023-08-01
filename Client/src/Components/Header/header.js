@@ -19,6 +19,11 @@ const Header = () => {
   if(auth)
   {
      userData = auth.split(',')
+
+     window.addEventListener('beforeunload', function (e) {
+     e.preventDefault();
+     e.returnValue = '';
+     });
   }
 
   const logout = () => {
@@ -38,21 +43,7 @@ const Header = () => {
     
   }   
   
-  const [userdetail , setUserDetail] = useState('')
-
-  useEffect(()=>{
-    async function getUser()
-    {
-      await axios.get(`/user-detail/${auth}`).then((res)=>{
-        
-       
-        setUserDetail(res.data)
-      }).catch((err)=>{
-        console.log(err)
-      })
-    }
-    getUser()
-  },[])  
+ 
 
    return (
 

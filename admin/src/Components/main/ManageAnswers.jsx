@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState,useEffect} from "react";
 import parse from 'html-react-parser';
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../SearchBar/SearchBar.jsx";
@@ -6,6 +6,7 @@ import { Avatar } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import './css/ManageQuestionsAnswers.css';
+import axios from 'axios'
 
 // NEED: Answers from database
 const answers=[
@@ -67,7 +68,8 @@ function Answer(props){
   )
 }
 
-function ManageAnswers() {
+function ManageAnswers() { 
+
   return(
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Sidebar />

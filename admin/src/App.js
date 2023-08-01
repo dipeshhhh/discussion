@@ -8,6 +8,7 @@ import Header from './Components/Header/header';
 import Signin from './Components/Signin/Signin'
 import Errorpage from './Components/Error/errorpage';
 import {Routes, Route, Redirect, BrowserRouter as Router} from 'react-router-dom';
+import PrivateComponent from './Components/PrivateComponent';
 
 
 function App() {
@@ -16,14 +17,16 @@ function App() {
       <Router>
         <Header />
         <Routes>
-          <Route exact path='/' element={<AuthenticateUsers/>}></Route>
-          <Route exact path='admin/Sigin' element={<Signin/>}></Route>
-          <Route exact path='/admin/authenticate-users' element={<AuthenticateUsers/>}></Route>        
-          <Route exact path='/admin/manage-users' element={<ManageUsers/>}></Route>        
-          <Route exact path='/admin/manage-questions' element={<ManageQuestions/>}></Route>        
-          <Route exact path='/admin/manage-answers' element={<ManageAnswers/>}></Route>        
-          <Route exact path='/admin/manage-replies' element={<ManageReplies/>}></Route>        
+        <Route element={<PrivateComponent/>}>
+          <Route exact path='/' element={<AuthenticateUsers/>}></Route>         
+          <Route exact path='/authenticate-users' element={<AuthenticateUsers/>}></Route>        
+          <Route exact path='/manage-users' element={<ManageUsers/>}></Route>        
+          <Route exact path='/manage-questions' element={<ManageQuestions/>}></Route>        
+          <Route exact path='/manage-answers' element={<ManageAnswers/>}></Route>        
+          <Route exact path='/manage-replies' element={<ManageReplies/>}></Route>        
           <Route exact path='*' element={<Errorpage/>}></Route>
+          </Route>
+          <Route exact path='/Sigin' element={<Signin/>}></Route>
         </Routes>
       </Router>
     </div>

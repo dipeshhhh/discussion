@@ -4,6 +4,8 @@ require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
 const Groupdivision = require('../DB/Group')
+const { default: mongoose } = require('mongoose');
+const { ObjectId } = require('mongodb');
 
 //Signup Page query
 
@@ -68,6 +70,10 @@ router.post('/Signin', async (req, res) => {
             if(userExist.status === 0)
             {
                 return res.status(402).json({ err: 'User is not Activated' }) 
+            }
+            else if (userExist.status > 1)
+            {
+                return res.status(402).json({ err: 'Wrong Credentails' })
             }
             else if(userExist.login == 1)
             {
@@ -150,6 +156,44 @@ router.post('/SignOut',(req,res)=>{
 router.get('/user-detail/:id',(req,res)=>{
 
     Users.findOne({email:req.params.id},{name:1, email:1, Divisionid:1,status:1}).then((resp)=>{
+        res.status(200).send(resp)
+    }).catch((e)=>{
+       res.status(400).send(e)
+    })
+})
+
+router.post('/unauthenticate',(req,res)=>{
+    Users.find({status:0},{email:1,name:1,Smdid:1,Divisionid:1}).then((resp)=>{
+        res.status(200).send(resp)
+    }).catch((e)=>{
+       res.status(400).send(e)
+    })
+})
+
+router.post('/authenticate',(req,res)=>{
+    Users.find({status:1},{email:1,name:1,Smdid:1,Divisionid:1}).then((resp)=>{
+        res.status(200).send(resp)
+    }).catch((e)=>{
+       res.status(400).send(e)
+    })
+})
+
+
+router.get('/approve/:id',(req,res)=>{
+
+    const id = new ObjectId(req.params.id)
+
+    Users.updateOne({_id:id},{$set:{status:1}}).then((resp)=>{
+        res.status(200).send(resp)
+    }).catch((e)=>{
+       res.status(400).send(e)
+    })
+
+})
+
+router.get('/disapprove/:id',(req,res)=>{
+    const id = new ObjectId(req.params.id)
+    Users.deleteOne({_id:id}).then((resp)=>{
         res.status(200).send(resp)
     }).catch((e)=>{
        res.status(400).send(e)

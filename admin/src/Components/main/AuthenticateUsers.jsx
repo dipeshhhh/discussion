@@ -1,71 +1,66 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../SearchBar/SearchBar.jsx";
 import { Avatar } from '@mui/material';
 import ClearIcon from '@mui/icons-material/Clear';
 import CheckIcon from '@mui/icons-material/Check';
 import "./css/UserContainer.css";
+import axios from 'axios'
+  import 'react-toastify/dist/ReactToastify.css';
 
 // This is a sample array of json objects,
 // ! WARNING: Keep the const name 'users', or change it everywhere in this code ;)
 // NEED: Requests from database
-const users = [ // ( Find users with 'status == 0' )?
-  { 
-    _id: "someId",
-    name: "User's Name",
-    email: "user@email.com",
-    smdid: "CROP SCIENCES",
-    Divisionid: "Genetics & Plant Breeding",
-    Group: ["CROP SCIENCES"]
-  },
-  { 
-    _id: "someOtherId",
-    name: "Other user's Name",
-    email: "user2@email.com",
-    smdid: "CROP SCIENCES",
-    Divisionid: "Genetics & Plant Breeding",
-    Group: ["CROP SCIENCES"]
-  },
-]
+// let users = [ // ( Find users with 'status == 0' )?
+  
+// ]
 
 function User(props){
-  function handleApproval(){
-    // Handle approving request here
+
+
+ 
+  const handleApproval = async (e)=>{
+    
+    if (window.confirm('Please Confirm for Activate Account')) {
+      axios.get(`/approve/${e}`).then((resp) => {                      
+          window.location.reload(false);
+      });
+    }    
   }
-  function handleRejection(){
-    // Handle rejecting request here
-  }
+
+  const handleRejection = (e)=>{   
+    if (window.confirm('Please Confirm for delete Account')) {
+      axios.get(`/disapprove/${e}`).then((resp) => {                      
+          window.location.reload(false);
+      });
+    }   
+         }
+         
   return(
-    <div className="user-container" key={props.key}>
+    <div className="user-container" key={props.id}>
       <div className="user-profile-picture-container">
         {/* must be 120px X 120px */}
         { props.profilePicture ? <img src={props.profilePicture} className="user-profile-picture" /> : <Avatar className="user-profile-picture" /> }
       </div>
       <div className="user-info-container">
-        <p className="user-info">Name: {props.name}</p>
+        <p className="user-info">Name: {props.name.toUpperCase()}</p>
         <p className="user-info">Email: {props.email}</p>
-        <p className="user-info">Smdid: {props.smdid}</p>
-        <p className="user-info">Division: {props.Divisionid}</p>
-        <p className="user-info">
-          Groups: 
-          {
-            props.Group.map((group) => {
-              return <span> {group}, </span>;
-            })
-          }
-        </p>
+        <p className="user-info">Subject: {props.Smdid.toUpperCase()}</p>
+        <p className="user-info">Division: {props.Divisionid.toUpperCase()}</p>
+        
       </div>
       <div className="admin-buttons">
         <CheckIcon 
           className="admin-button approve-button"
-          onClick={()=>{handleApproval()}}
+          // onClick={(e)=>{handleApproval()}}
+          onClick={(e) => { handleApproval(props.id)}} 
           onMouseEnter={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "var(--primary-faded-color)";}}
           onMouseLeave={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "white";}}
         />
         <div className="flex-grow"></div>
         <ClearIcon 
           className="admin-button reject-button"
-          onClick={()=>{handleRejection()}}
+          onClick={(e)=>{handleRejection(props.id)}}
           onMouseEnter={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "var(--red-crayola-bright-faded)";}}
           onMouseLeave={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "white";}}
         />
@@ -74,24 +69,37 @@ function User(props){
   )
 }
 
-function AuthenticateUsers() {
-  return(
+function AuthenticateUsers() {  
+
+
+
+  const [users, setUsers] = useState('') 
+
+  useEffect(()=>{
+
+    axios.post('/unauthenticate').then((resp)=>{
+      setUsers(resp)
+  })
+  },[])
+  
+  
+  
+    return(
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Sidebar />
       <div className="users-main-container">
         <div className="search-bar-container">
-          <SearchBar placeholder="Search users" />
+          <SearchBar placeholder="Search users"/>
         </div>
         <div className="users-container">
-          {users.map((user)=>{
+          {users.data?.map((user)=>{           
             return(
               <User
-                key={user._id} 
+                id={user._id} 
                 name={user.name}
                 email={user.email}
-                smdid={user.smdid}
-                Divisionid={user.Divisionid}
-                Group={user.Group}
+                Smdid={user.Smdid}
+                Divisionid={user.Divisionid}               
               />
             )
           })}
