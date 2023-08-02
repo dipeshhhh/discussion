@@ -5,18 +5,20 @@ import { Link } from 'react-router-dom';
 import { ToastContainer ,toast} from 'react-toastify';
 import Cookies from 'js-cookie';
 
-const Header = () => {
+const Header = () => { 
 
-  let auth;
+    let auth 
+
+    console.log(Cookies.get('auth')) 
   
-  if (Cookies.get('auth'))
-  {
+  // if (Cookies.get('auth'))
+  // {
+  //   const detail = Cookies.get('auth')
+  //   auth = detail.split(',')
+    
+  //   console.log(detail)
+  // }
 
-    const detail = Cookies.get('auth')
-
-    auth = detail.split(',')
-    }
-  
   return (    
     <header>
       <ToastContainer

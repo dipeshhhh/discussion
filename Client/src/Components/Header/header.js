@@ -18,12 +18,7 @@ const Header = () => {
   
   if(auth)
   {
-     userData = auth.split(',')
-
-     window.addEventListener('beforeunload', function (e) {
-     e.preventDefault();
-     e.returnValue = '';
-     });
+     userData = auth.split(',')    
   }
 
   const logout = () => {

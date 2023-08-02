@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react'
-import swal from 'sweetalert'
+
 import Img from './logo.png'
 import './index.css'
 import Content from './content'
@@ -131,18 +131,13 @@ const handleLogin= async (e)=>{
             let myPromise = new Promise((resolve,reject)=>{
                 resolve(sessionStorage.setItem('username',UserName))
             })
-
             myPromise.then(
                 async function ()
                 {
                     toast.success('Login successfully')           
                      navigate('/') 
                 }
-                    )
-            
-            
-                  
-               
+                    )  
             
         })
         }

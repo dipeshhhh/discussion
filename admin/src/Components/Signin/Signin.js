@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import Avatar from '@mui/material/Avatar';
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
@@ -23,9 +23,7 @@ export default function SignIn() {
 
   const navigate = useNavigate()
 
-
   let myPromise = new Promise((resolve,reject)=>{
-
     const auth = Cookies.get('auth')
     resolve(auth)
   })
@@ -34,8 +32,7 @@ export default function SignIn() {
     {
         if(value)
         {                              
-            navigate('/') 
-
+            navigate('/')
         }               
         
     }
@@ -54,7 +51,7 @@ export default function SignIn() {
     }
 
     
-  const handleSubmit = async (event) => {
+  const handleSubmit = (event) => {
 
     event.preventDefault();
     setLoading(true)
@@ -72,18 +69,42 @@ export default function SignIn() {
     {    
 
       try{
-        const resp = await axios.post('/SignAdmin', {
+         axios.post('/SignAdmin', {
             email,
             password
         }).then((resp)=>{
 
           const UserName = [resp.data.userExist.email,resp.data.userExist.name]  
-          const expirationTime = new Date(new Date().getTime() + 6000000);
-          console.log(expirationTime)
-          Cookies.set('auth',UserName)          
-          toast.success('Registration Sucessfully')
-          navigate('/')
-          setLoading(false)          
+          // const expirationTime = new Date(new Date().getTime() + 6000000); 
+          
+          let myPromise = new Promise((resolve,reject)=>{
+            setTimeout(() => resolve(Cookies.set('auth',UserName)), 500)           
+        })
+          myPromise.then(
+             ()=>
+            {
+                toast.success('Login successfully')           
+                 navigate('/') 
+            }
+                )
+
+
+
+
+          
+          // let Singin = new Promise((res,rej)=>{
+             
+          //   res(Cookies.set('auth',UserName))
+          // })
+
+          // Singin.then(
+          //   async function ()
+          //       {
+          //           toast.success('Login successfully')           
+          //            navigate('/') 
+          //       }
+          // )                 
+                 
             
         })
         }
