@@ -82,11 +82,7 @@ function AuthenticateUsers() {
   })
   },[])
 
-  const [search, setSearch] = useState('')
-  
-  console.log(search)
-  
-  
+  const [search, setSearch] = useState('')  
     return(
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Sidebar />
@@ -110,19 +106,17 @@ function AuthenticateUsers() {
               )
             })
             :
-
-            users.data?.filter((user)=>user.name.includes(search)).map(filterName=>{
-              
-              return(
+            users.data?.filter((user)=>user.name.includes(search)).map(filterName=>{              
+              return(               
                 <User
                   id={filterName._id} 
                   name={filterName.name}
                   email={filterName.email}
                   Smdid={filterName.Smdid}
                   Divisionid={filterName.Divisionid}               
-                />
+                />                
               )
-            })  }
+            })}
           
         </div>
       </div>

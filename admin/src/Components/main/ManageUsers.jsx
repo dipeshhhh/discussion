@@ -83,28 +83,45 @@ function ManageUsers() {
     axios.post('/authenticate').then((resp)=>{
       setUsers(resp)
   })
-  },[])  
+  },[])
+  
+  const [search, setSearch] = useState('')  
 
   return(
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Sidebar />
       <div className="users-main-container">
         <div className="search-bar-container">
-          <SearchBar placeholder="Search users" />
+          <SearchBar value={search} onChange={(e)=>{setSearch(e.target.value)}} placeholder="Search users" />
         </div>
         <div className="users-container">
-          {users.data?.map((user)=>{
-            return(
-              <User
-                id={user._id} 
-                name={user.name}
-                email={user.email}
-                Smdid={user.Smdid}
-                Divisionid={user.Divisionid}
-                Group={user.Group}
-              />
-            )
-          })}
+          {
+            search == '' ? 
+              
+            users.data?.map((user)=>{           
+              return(
+                <User
+                  id={user._id} 
+                  name={user.name}
+                  email={user.email}
+                  Smdid={user.Smdid}
+                  Divisionid={user.Divisionid}               
+                />
+              )
+            })
+            :
+            users.data?.filter((user)=>user.name.includes(search)).map(filterName=>{              
+              return(               
+                <User
+                  id={filterName._id} 
+                  name={filterName.name}
+                  email={filterName.email}
+                  Smdid={filterName.Smdid}
+                  Divisionid={filterName.Divisionid}               
+                />                
+              )
+            })}
+          
         </div>
       </div>
     </div>

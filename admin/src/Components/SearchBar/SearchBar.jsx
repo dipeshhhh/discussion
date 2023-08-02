@@ -9,7 +9,7 @@ function SearchBar(props){
       {/* <form action="/search-question" method="post" className='search-form'> */}
         <input name="searchItem" id="searchItem" className="search-input" placeholder={props.placeholder} value={props.value} onChange={props.onChange}></input>
         {/* <button type="submit"> */}
-          <SearchIcon className='search-icon'/>
+          {/* <SearchIcon className='search-icon'/> */}
         {/* </button> */}
       {/* </form> */}
     </div>
