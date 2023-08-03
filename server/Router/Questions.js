@@ -187,6 +187,17 @@ router.get('/group-question/:id', (req,res)=>{
         })
 })
 
+router.get('/get_Question/:id',(req,res)=>{
+   
+    const id = new ObjectId(req.params.id)
+
+    Question.find({_id:id}).then((resp)=>{
+        return res.status(200).send(resp)
+    })
+
+
+})
+
 router.get('/deletepost/:id', (req, res) => {
 
 
