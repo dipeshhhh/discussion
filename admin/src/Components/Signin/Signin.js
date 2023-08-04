@@ -88,31 +88,13 @@ export default function SignIn() {
             }
                 )
 
-
-
-
-          
-          // let Singin = new Promise((res,rej)=>{
-             
-          //   res(Cookies.set('auth',UserName))
-          // })
-
-          // Singin.then(
-          //   async function ()
-          //       {
-          //           toast.success('Login successfully')           
-          //            navigate('/') 
-          //       }
-          // )                 
-                 
             
         })
         }
         catch(err) {
-
             // setError(err.response.data.err)
 
-            toast.error(err.response.data.err)
+            console.log(err.response.data.err)           // toast.error(err.response.data.err)
 
             setLoading(false);
         }

@@ -2,14 +2,14 @@ import React from 'react';
 import './header.css';
 import logo from './logo.png';
 import { Link } from 'react-router-dom';
+import {useNavigate} from 'react-router-dom'
 import { ToastContainer ,toast} from 'react-toastify';
 import Cookies from 'js-cookie';
 
-const Header = () => { 
+const Header = () => {
+  const navigate = useNavigate() 
 
-  let auth 
-
-  console.log(Cookies.get('auth')) 
+  let auth  
   
   if (Cookies.get('auth'))
   {
@@ -18,6 +18,22 @@ const Header = () => {
     
     console.log(detail)
   }
+
+  
+  const logout = () => {
+
+
+    const singout = new Promise (async(res,rej)=>{  
+    res(Cookies.remove('auth'))
+    })
+    singout.then((out)=>{         
+     toast.success('Logout Sucessfully')
+     navigate('/Sigin')
+    })
+
+ 
+} 
+
 
   return (    
     <header>
@@ -51,7 +67,7 @@ const Header = () => {
             <h4>{auth[1]}</h4>
             {/* <h4>User Name</h4> */}
             <div className='header-right-container'>
-              <p>
+              <p onClick={logout}>
                 <i class="fa-solid fa-right-from-bracket"></i>  Log out
               </p>
             </div>
