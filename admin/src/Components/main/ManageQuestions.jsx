@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useState } from "react";
 import parse from 'html-react-parser';
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../SearchBar/SearchBar.jsx";
 import { Avatar } from '@mui/material'
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import './css/ManageQuestionsAnswers.css';
 
 // NEED: questions from database
@@ -28,13 +30,47 @@ const questions=[
     created_at: "2023-07-25T18:25:39.322+00:00"
   },
 ]
+// NEED: SMDs from database
+const smds=[
+  {
+    "_id": "someId",
+    "name": "All",
+    "division": [],
+  },
+  {
+    "_id": "6487539f30cc72e9c608aaef",
+    "name": "CROP SCIENCES",
+    "division": [
+      "Genetics & Plant Breeding",
+      "Economic Botany and Plant Genetic Resources",
+      "Seed Science and Technology",
+      "Plant Pathology",
+      "Nematology",
+      "Agricultural Entomology",
+      "Plant Biochemistry",
+      "Plant Physiology",
+      "Agricultural Biotechnology",
+      "Agricultural Microsbiology"
+    ]
+  },
+  {
+    "_id": "6487539f30cc72e9c608aaf0",
+    "name": "HORTICULTURE",
+    "division": [
+      "Vegetable Science",
+      "Fruit Science",
+      "Floriculture and Landscaping",
+      "Spices, Plantation and Medicinal and Aromatic Plants"
+    ]
+  }
+]
 
 function Question(props){
   function handleDelete(){
-    // Handle user deletion here
+    // Handle question deletion here
   }
   function handleEdit(){
-    // Handle user timeout (temporary ban) here
+    // Handle question edit here
   }
   function truncate(str, n) {
     return str.length > n ? str.substr(0, n - 1) + '...' : str;
@@ -74,14 +110,95 @@ function Question(props){
   )
 }
 
-
 function ManageQuestions() {
+  const [isSmdVisible, setSmdVisibility] = useState(false);
+  function toggleSmdVisibility() {
+    setSmdVisibility(!isSmdVisible);
+  }  
+  const [isDivisionVisible, setDivisionVisibility] = useState(false);
+  function toggleDivisionVisibility() {
+    setDivisionVisibility(!isDivisionVisible);
+  }
+  
+  const [selectedSmd, setSelectedSmd] = useState('All');
+  function handleSelectSmd(smd) {
+    setSelectedSmd(smd);
+  }
+  const [selectedDivisionOption, setSelectedDivisionOption] = useState('-');
+  function handleSelectedDivisionOption(division){
+    setSelectedDivisionOption(division);
+  }
+  const [divisionOptions, setDivisionOptions] = useState([]);
+  function handleDivisionOptions(divisions) {
+    setDivisionOptions(divisions);
+  }
+
   return(
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Sidebar />
       <div className="manage-question-answer-container">
         <div className="search-bar-container">
           <SearchBar placeholder="Search questions" />
+        </div>
+        <div className="options-container-box">
+          <div className="option-selector">
+            <div className="option-selector-title">
+              -SMD:
+            </div>
+            <div className="selected-option" onClick={()=>{
+              toggleSmdVisibility();
+              setDivisionVisibility(false);
+            }}>
+              <span>{selectedSmd}</span>
+              {isSmdVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </div>
+            <div className={isSmdVisible ? "options-container active" : "options-container"}>
+              {smds.map((smd)=>{
+                return(
+                  <span
+                    key={smd._id}
+                    className="option"
+                    onClick={()=>{
+                      handleSelectSmd(smd.name);
+                      handleDivisionOptions(smd.division);
+                      handleSelectedDivisionOption('-');
+                      setSmdVisibility(false);
+                      }}
+                  >
+                    {smd.name}
+                  </span>
+                )
+              })}
+            </div>
+          </div>
+          <div className="option-selector">
+            <div className="option-selector-title">
+              -Division:
+            </div>
+            <div className="selected-option" onClick={()=>{
+              toggleDivisionVisibility();
+              setSmdVisibility(false);
+            }}>
+              <span>{selectedDivisionOption}</span>
+              {isDivisionVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            </div>
+            <div className={isDivisionVisible ? "options-container active" : "options-container"}>
+              {
+                divisionOptions.map((divisionOption)=>{
+                  return(
+                    <span
+                      key={divisionOption}
+                      className="option"
+                      onClick={()=>{
+                        handleSelectedDivisionOption(divisionOption);
+                        setDivisionVisibility(false);
+                      }}
+                    >{divisionOption}</span>
+                  )
+                })
+              }
+            </div>
+          </div>
         </div>
         <div className="question-answer-container">
           {questions.map((question) => {
