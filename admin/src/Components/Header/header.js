@@ -7,17 +7,17 @@ import Cookies from 'js-cookie';
 
 const Header = () => { 
 
-    let auth 
+  let auth 
 
-    console.log(Cookies.get('auth')) 
+  console.log(Cookies.get('auth')) 
   
-  // if (Cookies.get('auth'))
-  // {
-  //   const detail = Cookies.get('auth')
-  //   auth = detail.split(',')
+  if (Cookies.get('auth'))
+  {
+    const detail = Cookies.get('auth')
+    auth = detail.split(',')
     
-  //   console.log(detail)
-  // }
+    console.log(detail)
+  }
 
   return (    
     <header>
@@ -43,27 +43,22 @@ const Header = () => {
           <h1 className='header-title'><font style={{color:'#006633'}}>Discussion Forum</font></h1>
           <h2 className='header-title2'><font style={{color:'#006633'}}>ICAR (Indian Council Of Agricultural Research)</font></h2>
         </div>
+          {console.log('below is auth')}
+          {console.log(auth)}
         {
-          auth ? 
-
+          auth ?
           <div className='header-right'>
-               
-                     <h4>{auth[1]}</h4>
-                     {/* <h4>User Name</h4> */}
-               
-                <div className='header-right-container'>
-                  <p href="#" >
-                    <i class="fa-solid fa-right-from-bracket"></i>  Log out
-                  </p>
-                </div>
-
-              </div> 
-              :
-            <></>
+            <h4>{auth[1]}</h4>
+            {/* <h4>User Name</h4> */}
+            <div className='header-right-container'>
+              <p>
+                <i class="fa-solid fa-right-from-bracket"></i>  Log out
+              </p>
+            </div>
+          </div> 
+          :
+          <p></p>
         }
-        <div className='header-right'>
-          <font style={{color:'#006633'}}>Admin</font>
-        </div>
       </div>
     </header>
   );
