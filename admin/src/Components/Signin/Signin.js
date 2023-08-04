@@ -165,7 +165,8 @@ export default function SignIn() {
                 required
                 fullWidth
                 id="email"
-                label="Email Address"
+                // label="Email Address"
+                placeholder="Email Address *"
                 name="email"
                 value={email}
                 autoComplete="email"
@@ -182,7 +183,7 @@ export default function SignIn() {
                   style: { color: '#B5BAC1' },
                 }}
                 InputProps={{
-                  style: { color: '#F2F3F5', backgroundColor: '#1E1F22' },                
+                  style: { color: '#F2F3F5', backgroundColor: '#1E1F22' },
                 }}
               />
               <TextField
@@ -190,7 +191,8 @@ export default function SignIn() {
                 required
                 fullWidth
                 name="password"
-                label="Password"
+                // label="Password"
+                placeholder="Password *"
                 type="password"
                 id="password"
                 value={password}
@@ -207,10 +209,7 @@ export default function SignIn() {
                   style: { color: '#B5BAC1' },
                 }}
                 InputProps={{
-                  style: { 
-                    color: '#F2F3F5',
-                    backgroundColor: '#1E1F22',
-                  },
+                  style: { color: '#F2F3F5', backgroundColor: '#1E1F22' },
                 }}
               />          
               <Button
