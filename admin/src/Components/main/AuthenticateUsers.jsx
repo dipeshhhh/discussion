@@ -69,10 +69,8 @@ function User(props){
   )
 }
 
-function AuthenticateUsers() {  
-
-
-
+function AuthenticateUsers() {
+  
   const [users, setUsers] = useState('') 
 
   useEffect(()=>{
@@ -83,6 +81,7 @@ function AuthenticateUsers() {
   },[])
 
   const [search, setSearch] = useState('')  
+
     return(
     <div style={{display: 'flex', flexDirection: 'row'}}>
       <Sidebar />

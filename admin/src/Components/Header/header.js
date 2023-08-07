@@ -11,9 +11,9 @@ const Header = () => {
 
   let auth  
   
-  if (Cookies.get('auth'))
+  if (Cookies.get('45034583/45843958/985307'))
   {
-    const detail = Cookies.get('auth')
+    const detail = Cookies.get('45034583/45843958/985307')
     auth = detail.split(',')
     
     
@@ -24,7 +24,7 @@ const Header = () => {
 
 
     const singout = new Promise (async(res,rej)=>{  
-    res(Cookies.remove('auth'))
+    res(Cookies.remove('45034583/45843958/985307'))
     })
     singout.then((out)=>{         
      toast.success('Logout Sucessfully')

@@ -12,7 +12,7 @@ import './Sidebar.css';
 
 function Sidebar() {
 
-  const auth = (Cookies.get('auth')).split(',')
+  const auth = (Cookies.get('45034583/45843958/985307')).split(',')
   
 
 const [userstatus, setUserStatus] = useState('')

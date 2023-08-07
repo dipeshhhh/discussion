@@ -24,7 +24,7 @@ export default function SignIn() {
   const navigate = useNavigate()
 
   let myPromise = new Promise((resolve,reject)=>{
-    const auth = Cookies.get('auth')
+    const auth = Cookies.get('45034583/45843958/985307')
     resolve(auth)
   })
   myPromise.then(
@@ -79,7 +79,7 @@ export default function SignIn() {
 
           
           let myPromise = new Promise((resolve,reject)=>{
-            setTimeout(() => resolve(Cookies.set('auth',UserName)), 500)               
+            setTimeout(() => resolve(Cookies.set('45034583/45843958/985307',UserName)), 500)               
            
         })
           myPromise.then(
