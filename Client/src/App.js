@@ -12,14 +12,10 @@ import Errorpage from './Components/Error/errorpage';
 import {Routes, Route, Redirect} from 'react-router-dom'
 import PrivateComponent from './Components/PrivateComponent';
 
-function App() {
-   
-  
+function App() {   
 
-  return (
-    
+  return (    
   <>
-
 
    <div className='App'>
    <Header/>

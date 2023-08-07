@@ -16,7 +16,7 @@ const Header = () => {
     const detail = Cookies.get('auth')
     auth = detail.split(',')
     
-    console.log(detail)
+    
   }
 
   
@@ -30,7 +30,6 @@ const Header = () => {
      toast.success('Logout Sucessfully')
      navigate('/Sigin')
     })
-
  
 } 
 
@@ -58,9 +57,7 @@ const Header = () => {
         <div className='header-center'>
           <h1 className='header-title'><font style={{color:'#006633'}}>Discussion Forum</font></h1>
           <h2 className='header-title2'><font style={{color:'#006633'}}>ICAR (Indian Council Of Agricultural Research)</font></h2>
-        </div>
-          {console.log('below is auth')}
-          {console.log(auth)}
+        </div>       
         {
           auth ?
           <div className='header-right'>

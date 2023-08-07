@@ -1,5 +1,4 @@
 import React, {useState, useEffect} from 'react'
-
 import Img from './logo.png'
 import './index.css'
 import Content from './content'
@@ -7,31 +6,27 @@ import './captcha'
 import axios from 'axios'
 import {useNavigate} from 'react-router-dom'
 import { Helmet } from 'react-helmet';
-
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
 const Index = () => {
-    const navigate = useNavigate()
-
-    //if user already login then it will not redirect to auth page 
-
+    const navigate = useNavigate()      
+        
         let myPromise = new Promise((resolve,reject)=>{
-
-            const auth = sessionStorage.getItem('username')
+            const auth = Cookies.get('auth')
             resolve(auth)
-        })
-        myPromise.then(
+          })
+          myPromise.then(
             async function(value)
             {
                 if(value)
                 {                              
-                    navigate('/') 
-
+                    navigate('/')
                 }               
                 
             }
-                )       
+                )  
   
 
     const [loading, setLoading] = useState(false);
@@ -129,7 +124,9 @@ const handleLogin= async (e)=>{
             const UserName = [resp.data.userExist.email,resp.data.userExist.name]
 
             let myPromise = new Promise((resolve,reject)=>{
-                resolve(sessionStorage.setItem('username',UserName))
+
+                setTimeout(() => resolve(Cookies.set('auth',UserName)), 500)  
+               // resolve(sessionStorage.setItem('username',UserName))
             })
             myPromise.then(
                 async function ()

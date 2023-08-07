@@ -74,19 +74,12 @@ router.post('/Signin', async (req, res) => {
             else if (userExist.status > 1)
             {
                 return res.status(402).json({ err: 'Wrong Credentails' })
-            }
-            else if(userExist.login == 1)
-            {
-
-                return res.status(402).json({ err: 'Your are already login in other Tab' })
-            }
+            } 
             
-            else if (verified) {
-
-                Users.updateOne({email:email},{$set:{login:1}}).then(()=>{
+            else if (verified) {          
 
                     return res.status(200).json({userExist})
-                })              
+                            
                 
 
             }
@@ -141,15 +134,6 @@ router.post('/SignAdmin', async (req, res) => {
     }
 }
 )
-
-router.post('/SignOut',(req,res)=>{
-
-    Users.updateOne({email:req.body.userData[0]},{$set:{login:0}}).then((resp)=>{
-        return res.status(200).send(resp)
-    })
-
-})
-
 
 
 //User Details fetch 

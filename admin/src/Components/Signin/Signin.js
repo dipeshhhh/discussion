@@ -51,9 +51,9 @@ export default function SignIn() {
     }
 
     
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
 
-    event.preventDefault();
+    event.preventDefault(); 
     setLoading(true)
     if(!email || !password )
         {
@@ -69,7 +69,7 @@ export default function SignIn() {
     {    
 
       try{
-         axios.post('/SignAdmin', {
+        const resp = await axios.post('/SignAdmin', {
             email,
             password
         }).then((resp)=>{
@@ -78,39 +78,25 @@ export default function SignIn() {
           // const expirationTime = new Date(new Date().getTime() + 6000000); 
           
           let myPromise = new Promise((resolve,reject)=>{
-            setTimeout(() => resolve(Cookies.set('auth',UserName)), 500)           
+            setTimeout(() => resolve(Cookies.set('auth',UserName)), 500)               
+           
         })
           myPromise.then(
-             ()=>
+            ()=>
             {
                 toast.success('Login successfully')           
                  navigate('/') 
             }
-                )
-
-            
+                )            
         })
         }
-        catch(err) {
-            // setError(err.response.data.err)
-
-            console.log(err.response.data.err)           // toast.error(err.response.data.err)
-
-            setLoading(false);
+        catch(err) {                    
+          toast.error(err.response.data.err)
+          setLoading(false);
         }
-    }   
-
-
-
-
-   
+    }      
     
-   
-    // const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get('email'),
-    //   password: data.get('password'),
-    // });
+  
   };
 
   return (

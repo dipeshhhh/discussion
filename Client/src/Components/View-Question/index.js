@@ -3,11 +3,12 @@ import './index.css'
 import Sidebar from '../sidebar/sidebar'
 import Main from './mainquestion'
 import axios from 'axios'
+import Cookies from 'js-cookie';
 const Index = () => {
 
   const [questiondata, setQuestionData] = useState()
   
-  const userData = sessionStorage.getItem('username')
+  const userData = Cookies.get('auth')
   let auth =''
   if(userData)
   {

@@ -4,38 +4,29 @@ import logo from '../images/logo.png';
 import { Link } from 'react-router-dom';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
-
+import Cookies from 'js-cookie';
 import { ToastContainer ,toast} from 'react-toastify';
 
-
 const Header = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate()  
  
-  const auth = sessionStorage.getItem('username')
+  let auth  
   
-
-  let userData =''
-  
-  if(auth)
+  if (Cookies.get('auth'))
   {
-     userData = auth.split(',')    
+    const detail = Cookies.get('auth')
+    auth = detail.split(',')    
+    
   }
 
-  const logout = () => {
-
-
-       const singout = new Promise (async(res,rej)=>{
-     
-       const out = await axios.post('/SignOut',{userData})
-       res(out)
-       })
-       singout.then((out)=>{           
-        sessionStorage.clear('username')       
-        toast.success('Logout Sucessfully')
-        navigate('/auth')
-       })
-
-    
+  const logout = () => {    
+    const singout = new Promise (async(res,rej)=>{  
+      res(Cookies.remove('auth'))
+      })
+      singout.then((out)=>{         
+       toast.success('Logout Sucessfully')
+       navigate('/auth')
+      })   
   }   
   
  
@@ -74,7 +65,7 @@ const Header = () => {
           auth ? 
               <div className='header-right'>
                
-                     <h4>{userData[1].toUpperCase()}</h4>
+                     <h4>{auth[1].toUpperCase()}</h4>
                      {/* <h4>User Name</h4> */}
                
                 <div className='header-right-container'>

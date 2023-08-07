@@ -11,7 +11,6 @@ import Axios from 'axios';
 import { Document, Page, PDFViewer } from '@react-pdf/renderer';
 import Reply from './Reply';
 import './index.css';
-
 import BookmarkIcon from '@mui/icons-material/Bookmark';
 import HistoryIcon from '@mui/icons-material/History';
 import { Avatar } from '@mui/material';
@@ -22,6 +21,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CancelIcon from '@mui/icons-material/Cancel';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import Cookies from 'js-cookie';
 
 const Mainquestion = (details) => {
   const navigate = useNavigate();
@@ -98,7 +98,7 @@ const Mainquestion = (details) => {
     });
   };
 
-  const userData = sessionStorage.getItem('username')
+  const userData = Cookies.get('auth')
   let auth =''
   if(userData)
   {
