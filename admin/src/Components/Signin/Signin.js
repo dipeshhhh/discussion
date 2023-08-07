@@ -13,13 +13,13 @@ import {useNavigate} from 'react-router-dom'
 import axios from 'axios'
 import Cookies from 'js-cookie';
 import './Signin.css'
-
 import { ToastContainer, toast } from 'react-toastify';
-  import 'react-toastify/dist/ReactToastify.css';
+import 'react-toastify/dist/ReactToastify.css';
 
 const defaultTheme = createTheme();
 
 export default function SignIn() {
+
 
   const navigate = useNavigate()
 
@@ -74,8 +74,9 @@ export default function SignIn() {
             password
         }).then((resp)=>{
 
-          const UserName = [resp.data.userExist.email,resp.data.userExist.name]  
+          const UserName = [resp.data.userExist.email,resp.data.userExist.name,resp.data.userExist._id]  
           // const expirationTime = new Date(new Date().getTime() + 6000000); 
+
           
           let myPromise = new Promise((resolve,reject)=>{
             setTimeout(() => resolve(Cookies.set('auth',UserName)), 500)               

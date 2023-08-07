@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import parse from 'html-react-parser';
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../SearchBar/SearchBar.jsx";
@@ -8,6 +8,7 @@ import EditIcon from '@mui/icons-material/Edit';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import './css/ManageQuestionsAnswers.css';
+import axios from 'axios'
 
 // NEED: questions from database
 const questions=[
@@ -31,39 +32,39 @@ const questions=[
   },
 ]
 // NEED: SMDs from database
-const smds=[
-  {
-    "_id": "someId",
-    "name": "All",
-    "division": [],
-  },
-  {
-    "_id": "6487539f30cc72e9c608aaef",
-    "name": "CROP SCIENCES",
-    "division": [
-      "Genetics & Plant Breeding",
-      "Economic Botany and Plant Genetic Resources",
-      "Seed Science and Technology",
-      "Plant Pathology",
-      "Nematology",
-      "Agricultural Entomology",
-      "Plant Biochemistry",
-      "Plant Physiology",
-      "Agricultural Biotechnology",
-      "Agricultural Microsbiology"
-    ]
-  },
-  {
-    "_id": "6487539f30cc72e9c608aaf0",
-    "name": "HORTICULTURE",
-    "division": [
-      "Vegetable Science",
-      "Fruit Science",
-      "Floriculture and Landscaping",
-      "Spices, Plantation and Medicinal and Aromatic Plants"
-    ]
-  }
-]
+// const smds=[
+//   {
+//     "_id": "someId",
+//     "name": "All",
+//     "division": [],
+//   },
+//   {
+//     "_id": "6487539f30cc72e9c608aaef",
+//     "name": "CROP SCIENCES",
+//     "division": [
+//       "Genetics & Plant Breeding",
+//       "Economic Botany and Plant Genetic Resources",
+//       "Seed Science and Technology",
+//       "Plant Pathology",
+//       "Nematology",
+//       "Agricultural Entomology",
+//       "Plant Biochemistry",
+//       "Plant Physiology",
+//       "Agricultural Biotechnology",
+//       "Agricultural Microsbiology"
+//     ]
+//   },
+//   {
+//     "_id": "6487539f30cc72e9c608aaf0",
+//     "name": "HORTICULTURE",
+//     "division": [
+//       "Vegetable Science",
+//       "Fruit Science",
+//       "Floriculture and Landscaping",
+//       "Spices, Plantation and Medicinal and Aromatic Plants"
+//     ]
+//   }
+// ]
 
 function Question(props){
   function handleDelete(){
@@ -111,6 +112,17 @@ function Question(props){
 }
 
 function ManageQuestions() {
+
+const [smds, setSmds] = useState('')
+
+      useEffect(()=>{
+
+          axios.get('/SMD').then((resp)=>{
+            setSmds(resp)
+          })
+
+      },[])
+
   const [isSmdVisible, setSmdVisibility] = useState(false);
   function toggleSmdVisibility() {
     setSmdVisibility(!isSmdVisible);
@@ -123,11 +135,16 @@ function ManageQuestions() {
   const [selectedSmd, setSelectedSmd] = useState('All');
   function handleSelectSmd(smd) {
     setSelectedSmd(smd);
+
+    console.log(selectedSmd)
   }
   const [selectedDivisionOption, setSelectedDivisionOption] = useState('-');
   function handleSelectedDivisionOption(division){
     setSelectedDivisionOption(division);
+
+    console.log(selectedDivisionOption)
   }
+
   const [divisionOptions, setDivisionOptions] = useState([]);
   function handleDivisionOptions(divisions) {
     setDivisionOptions(divisions);
@@ -153,7 +170,7 @@ function ManageQuestions() {
               {isSmdVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </div>
             <div className={isSmdVisible ? "options-container active" : "options-container"}>
-              {smds.map((smd)=>{
+              {smds.data?.map((smd)=>{
                 return(
                   <span
                     key={smd._id}

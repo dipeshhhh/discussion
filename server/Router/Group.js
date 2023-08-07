@@ -29,6 +29,14 @@ router.get('/smddetail/:name', (req,res)=>{
     })
 })
 
+router.get('/SMD',(req,res)=>{
+    SmdDivision.find({}).then((resp)=>{
+        res.status(200).send(resp)
+    }).catch((e)=>{
+        res.status(400).send(e)
+    })
+})
+
 //Group detail fetch from user collection
 router.get('/group/:id',(req,res)=>{
 
