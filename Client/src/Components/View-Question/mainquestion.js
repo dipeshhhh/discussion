@@ -28,45 +28,6 @@ const Mainquestion = (details) => {
   let detail = details.details;
   const question_id = detail._id;
 
-  // NEED: Replies from database
-  const replies = [
-    {
-      _id: "someId",
-      replied_to: "64c013b493b6f8d6e655d2b1",
-      text: "This is reply body text",
-      auth: "Author of this reply",
-      created_at: "2023-07-26T17:49:54.625+00:00",
-      replies: [
-        // Nested replies for the first reply (if any)
-        {
-          _id: "nestedReplyId1",
-          replied_to: "someId", // ID of the parent reply
-          text: "This is a nested reply",
-          auth: "Author of the nested reply",
-          created_at: "2023-07-26T17:49:54.625+00:00",
-          replies: [] // More nested replies can be added here
-        },
-        {
-          _id: "nestedReplyId1",
-          replied_to: "someId", // ID of the parent reply
-          text: "This is a nested reply",
-          auth: "Author of the nested reply",
-          created_at: "2023-07-26T17:49:54.625+00:00",
-          replies: [] // More nested replies can be added here
-        },
-      ],
-    },
-    {
-      _id: "someOtherId",
-      replied_to: "64c02eee93b6f8d6e655d32b",
-      text: "This is another reply",
-      auth: "Author of this reply",
-      created_at: "2023-07-26T17:49:54.625+00:00",
-      replies: [],
-    },
-  ];
-  
-
   /**********Comment Fetch through question id***********/
 
   const [answerdata, setAnswerData] = useState();
@@ -184,16 +145,6 @@ const Mainquestion = (details) => {
   };
 
   /***********************************/
-
-  // Code to toggle replies visibility
-  const [showReplies, setShowReplies] = useState({});
-  const toggleReplies = (answerId) => {
-    setShowReplies((prevState) => ({
-      ...prevState,
-      [answerId]: !prevState[answerId],
-    }));
-  };
-  /***********************************/
   return (
     <div className="main">
       <div className="main-container">
@@ -237,7 +188,7 @@ const Mainquestion = (details) => {
             </div>
           </div>
         </div>        
-        <div>
+        <div id='write-new-answer'>
           <div className={ enable ? "icon-reply" : "icon-reply red-colored"} onClick={() => reply()}>
             { enable ? <ReplyAllIcon /> : <CancelIcon />}
             <p>{ enable ? "Answer" : "Cancel" }</p>
@@ -279,72 +230,209 @@ const Mainquestion = (details) => {
           </div>
         </div>
         <div className="all-questions">
-          <p>Number of Comments</p>
-          {answerdata?.map((resp) => (
-            <div key={resp._id}>
-              <div className="all-questions-container">
-                <div className="all-questions-left">
-                  <div className="all-options">
-                    <p className="arrow">▲</p>
-                    <p className="arrow">0</p>
-                    <p className="arrow">▼</p>
-                    <BookmarkIcon />
-                    <HistoryIcon />
-                  </div>
-                </div>
-                <div className="question-answer">
-                  {parse(resp.body)}
-                  <div 
-                    className="answer-reply-buttons"
-                    onClick={() => toggleReplies(resp._id)}
-                  >
-                    <small className="answer-reply-button">
-                      {showReplies[resp._id] ? "Hide replies" : "Show replies"}
-                    </small>
-                    <small className="answer-reply-button">Reply</small>
-                  </div>
-                  <div className="author">
-                    {resp?.file ? (
-                      <a onClick={(e) => downloadanswer(resp?._id)}>
-                        <AttachFileIcon />
-                      </a>
-                    ) : (
-                      <></>
-                    )}
-                    <small>on {new Date(resp?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
-                    <div className="auth-details">
-                      <Avatar />
-                      <p>{String(resp?.auth).split('@')[0]}</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div 
-                id={"replies-to-"+resp?._id} 
-                className={`replies-container ${showReplies[resp._id] ? "active" : ""}`}
-              >
-                {replies.filter((reply)=>{
-                  return(reply.replied_to == resp._id)
-                  }).map((reply)=>{
-                    return(
-                      <Reply
-                        key = {reply._id}
-                        id = {reply._id}
-                        text = {reply.text}
-                        created_at = {reply.created_at}
-                        auth = {reply.auth}
-                        replies = {reply.replies}
-                      />
-                    )
-                  })
-                }
-              </div>
-            </div>
-          ))}
+          <p>Number of Comments: {answerdata?.length}</p>
+          <div className="comments-container">
+            {answerdata?.map((resp) => (
+              <Comment key={resp._id} data={resp} />
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 };
+
+function Comment(props){
+  const resp = props.data;
+
+  // NEED: Replies from database
+  const replies = [
+    {
+      _id: "someId",
+      replied_to: "64d0de75d3fd477d8c5bb3db",
+      // replied_to: "64c655f8c747dc4a4638aa95",
+      body: "This is reply body text",
+      auth: "Author of this reply",
+      created_at: "2023-07-26T17:49:54.625+00:00",
+      replies: [
+        // Nested replies for the first reply (if any)
+        {
+          _id: "nestedReplyId1",
+          replied_to: "someId", // ID of the parent reply
+          body: "This is a nested reply",
+          auth: "Author of the nested reply",
+          created_at: "2023-07-26T17:49:54.625+00:00",
+          replies: [
+            {
+              _id: "nestedReplyId11",
+              replied_to: "nestedReplyId1", // ID of the parent reply
+              body: "This is a nested reply",
+              auth: "Author of the nested reply",
+              created_at: "2023-07-26T17:49:54.625+00:00",
+              replies: [] // More nested replies can be added here
+            }
+          ] // More nested replies can be added here
+        },
+        {
+          _id: "nestedReplyId1",
+          replied_to: "someId", // ID of the parent reply
+          body: "This is a nested reply",
+          auth: "Author of the nested reply",
+          created_at: "2023-07-26T17:49:54.625+00:00",
+          replies: [] // More nested replies can be added here
+        },
+      ],
+    },
+    {
+      _id: "someOtherId",
+      replied_to: "64d0de84d3fd477d8c5bb3e3",
+      body: "This is another reply",
+      auth: "Author of this reply",
+      created_at: "2023-07-26T17:49:54.625+00:00",
+      replies: [],
+    },
+  ];
+
+  /***********************************/
+  // Code for replies
+  const [loadingReply, setLoadingReply] = useState(false);
+  const [errorReply, setErrorReply] = useState('');
+  const [bodyReply, setBodyReply] = useState('');
+  const [fileReply, setFileReply] = useState('');
+  const [bthiddenReply, setBthiddenReply] = useState(false);
+
+  const handleQuillReply = (value) => {
+    setBodyReply(value);
+  };
+
+  const [enableReply, setEnableReply] = useState(true);  
+  function replyToReplyToggle() {
+    setEnableReply(!enableReply);
+  };
+
+  const [showReplies, setShowReplies] = useState(false);
+  function toggleReplies() {
+    setShowReplies(!showReplies);
+  }
+
+  function handleReplyFileChange() {
+    // Handle reply's file change here
+  }
+
+  // Code to handle backend for replies
+  function replyBackend() {
+    // Handle backend to add replies here
+
+  }
+  /***********************************/
+  return(
+    <div className="comment" key={resp._id}>
+      <div className="all-questions-container">
+        <div className="all-questions-left">
+          <div className="all-options">
+            <p className="arrow">▲</p>
+            <p className="arrow">0</p>
+            <p className="arrow">▼</p>
+            <BookmarkIcon />
+            <HistoryIcon />
+          </div>
+        </div>
+        <div className="question-answer">
+          {parse(resp.body)}
+          <div className="answer-reply-buttons">
+            <small 
+              className="answer-reply-button"
+              onClick={() => toggleReplies(resp._id)}
+              >
+              {showReplies ? "Hide replies" : "Show replies"}
+            </small>
+            <small 
+              className="answer-reply-button"
+              onClick={() => {replyToReplyToggle()}}
+              >
+              Reply</small>
+          </div>
+          <div className="author">
+            {resp?.file ? (
+              <a onClick={(e) => downloadanswer(resp?._id)}>
+                <AttachFileIcon />
+              </a>
+            ) : (
+              <></>
+            )}
+            <small>on {new Date(resp?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
+            <div className="auth-details">
+              <Avatar />
+              <p>{String(resp?.auth).split('@')[0]}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* This part below is to reply to the reply, NEED: backend for it */}
+      <div 
+        id={"write-reply-to-"+resp._id} 
+        className={enableReply ? "write-reply-box" : "write-reply-box active"}
+      >
+        {/* Reply Here :D */}
+        <div className="answer">
+          <div className="main-answer">
+            <h3>You can Reply</h3>
+            <ReactQuill
+              theme="snow"
+              value={bodyReply}
+              onChange={handleQuillReply}
+              className="react-quill"
+              style={{ height: '200px' }}
+            />
+          </div>
+          <div className="file-attach">
+            {/* <h3>Attach file (only PDF with 5 MB)</h3>
+            <input
+              label="File upload"
+              type="file"
+              name="file"
+              onChange={handleReplyFileChange}
+              placeholder="Select file..."
+            /> */}
+          </div>
+          <button
+            hidden={bthiddenReply}
+            onClick={replyBackend}
+            style={{
+              margin: '10px 0',
+              maxWidth: 'fit-content',
+            }}
+          >
+            {loadingReply ? 'Replying...' : 'Post Reply'}
+          </button>
+          {errorReply !== '' && (
+            <p style={{ color: 'red', fontSize: '14px' }}>{errorReply}</p>
+          )}
+        </div>
+      </div>
+      <div 
+        id={"replies-to-"+resp?._id} 
+        className={`replies-container ${showReplies ? "active" : ""}`}
+        // className={`replies-container active`}
+      >
+        {replies.filter((reply)=>{
+          return(reply.replied_to == resp._id)
+          }).map((reply)=>{
+            return(
+              <Reply
+                key = {reply._id}
+                id = {reply._id}
+                body = {reply.body}
+                created_at = {reply.created_at}
+                auth = {reply.auth}
+                replies = {reply.replies}
+              />
+            )
+          })
+        }
+      </div>
+    </div>
+  )
+}
 
 export default Mainquestion;

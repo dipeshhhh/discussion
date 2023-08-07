@@ -19,7 +19,7 @@
     border-Bottom: 1px solid #eee;
     border-radius: var(--rounded-border-radius);
     width: auto;
-    margin-bottom: 16px;
+    /* margin-bottom: 16px; */
     padding: 16px;
     box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 12%),
      2px 5px 18px 0px rgb(0 139 41 / 10%);
