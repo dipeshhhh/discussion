@@ -11,7 +11,7 @@ import './css/ManageQuestionsAnswers.css';
 import axios from 'axios'
 
 // NEED: questions from database
-const questions=[
+const questions = [
   {
     _id: "someQuestionId",
     title: "This is a question title",
@@ -66,17 +66,17 @@ const questions=[
 //   }
 // ]
 
-function Question(props){
-  function handleDelete(){
+function Question(props) {
+  function handleDelete() {
     // Handle question deletion here
   }
-  function handleEdit(){
+  function handleEdit() {
     // Handle question edit here
   }
   function truncate(str, n) {
     return str.length > n ? str.substr(0, n - 1) + '...' : str;
   }
-  return(
+  return (
     <div className="main-question-answer-body" key={props._id}>
       <div className='question-answer'>
         <span to={`/view-question?id=${props._id}`}>{props.title}</span>
@@ -94,17 +94,17 @@ function Question(props){
       <div className="admin-buttons-short">
         <EditIcon
           className="admin-button edit-button"
-          onClick={()=>{handleEdit()}}
-          onMouseEnter={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "var(--orange-peel-faded)";}}
-          onMouseLeave={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "white";}}
+          onClick={() => { handleEdit() }}
+          onMouseEnter={(event) => { event.target.parentElement.parentElement.style.backgroundColor = "var(--orange-peel-faded)"; }}
+          onMouseLeave={(event) => { event.target.parentElement.parentElement.style.backgroundColor = "white"; }}
         />
         <div className="flex-grow">
         </div>
-        <DeleteIcon 
+        <DeleteIcon
           className="admin-button reject-button"
-          onClick={()=>{handleDelete()}}
-          onMouseEnter={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "var(--red-crayola-bright-faded)";}}
-          onMouseLeave={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "white";}}
+          onClick={() => { handleDelete() }}
+          onMouseEnter={(event) => { event.target.parentElement.parentElement.style.backgroundColor = "var(--red-crayola-bright-faded)"; }}
+          onMouseLeave={(event) => { event.target.parentElement.parentElement.style.backgroundColor = "white"; }}
         />
       </div>
     </div>
@@ -113,36 +113,42 @@ function Question(props){
 
 function ManageQuestions() {
 
-const [smds, setSmds] = useState('')
+  const [smds, setSmds] = useState('')
 
-      useEffect(()=>{
+  useEffect(() => {
 
-          axios.get('/SMD').then((resp)=>{
-            setSmds(resp)
-          })
+    axios.get('/SMD').then((resp) => {
+      setSmds(resp)
+    })
 
-      },[])
+  }, [])
 
+  
   const [isSmdVisible, setSmdVisibility] = useState(false);
   function toggleSmdVisibility() {
     setSmdVisibility(!isSmdVisible);
-  }  
+  }
   const [isDivisionVisible, setDivisionVisibility] = useState(false);
   function toggleDivisionVisibility() {
     setDivisionVisibility(!isDivisionVisible);
   }
-  
-  const [selectedSmd, setSelectedSmd] = useState('All');
-  function handleSelectSmd(smd) {
-    setSelectedSmd(smd);
 
-    console.log(selectedSmd)
+  const [selectedSmd, setSelectedSmd] = useState('All');
+  function handleSelectedSmd(smd) {
+    setSelectedSmd(smd);
+    
+    // console.log(selectedSmd)
+
+    // INFO: This did not work because the state updates triggered by useState are asynchronous, and the updated values might not be immediately available within the same function scope. Since the state updates are batched and applied after the component re-renders, so the console.log inside the same function won't show the updated values.
+    // NOTE: Use 'useEffect' hooks provided below (line '169' to '188') for their respective tasks :D
   }
   const [selectedDivisionOption, setSelectedDivisionOption] = useState('-');
-  function handleSelectedDivisionOption(division){
+  function handleSelectedDivisionOption(division) {
     setSelectedDivisionOption(division);
+    
+    // console.log(selectedSmd)
 
-    console.log(selectedDivisionOption)
+    // INFO: This did not work because (explained in the comments of above function)
   }
 
   const [divisionOptions, setDivisionOptions] = useState([]);
@@ -150,8 +156,40 @@ const [smds, setSmds] = useState('')
     setDivisionOptions(divisions);
   }
 
-  return(
-    <div style={{display: 'flex', flexDirection: 'row'}}>
+  const [isSmdInitialRender, setIsSmdInitialRender] = useState(true);
+  const [isDivisionInitialRender, setIsDivisionInitialRender] = useState(true);
+
+  // ############################################################################### //
+  // NOTE: Use this when you want to handle change in both selected smd and division
+  // useEffect(() => {
+  //   console.log(selectedSmd, selectedDivisionOption);
+  // }, [selectedSmd, selectedDivisionOption]);
+  
+  // NOTE: Use this when you want to handle change in selected smd
+  useEffect(() => {
+    // INFO: These commented lines are to prevent the 'else part' from executing before the SMD selector is interacted with i.e. to prevent it from executing in initial render. i.e. If you don't want the 'else part' (console.log statement currently) execute two times on reload, uncomment these lines.
+    // if(isSmdInitialRender){
+    //     setIsSmdInitialRender(false);
+    //   }
+    //   else{
+        console.log(selectedSmd);
+        // }
+      }, [selectedSmd]);
+      
+  // NOTE: Use this when you want to handle change in selected division
+  useEffect(() => {
+    // INFO: These commented lines are to prevent the 'else part' from executing before the SMD selector is interacted with i.e. to prevent it from executing in initial render. i.e. If you don't want the 'else part' (console.log statement currently) execute two times on reload, uncomment these lines.
+    // if(isDivisionInitialRender){
+    //   setIsDivisionInitialRender(false);
+    // }
+    // else{
+      console.log(selectedDivisionOption);
+    // }
+  }, [selectedDivisionOption]);
+  // ############################################################################### //
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'row' }}>
       <Sidebar />
       <div className="manage-question-answer-container">
         <div className="search-bar-container">
@@ -162,7 +200,7 @@ const [smds, setSmds] = useState('')
             <div className="option-selector-title">
               -SMD:
             </div>
-            <div className="selected-option" onClick={()=>{
+            <div className="selected-option" onClick={() => {
               toggleSmdVisibility();
               setDivisionVisibility(false);
             }}>
@@ -170,17 +208,18 @@ const [smds, setSmds] = useState('')
               {isSmdVisible ? <ExpandLessIcon /> : <ExpandMoreIcon />}
             </div>
             <div className={isSmdVisible ? "options-container active" : "options-container"}>
-              {smds.data?.map((smd)=>{
-                return(
+            {/* SUGGESTION: Add 'All' option as well to select all types of SMDs and Division */}
+              {smds.data?.map((smd) => {
+                return (
                   <span
                     key={smd._id}
                     className="option"
-                    onClick={()=>{
-                      handleSelectSmd(smd.name);
+                    onClick={() => {
+                      handleSelectedSmd(smd.name);
                       handleDivisionOptions(smd.division);
                       handleSelectedDivisionOption('-');
                       setSmdVisibility(false);
-                      }}
+                    }}
                   >
                     {smd.name}
                   </span>
@@ -192,7 +231,7 @@ const [smds, setSmds] = useState('')
             <div className="option-selector-title">
               -Division:
             </div>
-            <div className="selected-option" onClick={()=>{
+            <div className="selected-option" onClick={() => {
               toggleDivisionVisibility();
               setSmdVisibility(false);
             }}>
@@ -201,12 +240,12 @@ const [smds, setSmds] = useState('')
             </div>
             <div className={isDivisionVisible ? "options-container active" : "options-container"}>
               {
-                divisionOptions.map((divisionOption)=>{
-                  return(
+                divisionOptions.map((divisionOption) => {
+                  return (
                     <span
                       key={divisionOption}
                       className="option"
-                      onClick={()=>{
+                      onClick={() => {
                         handleSelectedDivisionOption(divisionOption);
                         setDivisionVisibility(false);
                       }}
@@ -219,14 +258,14 @@ const [smds, setSmds] = useState('')
         </div>
         <div className="question-answer-container">
           {questions.map((question) => {
-            return(
+            return (
               <Question
-                key = {question._id}
-                title = {question.title}
-                body = {question.body}
-                auth = {question.auth}
-                subject = {question.subject}
-                created_at = {question.created_at}
+                key={question._id}
+                title={question.title}
+                body={question.body}
+                auth={question.auth}
+                subject={question.subject}
+                created_at={question.created_at}
               />
             )
           })}

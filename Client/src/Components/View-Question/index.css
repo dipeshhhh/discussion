@@ -109,7 +109,7 @@
   .answer{
     background-color: white;
     border-radius: 10px;
-    margin-top: 16px;
+    /* margin-top: 16px; */
     padding: 16px;
     box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 12%),
      2px 5px 18px 0px rgb(0 139 41 / 10%);
@@ -142,8 +142,16 @@
   {
     flex-direction: column;
     border: 1px;
-  
-
+  }
+  .comments-container{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .comment{
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
   }
   .answer-reply-buttons, .reply-to-reply-buttons{
     display: flex;
@@ -167,29 +175,61 @@
   .replies-container.active{
     display: flex;
     flex-direction: column;
+    gap: 16px;
   }
   .replies-container:not(.active){
     display: none;
   }
+  .main-reply-box{
+    display: flex;
+    flex-direction: row;
+  }
   .reply{
-    padding: 16px;
-    border-radius: 10px;
-    background-color: rgb(243, 243, 243);
-    /* margin-top: 16px; */
-    margin-bottom: 16px;
-    box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 12%),
-     2px 5px 18px 0px rgb(0 139 41 / 10%);
     display: flex;
     flex-direction: column;
     gap: 16px;
+    flex-grow: 1;
+    padding: 16px;
+    border-radius: 10px;
+    background-color: rgb(246, 246, 246);
+    box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 12%),
+     2px 5px 18px 0px rgb(0 139 41 / 10%);
   }
-  .reply-body{
-    border-left: 2px solid lightgray;
+  /* .gray-reply-box{
+    padding: 16px;
+    border-radius: 10px;
+    background-color: rgb(246, 246, 246);
+    box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 12%),
+     2px 5px 18px 0px rgb(0 139 41 / 10%);
+  } */
+  .left-bar{
+    width: 0px;
+    border: 2px solid darkgray;
+    border-radius: 5px;
+    margin-right: 16px
+  }
+  .left-bar:hover{
+    border: 2px solid gray;
+  }
+  .reply-box{
     display: flex;
     flex-direction: row;
     position: relative;
   }
+  .write-reply-box:not(.active){
+    display: none;
+  }
+  .write-reply-box.active{
+    display: initial;
+  }
   .reply-buttons{
     margin-right: 16px;
   }
-  
+  .replies{
+    margin-right: -16px;
+    /* Uncomment below line and comment above line for the gray-reply-box thingy */
+    /* margin-right: 0px; */
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }  
