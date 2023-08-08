@@ -110,7 +110,7 @@ function ManageUsers() {
               )
             })
             :
-            users.data?.filter((user)=>user.name.includes(search)).map(filterName=>{              
+            users.data?.filter((user)=>user.name.includes(search) || user.email.includes(search)).map(filterName=>{              
               return(               
                 <User
                   id={filterName._id} 

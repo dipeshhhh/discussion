@@ -11,61 +11,26 @@ import './css/ManageQuestionsAnswers.css';
 import axios from 'axios'
 
 // NEED: questions from database
-const questions = [
-  {
-    _id: "someQuestionId",
-    title: "This is a question title",
-    body: "This is the question body",
-    auth: "Author",
-    subject: "Genetics & Plant Breeding",
-    member: [],
-    created_at: "2023-07-25T18:25:39.322+00:00"
-  },
-  {
-    _id: "someQuestionId2",
-    title: "This is a question title",
-    body: "This is the question body",
-    auth: "Author",
-    subject: "Genetics & Plant Breeding",
-    member: [],
-    created_at: "2023-07-25T18:25:39.322+00:00"
-  },
-]
-// NEED: SMDs from database
-// const smds=[
+// const questions = [
 //   {
-//     "_id": "someId",
-//     "name": "All",
-//     "division": [],
+//     _id: "someQuestionId",
+//     title: "This is a question title",
+//     body: "This is the question body",
+//     auth: "Author",
+//     subject: "Genetics & Plant Breeding",
+//     member: [],
+//     created_at: "2023-07-25T18:25:39.322+00:00"
 //   },
 //   {
-//     "_id": "6487539f30cc72e9c608aaef",
-//     "name": "CROP SCIENCES",
-//     "division": [
-//       "Genetics & Plant Breeding",
-//       "Economic Botany and Plant Genetic Resources",
-//       "Seed Science and Technology",
-//       "Plant Pathology",
-//       "Nematology",
-//       "Agricultural Entomology",
-//       "Plant Biochemistry",
-//       "Plant Physiology",
-//       "Agricultural Biotechnology",
-//       "Agricultural Microsbiology"
-//     ]
+//     _id: "someQuestionId2",
+//     title: "This is a question title",
+//     body: "This is the question body",
+//     auth: "Author",
+//     subject: "Genetics & Plant Breeding",
+//     member: [],
+//     created_at: "2023-07-25T18:25:39.322+00:00"
 //   },
-//   {
-//     "_id": "6487539f30cc72e9c608aaf0",
-//     "name": "HORTICULTURE",
-//     "division": [
-//       "Vegetable Science",
-//       "Fruit Science",
-//       "Floriculture and Landscaping",
-//       "Spices, Plantation and Medicinal and Aromatic Plants"
-//     ]
-//   }
 // ]
-
 function Question(props) {
   function handleDelete() {
     // Handle question deletion here
@@ -114,6 +79,8 @@ function Question(props) {
 function ManageQuestions() {
 
   const [smds, setSmds] = useState('')
+  const [questions, setQuestions] = useState('')
+  const [search, setSearch] = useState('')
 
   useEffect(() => {
 
@@ -121,8 +88,11 @@ function ManageQuestions() {
       setSmds(resp)
     })
 
-  }, [])
+    axios.get('/all_question').then((resp)=>{
+        setQuestions(resp)
+    })
 
+  }, []) 
   
   const [isSmdVisible, setSmdVisibility] = useState(false);
   function toggleSmdVisibility() {
@@ -142,7 +112,7 @@ function ManageQuestions() {
     // INFO: This did not work because the state updates triggered by useState are asynchronous, and the updated values might not be immediately available within the same function scope. Since the state updates are batched and applied after the component re-renders, so the console.log inside the same function won't show the updated values.
     // NOTE: Use 'useEffect' hooks provided below (line '169' to '188') for their respective tasks :D
   }
-  const [selectedDivisionOption, setSelectedDivisionOption] = useState('-');
+  const [selectedDivisionOption, setSelectedDivisionOption] = useState('');
   function handleSelectedDivisionOption(division) {
     setSelectedDivisionOption(division);
     
@@ -172,7 +142,7 @@ function ManageQuestions() {
     //     setIsSmdInitialRender(false);
     //   }
     //   else{
-        console.log(selectedSmd);
+      
         // }
       }, [selectedSmd]);
       
@@ -193,7 +163,7 @@ function ManageQuestions() {
       <Sidebar />
       <div className="manage-question-answer-container">
         <div className="search-bar-container">
-          <SearchBar placeholder="Search questions" />
+          <SearchBar value={search} onChange={(e)=>{setSearch(e.target.value)}} placeholder="Search questions" />
         </div>
         <div className="options-container-box">
           <div className="option-selector">
@@ -217,7 +187,7 @@ function ManageQuestions() {
                     onClick={() => {
                       handleSelectedSmd(smd.name);
                       handleDivisionOptions(smd.division);
-                      handleSelectedDivisionOption('-');
+                      handleSelectedDivisionOption('');
                       setSmdVisibility(false);
                     }}
                   >
@@ -257,18 +227,73 @@ function ManageQuestions() {
           </div>
         </div>
         <div className="question-answer-container">
-          {questions.map((question) => {
-            return (
-              <Question
-                key={question._id}
-                title={question.title}
-                body={question.body}
-                auth={question.auth}
-                subject={question.subject}
-                created_at={question.created_at}
-              />
-            )
-          })}
+          {
+
+        selectedDivisionOption == '' ?
+
+        search == '' ?
+
+        questions?.data?.map((question) => {
+          return (
+            <Question
+              key={question._id}
+              title={question.title}
+              body={question.body}
+              auth={question.auth}
+              subject={question.subject}
+              created_at={question.created_at}
+            />
+          )
+        })
+
+        :
+        questions?.data?.filter((subject)=>subject.title.includes(search) || subject.auth.includes(search) || subject.body.includes(search)).map((question)=>{
+          return (
+            <Question
+              key={question._id}
+              title={question.title}
+              body={question.body}
+              auth={question.auth}
+              subject={question.subject}
+              created_at={question.created_at}
+            />
+          )
+        })   
+
+        :
+
+        search == '' ?
+
+        questions?.data?.filter((subject)=>subject.subject.includes(selectedDivisionOption)).map((question)=>{
+          return (
+            <Question
+              key={question._id}
+              title={question.title}
+              body={question.body}
+              auth={question.auth}
+              subject={question.subject}
+              created_at={question.created_at}
+            />
+          )
+        })
+
+        :
+
+        questions?.data?.filter((subject)=>subject.title.includes(search) || subject.auth.includes(search) || subject.body.includes(search)).map((question)=>{
+          return (
+            <Question
+              key={question._id}
+              title={question.title}
+              body={question.body}
+              auth={question.auth}
+              subject={question.subject}
+              created_at={question.created_at}
+            />
+          )
+        })          
+          
+          }
+          
         </div>
       </div>
     </div>

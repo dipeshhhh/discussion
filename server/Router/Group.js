@@ -21,12 +21,21 @@ router.get('/smddetail', (req,res)=>{
 //Dvision details fetch
 router.get('/smddetail/:name', (req,res)=>{
 
-    SmdDivision.find({name:req.params.name},{division:1}).limit(1).then((resp)=>{
+    SmdDivision.find({name:req.params.name}).then((resp)=>{
 
-        res.status(200).send(resp)
-    }).catch((e)=>{
-        res.status(400).send(e)
-    })
+            console.log(resp)
+           res.status(200).send(resp)
+           
+        })
+        
+        
+
+    // SmdDivision.find({name:req.params.name},{'division.name':1}).limit(1).then((resp)=>{
+
+    //     res.status(200).send(resp)
+    // }).catch((e)=>{
+    //     res.status(400).send(e)
+    // })
 })
 
 router.get('/SMD',(req,res)=>{
@@ -62,7 +71,7 @@ router.get('/main_group/:id',(req,res)=>{
         .then((resp)=>{
             resp.map((rsp)=>{
                 
-                Group.find({_id:rsp.Group},{name:1})
+                SmdDivision.find({_id:rsp.Group},{name:1})
                    .then((grsp)=>{
                           res.send(grsp)
                     })

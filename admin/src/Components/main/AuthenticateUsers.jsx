@@ -93,7 +93,8 @@ function AuthenticateUsers() {
           {
             search == '' ? 
               
-            users.data?.map((user)=>{           
+            users.data?.map((user)=>{             
+              
               return(
                 <User
                   id={user._id} 

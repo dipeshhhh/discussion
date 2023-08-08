@@ -133,6 +133,16 @@ router.get('/Question/:id', async(req,res)=>{
     
 })
 
+router.get('/all_question',(req,res)=>{
+
+    Question.find().sort({created_at:-1}).then((resp)=>{
+       
+        return res.status(200).send(resp)
+        
+    })
+    
+})
+
 
 router.get('/subject_question/:id',(req,res)=>{
        
