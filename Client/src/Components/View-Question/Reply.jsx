@@ -8,8 +8,11 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import ReplyIcon from '@mui/icons-material/Reply';
 import CancelIcon from '@mui/icons-material/Cancel';
 import "./index.css";
+import { ToastContainer, toast } from 'react-toastify';
+import Axios from 'axios';
+import Cookies from 'js-cookie';
 
-function Reply({ id, body, created_at, auth, replies }) {
+function Reply({ id, replied_to, body, auth, replies, created_at }) {
   const [expanded, setExpanded] = useState(false);
 
   const [loadingReply, setLoadingReply] = useState(false);
@@ -18,7 +21,7 @@ function Reply({ id, body, created_at, auth, replies }) {
   const [fileReply, setFileReply] = useState('');
   const [bthiddenReply, setBthiddenReply] = useState(false);
   const [enableReply, setEnableReply] = useState(true);
-  
+
   const replyToReplyToggle = () => {
     setEnableReply(!enableReply);
   };
@@ -30,7 +33,7 @@ function Reply({ id, body, created_at, auth, replies }) {
   const handleQuill = (value) => {
     setBodyReply(value);
   };
-  
+
   const handleFileChange = (event) => {
     event.preventDefault();
 
@@ -46,16 +49,60 @@ function Reply({ id, body, created_at, auth, replies }) {
     }
   };
 
-  const replyBackend = async (e) => {
-    // Handle Reply submission here
+  const replyToReply = async (e) => {
+    e.preventDefault();
+    setLoadingReply(true);
 
+    const userData = Cookies.get('auth');
+    let currentUserEmail;
+    if (userData) {
+      currentUserEmail = userData.split(',')[0];
+    }
+    else {
+      setLoadingReply(false);
+      // return Promise.reject('Cannot get userdata from cookies');
+      return;
+    }
+
+    // Garbage collector should handle this after its use
+    const newRepliedToArray = [];
+    replied_to.forEach(reply => {
+      newRepliedToArray.push(reply);
+    });
+    newRepliedToArray.push(id);
+
+    // NOTE: you might want to convert this to js FormData()
+    const data = {
+      replied_to: newRepliedToArray,
+      body: bodyReply,
+      auth: currentUserEmail,
+      created_at: new Date(),
+      replies: []
+    }
+
+    // const commentId = data.replied_to[0];
+
+    if (!bodyReply) {
+      setErrorReply('Please fill in the Body Part');
+      setLoadingReply(false);
+    } else {
+      if (window.confirm('Please click to confirm Reply')) {
+        Axios.patch(`/Reply-reply/${data.replied_to[0]}`, data).then((res) => {
+          if (res) {
+            toast.success('Reply Successful');
+            // setLoadingReply(false);
+            window.location.reload(false);
+          }
+        });
+      }
+    }
   };
 
   return (
     <div className="main-reply-box" key={id}>
       <div
-        className="left-bar" 
-        onClick={ replies.length > 0 ? ()=>{toggleExpand()} : ()=>{}}
+        className="left-bar"
+        onClick={replies.length > 0 ? () => { toggleExpand() } : () => { }}
       >
       </div>
       <div className="reply">
@@ -68,10 +115,10 @@ function Reply({ id, body, created_at, auth, replies }) {
                 </p>
               )}
               <p onClick={replyToReplyToggle} className="option-icon">
-                { enableReply ? <ReplyIcon /> : <CancelIcon />}
+                {enableReply ? <ReplyIcon /> : <CancelIcon />}
               </p>
             </div>
-            <div className="reply-body" style={{"margin-bottom": "16px", "overflow-wrap":"break-word"}}>
+            <div className="reply-body" style={{ "margin-bottom": "16px", "overflow-wrap": "break-word" }}>
               {parse(body)}
             </div>
             <div className='author reply-author'>
@@ -84,7 +131,7 @@ function Reply({ id, body, created_at, auth, replies }) {
           </div>
         </div>
         {/* This part below is to reply to the reply, NEED: backend for it */}
-        <div id={"write-reply-to-"+id} className={enableReply ? "write-reply-box" : "write-reply-box active"}>
+        <div id={"write-reply-to-" + id} className={enableReply ? "write-reply-box" : "write-reply-box active"}>
           <div className="answer">
             <div className="main-answer">
               <h3>You can Reply</h3>
@@ -108,7 +155,7 @@ function Reply({ id, body, created_at, auth, replies }) {
             </div>
             <button
               hidden={bthiddenReply}
-              onClick={replyBackend}
+              onClick={replyToReply}
               style={{
                 margin: '10px 0',
                 maxWidth: 'fit-content',
@@ -127,10 +174,12 @@ function Reply({ id, body, created_at, auth, replies }) {
             {replies.map((reply) => (
               <Reply
                 key={reply._id}
+                id={reply._id}
+                replied_to={reply.replied_to}
                 body={reply.body}
-                created_at={reply.created_at}
                 auth={reply.auth}
-                replies={reply.replies} // Recursively pass nested replies
+                replies={reply.replies}
+                created_at={reply.created_at} // Recursively pass nested replies
               />
             ))}
           </div>

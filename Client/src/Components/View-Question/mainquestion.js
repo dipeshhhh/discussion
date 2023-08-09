@@ -34,7 +34,7 @@ const Mainquestion = (details) => {
 
   useEffect(() => {
     async function getAnswerDetails() {
-      await Axios.get(`/Answer-detail/${question_id}`)
+      await Axios(`/Answer-detail/${question_id}?`)
         .then((resp) => {
           setAnswerData(resp.data);
         })
@@ -60,13 +60,12 @@ const Mainquestion = (details) => {
   };
 
   const userData = Cookies.get('auth')
-  let auth =''
-  if(userData)
-  {
+  let auth = ''
+  if (userData) {
     const data = userData.split(',')
-    auth = data[0]  
+    auth = data[0]
   }
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [body, setBody] = useState('');
@@ -159,24 +158,24 @@ const Mainquestion = (details) => {
           <div className="info">
             <p>on {new Date(detail?.created_at).toLocaleString().replace(/,/g, ' at ')}</p>
 
-          {
-            detail.file ?
+            {
+              detail.file ?
 
-            <a onClick={(e) => download(detail._id)}>
-            <FileDownloadIcon />
-          </a>
-            :
-            <></>
+                <a onClick={(e) => download(detail._id)}>
+                  <FileDownloadIcon />
+                </a>
+                :
+                <></>
 
-          }          
+            }
 
-           
+
           </div>
         </div>
         <div className="all-questions">
           <div className="all-questions-container">
             <div className="question-answer">
-              <p>{parse(detail.body)}</p>             
+              <p>{parse(detail.body)}</p>
 
               <div className="author">
                 <small></small>
@@ -187,11 +186,11 @@ const Mainquestion = (details) => {
               </div>
             </div>
           </div>
-        </div>        
+        </div>
         <div id='write-new-answer'>
-          <div className={ enable ? "icon-reply" : "icon-reply red-colored"} onClick={() => reply()}>
-            { enable ? <ReplyAllIcon /> : <CancelIcon />}
-            <p>{ enable ? "Answer" : "Cancel" }</p>
+          <div className={enable ? "icon-reply" : "icon-reply red-colored"} onClick={() => reply()}>
+            {enable ? <ReplyAllIcon /> : <CancelIcon />}
+            <p>{enable ? "Answer" : "Cancel"}</p>
           </div>
           <div className="answer" hidden={enable}>
             <div className="main-answer">
@@ -242,7 +241,7 @@ const Mainquestion = (details) => {
   );
 };
 
-function Comment(props){
+function Comment(props) {
   const resp = props.data;
 
   // NEED: Replies from database
@@ -305,7 +304,7 @@ function Comment(props){
     setBodyReply(value);
   };
 
-  const [enableReply, setEnableReply] = useState(true);  
+  const [enableReply, setEnableReply] = useState(true);
   function replyToReplyToggle() {
     setEnableReply(!enableReply);
   };
@@ -319,13 +318,48 @@ function Comment(props){
     // Handle reply's file change here
   }
 
-  // Code to handle backend for replies
-  function replyBackend() {
-    // Handle backend to add replies here
+  const replyToAnswer = async (e) => {
+    e.preventDefault();
+    setLoadingReply(true);
 
-  }
+    const userData = Cookies.get('auth');
+    let currentUserEmail;
+    if (userData) {
+      currentUserEmail = userData.split(',')[0];
+    }
+    else {
+      setLoadingReply(false);
+      // return Promise.reject('Cannot get userdata from cookies');
+      return;
+    }
+
+    // NOTE: you might want to convert this to js FormData()
+    const data = {
+      replied_to: [resp._id],
+      body: bodyReply,
+      auth: currentUserEmail,
+      created_at: new Date(),
+      replies: []
+    }
+
+    if (!bodyReply) {
+      setErrorReply('Please fill in the Body Part');
+      setLoadingReply(false);
+    } else {
+      if (window.confirm('Please click to confirm Reply')) {
+        Axios.patch(`/Answer-reply/${resp._id}`, data).then((res) => {
+          if (res) {
+            toast.success('Reply Successful');
+            // setLoadingReply(false);
+            window.location.reload(false);
+          }
+        });
+      }
+    }
+  };
+
   /***********************************/
-  return(
+  return (
     <div className="comment" key={resp._id}>
       <div className="all-questions-container">
         <div className="all-questions-left">
@@ -340,16 +374,19 @@ function Comment(props){
         <div className="question-answer">
           {parse(resp.body)}
           <div className="answer-reply-buttons">
-            <small 
-              className="answer-reply-button"
-              onClick={() => toggleReplies(resp._id)}
+            {
+              resp.comments.length>=1 &&
+              <small
+                className="answer-reply-button"
+                onClick={() => toggleReplies()}
               >
-              {showReplies ? "Hide replies" : "Show replies"}
-            </small>
-            <small 
+                {showReplies ? "Hide replies" : "Show replies"} 
+              </small>
+            }
+            <small
               className="answer-reply-button"
-              onClick={() => {replyToReplyToggle()}}
-              >
+              onClick={() => { replyToReplyToggle() }}
+            >
               Reply</small>
           </div>
           <div className="author">
@@ -368,9 +405,8 @@ function Comment(props){
           </div>
         </div>
       </div>
-      {/* This part below is to reply to the reply, NEED: backend for it */}
-      <div 
-        id={"write-reply-to-"+resp._id} 
+      <div
+        id={"write-reply-to-" + resp._id}
         className={enableReply ? "write-reply-box" : "write-reply-box active"}
       >
         {/* Reply Here :D */}
@@ -397,7 +433,7 @@ function Comment(props){
           </div>
           <button
             hidden={bthiddenReply}
-            onClick={replyBackend}
+            onClick={replyToAnswer}
             style={{
               margin: '10px 0',
               maxWidth: 'fit-content',
@@ -410,27 +446,28 @@ function Comment(props){
           )}
         </div>
       </div>
-      <div 
-        id={"replies-to-"+resp?._id} 
-        className={`replies-container ${showReplies ? "active" : ""}`}
-        // className={`replies-container active`}
-      >
-        {replies.filter((reply)=>{
-          return(reply.replied_to == resp._id)
-          }).map((reply)=>{
-            return(
-              <Reply
-                key = {reply._id}
-                id = {reply._id}
-                body = {reply.body}
-                created_at = {reply.created_at}
-                auth = {reply.auth}
-                replies = {reply.replies}
-              />
-            )
-          })
-        }
-      </div>
+      {resp.comments.length>=1 && 
+        <div
+          id={"replies-to-" + resp?._id}
+          className={`replies-container ${showReplies ? "active" : ""}`}
+        >
+          {
+            resp.comments.map((reply) => {
+              return (
+                <Reply
+                  key={reply._id}
+                  id={reply._id}
+                  replied_to={reply.replied_to}
+                  body={reply.body}
+                  auth={reply.auth}
+                  replies={reply.replies}
+                  created_at={reply.created_at}
+                />
+              )
+            })
+          }
+        </div>
+      }
     </div>
   )
 }
