@@ -21,21 +21,20 @@ router.get('/smddetail', (req,res)=>{
 //Dvision details fetch
 router.get('/smddetail/:name', (req,res)=>{
 
-    SmdDivision.find({name:req.params.name}).then((resp)=>{
+    // SmdDivision.find({name:req.params.name}).then((resp)=>{
 
-            console.log(resp)
-           res.status(200).send(resp)
+    //         console.log(resp)
+    //        res.status(200).send(resp)
            
-        })
-        
+    //     })  
         
 
-    // SmdDivision.find({name:req.params.name},{'division.name':1}).limit(1).then((resp)=>{
+    SmdDivision.find({name:req.params.name},{_id:0, division:1}).limit(1).then((resp)=>{
 
-    //     res.status(200).send(resp)
-    // }).catch((e)=>{
-    //     res.status(400).send(e)
-    // })
+        res.status(200).send(resp)
+    }).catch((e)=>{
+        res.status(400).send(e)
+    })
 })
 
 router.get('/SMD',(req,res)=>{
