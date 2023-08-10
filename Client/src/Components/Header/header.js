@@ -27,9 +27,7 @@ const Header = () => {
        toast.success('Logout Sucessfully')
        navigate('/auth')
       })   
-  }   
-  
- 
+  }    
 
    return (
 
@@ -50,7 +48,7 @@ const Header = () => {
        <div className='header-container'>
           <div className='header-left'>      
             
-          <Link to="/" >
+          <Link to="/index" >
             <img src={logo} alt="" />
           </Link>
           <h3>          </h3>

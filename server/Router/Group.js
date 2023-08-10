@@ -49,7 +49,7 @@ router.get('/SMD',(req,res)=>{
 router.get('/group/:id',(req,res)=>{
 
        
-    User.find({email:req.params.id},{_id:0,Divisionid:1})
+    User.find({email:req.params.id},{_id:0,Divisionid:1,status:1,Group:1,Smdid:1})
      .then((resp)=>{       
        
             resp.map((rsp)=>{              

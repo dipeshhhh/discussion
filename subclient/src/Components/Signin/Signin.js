@@ -1,204 +1,361 @@
-import React, {useState} from 'react';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import Link from '@mui/material/Link';
-import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import {useNavigate} from 'react-router-dom'
+import React, {useState, useEffect} from 'react'
+import Img from './logo.png'
+import './index.css'
+import Content from './content'
 import axios from 'axios'
-import Cookies from 'js-cookie';
-import './Signin.css'
+import {useNavigate} from 'react-router-dom'
+import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import Cookies from 'js-cookie';
 
-const defaultTheme = createTheme();
 
 export default function SignIn() {
 
 
-  const navigate = useNavigate()
-
-  let myPromise = new Promise((resolve,reject)=>{
-    const auth = Cookies.get('45034583/45843958/985307')
-    resolve(auth)
-  })
-  myPromise.then(
-    async function(value)
-    {
-        if(value)
-        {                              
-            navigate('/')
-        }               
+  const navigate = useNavigate()      
         
-    }
-        )  
-
- 
-    const [loading, setLoading] = useState(false);   
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    
-    function validateEmail(email) {
-      const reg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
-      if (reg.test(email) === false || !(email.split('@')[1] === 'icar.gov.in')) {
-        return false;
-      } else return true;
-    }
-
-    
-  const handleSubmit = async (event) => {
-
-    event.preventDefault(); 
-    setLoading(true)
-    if(!email || !password )
-        {
-          toast.error('Plese Fill the field')
-            setLoading(false);
-        }
-    else if(!validateEmail(email))
-    {
-      toast.error('Email is not in Valid Formate')
-      setLoading(false);
-    }
-    else
-    {    
-
-      try{
-        const resp = await axios.post('/SignAdmin', {
-            email,
-            password
-        }).then((resp)=>{
-
-          const UserName = [resp.data.userExist.email,resp.data.userExist.name,resp.data.userExist._id]  
-          // const expirationTime = new Date(new Date().getTime() + 6000000); 
-
+  let myPromise = new Promise((resolve,reject)=>{
+      const auth = Cookies.get('auth')
+      resolve(auth)
+    })
+    myPromise.then(
+      async function(value)
+      {
+          if(value)
+          {                              
+              navigate('/')
+          }               
           
-          let myPromise = new Promise((resolve,reject)=>{
-            setTimeout(() => resolve(Cookies.set('45034583/45843958/985307',UserName)), 500)               
-           
-        })
-          myPromise.then(
-            ()=>
-            {
-                toast.success('Login successfully')           
-                 navigate('/') 
-            }
-                )            
-        })
-        }
-        catch(err) {                    
+      }
+          )  
+
+
+const [loading, setLoading] = useState(false);
+const [error, setError] = useState("");
+const [register, setRegister] = useState(false)
+const [user, setUSer] = useState({
+  name:'',email:'',password:'',cpassword:''
+})
+let name, value 
+const handleInput = (e)=>{
+ 
+  name =e.target.name
+  value =e.target.value
+
+  setUSer({...user, [name]:value})
+}
+
+function validateEmail(email) {
+  const reg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
+  if (reg.test(email) === false || !(email.split('@')[1] === 'icar.gov.in')) {
+    return false;
+  } else return true;
+}
+/// Registration button function call here
+ const handleRegister= async (e)=>{
+ const status=0
+  e.preventDefault()
+  setLoading(true)
+  const {name, email,password, cpassword} = user
+  console.log(user)
+  if(!name || !email || !Divisionid || !password || !cpassword || !Smdid )
+  {
+      setError("Something missing");
+      setLoading(false);
+  }
+  else if (!validateEmail(email))
+  {
+      setError("Email is not in valid formate");
+      setLoading(false);
+  }
+  else if(!(password === cpassword))
+  {
+      
+      setError("Password is not Matched");
+      
+      setLoading(false);
+  }
+  else{    
+            
+      try{
+          const resp =await axios.post('/Signup',
+          {
+              name,
+              email,
+              Divisionid,
+              Smdid,
+              password,
+              status
+              
+          }).then((resp)=>{
+              toast.success('Registration Sucessfully')
+              navigate('/')
+              setLoading(false)
+          })
+      }
+      catch(err)
+      {
           toast.error(err.response.data.err)
           setLoading(false);
-        }
-    }      
-    
+      }          
+     
+  }
+          
+}
+
+const handleLogin= async (e)=>{
+const {email, password} = user
+e.preventDefault()
+  if(!email || !password )
+{
+  setError("Something missing");
+  setLoading(false);
+}
+else if (!validateEmail(email))
+{
+  setError("Email is not in valid formate");
+  setLoading(false);
+}
+else{
+try{
+  const resp = await axios.post('/Signin', {
+      email,
+      password
+  }).then((resp)=>{
+      const UserName = [resp.data.userExist.email,resp.data.userExist.name]
+
+      let myPromise = new Promise((resolve,reject)=>{
+
+          setTimeout(() => resolve(Cookies.set('auth',UserName)), 500)  
+         // resolve(sessionStorage.setItem('username',UserName))
+      })
+      myPromise.then(
+          async function ()
+          {
+              toast.success('Login successfully')           
+               navigate('/') 
+          }
+              )  
+      
+  })
+  }
+  catch(err) {
+
+      // setError(err.response.data.err)
+
+      toast.error(err.response.data.err)
+
+      setLoading(false);
+  }
+
+}
+  }
   
-  };
+
+
+const [Smd , setSmd] = useState([])
+const [Smdid, setSmdid] = useState('')
+const [Division, setDivision]= useState([])
+const [Divisionid, setDivisionid]= useState('')
+const [enable, setEnable] = useState(true)
+
+   
+//Here We fetch the SMD division data from server 
+  useEffect(()=>{
+    async function getSmd()
+    {
+      await axios.get('/smddetail').then((res)=>{
+         
+          //console.log(res.data)
+          setSmd(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
+    }
+    getSmd()
+  },[])      
+ 
+  //Handle SMD select options
+  const handleSmd = async (e)=>{           
+      
+      setSmdid('')
+      setDivision([])
+      
+      const Smdname = e.target.value
+      
+
+      if(Smdname!='')
+      {                   
+          await axios.get(`/smddetail/${Smdname}`).then((res)=>{
+              
+              setDivision(res.data)
+              setSmdid(Smdname)
+              setEnable(false)
+
+             
+              }).catch((err)=>{
+            console.log(err)
+          })
+
+         
+      }
+      else
+      {
+          setDivisionid('')
+          setSmdid('')       
+          setDivision([])
+          setEnable(true)
+
+      }
+  }
+
+  //handle division select options
+  const handeDivision = async (e)=>{
+     setDivisionid(e.target.value)
+      
+  }
+
 
   return (
-    <div class='signin-bg'>
-      <ThemeProvider theme={defaultTheme}>
-        <Container component="main" maxWidth="xs">
-          <CssBaseline />
-          <Box
-            sx={{
-              marginTop: 10,
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              p: '32px',
-              borderRadius: '10px',
-              backgroundColor: '#313338',
-            }}
-          >
-            {/* <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-              <LockOutlinedIcon />
-            </Avatar> */}
-            <Typography component="h1" variant="h5" sx={{ color: '#F2F3F5' }}>
-              Sign in
-            </Typography>
-            {/* <Typography component="h1" variant="h5" sx={{ color: '#F2F3F5' }}>
-              Welcome back admin!
-            </Typography>
-            <Typography component="h2" variant="h6" sx={{ color: '#F2F3F5' }}>
-              Sign in
-            </Typography> */}
-            <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                id="email"
-                // label="Email Address"
-                placeholder="Email Address *"
-                name="email"
-                value={email}
-                autoComplete="email"
-                autoFocus
-                onChange={(e)=>{setEmail(e.target.value)}}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#1E1F22' },
-                    '&:hover fieldset': { borderColor: '#1E1F22' },
-                    '&.Mui-focused fieldset': { borderColor: '#1E1F22' },
-                  },
-                }}
-                InputLabelProps={{
-                  style: { color: '#B5BAC1' },
-                }}
-                InputProps={{
-                  style: { color: '#F2F3F5', backgroundColor: '#1E1F22' },
-                }}
-              />
-              <TextField
-                margin="normal"
-                required
-                fullWidth
-                name="password"
-                // label="Password"
-                placeholder="Password *"
-                type="password"
-                id="password"
-                value={password}
-                autoComplete="current-password"
-                onChange={(e)=>{setPassword(e.target.value)}}
-                sx={{
-                  '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: '#1E1F22' },
-                    '&:hover fieldset': { borderColor: '#1E1F22' },
-                    '&.Mui-focused fieldset': { borderColor: '#1E1F22' },
-                  },
-                }}
-                InputLabelProps={{
-                  style: { color: '#B5BAC1' },
-                }}
-                InputProps={{
-                  style: { color: '#F2F3F5', backgroundColor: '#1E1F22' },
-                }}
-              />          
-              <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                sx={{ 
-                  mt: 3,
-                  mb: 2,
-                  p: 2,
-                  backgroundColor: '#006633',
-                  '&:hover': { backgroundColor: '#02773d' },
-                }}
-              >  
-              {loading ? "Logging in..." : "Login"}
-              </Button>            
-            </Box>
-          </Box>       
-        </Container>     
-      </ThemeProvider>
-    </div>
-  );
+    <div className='auth'>
+            <Helmet>
+        <title>Discussion Forum | Auth</title>
+      </Helmet>
+        <div className='auth-container'>
+                <div className='landing_page'>
+                    <div className='pull-right'>
+                      <div className='auth-login'>
+                          <div className='auth-login-container'>
+
+                            <div className='ICAR-Sign'>
+                                <img src={Img} alt="" style={{ height: "150px"}} />
+                            </div>
+                            
+                            {
+                                register ? (<>
+                                    <div className='input-field'>
+                                  <p>Name</p>
+                                  <input  type="text" name='name' autoComplete='off'
+                                  value={user.name}
+                                  onChange={handleInput}
+                                  placeholder='Enter your full name' />
+                              </div>
+                              <div className='input-field'>
+                                  <p>ICAR Email</p>
+                                  <input  type="email" name='email' autoComplete='off'
+                                  value={user.email}
+                                  onChange={handleInput}
+                                  placeholder='Enter your icar mail' />
+                              </div>
+
+                              <div className='input-field'>
+                                  <p>Select SMD</p>
+                                  <select name="division" onChange={(e)=>handleSmd(e)} id="smd">
+                                  <option value=''>--Select SMD--</option> 
+                                  {
+                                    Smd.map((data)=>
+                                      
+                                        <option value={data.name}>{data.name}</option>
+                                    )
+                                  }                                                        
+                                 
+                                  </select>
+                              </div>
+                              <div className='input-field'>
+                                  <p>Select Subject</p>
+                                  <select disabled={enable} onChange={(e)=>{handeDivision(e)}} id="division">
+                                  <option value=''>--Select Subject--</option>
+                                  {
+                                     Division.map((resp)=>
+                                        resp.division.map((res)=>
+                                        <option value={res._id}>{res}</option>
+                                        )
+                                    )
+                                  }
+                                 
+                                  </select>
+                              </div>
+                              <div className='input-field'>
+                                  <p>Password</p>
+                                  <input  name='password' type="password" autoComplete='off'
+                                  value={user.password}
+                                  onChange={handleInput}
+                                  placeholder='Enter the password'/>
+                              </div>
+                              <div className='input-field'>
+                                  <p>Confirm Password</p>
+                                  <input type="password" name='cpassword' autoComplete='off'
+                                  value={user.cpassword}
+                                  onChange={handleInput}
+                                  placeholder='Enter the Confirm password' />
+                              </div>
+                              <button style={{ marginTop: "20px" }} onClick={handleRegister}>
+                              {loading ? "Registering..." : "Register"}
+                              </button>
+                                </>
+                                ) : (
+                                
+                                <>
+                                <div className='input-field'>
+                                  <p>Email</p>
+                                  <input  type="email" name='email'  autoComplete='off' 
+                                   value={user.email}
+                                   onChange={handleInput}
+                                  />
+                              </div>
+                              <div className='input-field'>
+                                  <p>Password</p>
+                                  <input  type="password" name='password' autoComplete='off'
+                                  value={user.password}
+                                  onChange={handleInput}
+                                  />
+                              </div>                         
+                                                                                                                 
+                              <button style={{ marginTop: "20px" }} onClick={handleLogin}>
+                              {loading ? "Logging in..." : "Login"}
+                              </button>
+                              
+                                </>
+                                )}
+                              <p onClick={()=> setRegister(!register)   || setUSer({name:'',email:'',division:'',password:'',cpassword:''})   || setError(false)                        
+                            } style={{
+                                    marginTop:'10px',
+                                    textAlign:'center',
+                                    // color:'#0095ff',
+                                    color:'var(--secondary-color-forlink)',
+                                    textDecoration:'underline',
+                                    cursor:'pointer'
+                              }}>{ register ? 'Login' : 'Register'}?</p>
+                                  <div id="company">
+                                  {error !== "" && (
+                                        <p
+                                        style={{
+                                        color: "red",
+                                        fontSize: "14px",
+                                               }}
+                                        >
+                                          {error}
+                                        </p>
+                                            )}    
+                                  </div>
+                                   
+                              </div>
+                      </div>
+
+                    </div>
+                    
+                        <Content/>
+                  
+                
+                    </div>       
+                   
+                  </div>      
+           </div>
+    
+  )
+
+    
 }
+
+

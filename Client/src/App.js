@@ -22,7 +22,7 @@ function App() {
    
     <Routes>
       <Route element={<PrivateComponent/>}>
-      <Route exact path='/' element={<Index/>}></Route>
+      <Route exact path='/index' element={<Index/>}></Route>
       <Route exact path='/add-question' element={<Question/>}></Route>
       <Route exact path='/view-question' element={<ViewQuestion/>}></Route>
       <Route exact path='/comment' element={<Comment/>}></Route>

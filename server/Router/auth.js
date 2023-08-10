@@ -71,7 +71,7 @@ router.post('/Signin', async (req, res) => {
             {
                 return res.status(402).json({ err: 'User is not Activated' }) 
             }
-            else if (userExist.status > 1)
+            else if (userExist.status > 2)
             {
                 return res.status(402).json({ err: 'Wrong Credentails' })
             } 

@@ -130,9 +130,20 @@ const handleLogin= async (e)=>{
             })
             myPromise.then(
                 async function ()
-                {
-                    toast.success('Login successfully')           
-                     navigate('/') 
+                {   
+                    if(resp.data.userExist.status == 1)
+                    {
+                        toast.success('Login successfully')           
+                        navigate('/index') 
+                    }    
+                    else
+                    {
+                        toast.success('Login successfully')           
+                        navigate('/add-question') 
+
+                    }    
+
+                   
                 }
                     )  
             

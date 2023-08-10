@@ -5,9 +5,9 @@ import Cookies from 'js-cookie';
 
 const PrivateComponent = () => {
             
-   const auth = Cookies.get('45034583/45843958/985307')
+   const auth = Cookies.get('auth')
 
-  return auth?<Outlet/>: <Navigate to='/Sigin'/>
+  return auth?<Outlet/>: <Navigate to='/Signin'/>
   
 }
 

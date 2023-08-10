@@ -4,6 +4,7 @@ import GroupsIcon from '@mui/icons-material/Groups';
 import GroupIcon from '@mui/icons-material/Group';
 import QuestionMarkIcon from '@mui/icons-material/QuestionMark';
 import QuestionAnswerIcon from '@mui/icons-material/QuestionAnswer';
+import SubjectQuestion from '../main/SubjectQuestion';
 import ReplyAllIcon from '@mui/icons-material/ReplyAll';
 import Cookies from 'js-cookie';
 import axios from 'axios'
@@ -12,7 +13,7 @@ import './Sidebar.css';
 
 function Sidebar() {
 
-  const auth = (Cookies.get('45034583/45843958/985307')).split(',')
+  const auth = (Cookies.get('auth')).split(',')
   
 
 const [userstatus, setUserStatus] = useState('')
@@ -33,20 +34,10 @@ useEffect(()=>{
         
         <div className="sidebar-option-category-container">
           <small className="sidebar-option-category">Manage</small>
-          {
-            userstatus == 2 && 
-
-            <NavLink to="/authenticate-users" className="sidebar-option">
-            <GroupsIcon />
-            <p>Authenticate Users</p>
-            </NavLink>
-            
-          }
-         
-          <NavLink to="/manage-users" className="sidebar-option">
-            <GroupIcon />
-            <p>Users</p>
-          </NavLink>
+          <NavLink to="/subject-questions" className="sidebar-option">
+            <SubjectQuestion />
+            <p>Questions</p>
+          </NavLink>              
           <NavLink to="/manage-questions" className="sidebar-option">
             <QuestionMarkIcon />
             <p>Questions</p>
