@@ -9,6 +9,7 @@ import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
+import {Multiselect} from 'multiselect-react-dropdown'
 
 const Index = () => {
     const navigate = useNavigate()      
@@ -226,16 +227,13 @@ const handleLogin= async (e)=>{
         }
 
 
+      let options = []
 
-        // console.log(Smdid,Divisionid)
-
-       
-       
-        
-        
-        
-      
-               
+        Division.map((resp)=>
+            resp.division.map((res)=>
+                options.push(res)               
+              )) 
+             console.log(options)
 
   return (
         <div className='auth'>
@@ -295,6 +293,9 @@ const handleLogin= async (e)=>{
                                   }
                                  
                                   </select>
+                              </div>
+                              <div className='input-field'>
+                              <Multiselect options={options} displayValue='Your' />
                               </div>
                               <div className='input-field'>
                                   <p>Password</p>

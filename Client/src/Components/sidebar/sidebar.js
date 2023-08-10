@@ -27,7 +27,7 @@ const sidebar = ({Subject}) => {
 
 <span className="sidebar-option-category-title">Your Subject</span>  
                         
-                        <NavLink className='link-tag sidebar-option'>
+                        <NavLink to="/index" className='link-tag sidebar-option'>
                             <PeopleIcon />
                             <span className="link-title">{Subject.Divisionid}</span>
                         </NavLink>   

@@ -48,7 +48,7 @@ useEffect(()=>{
             <p>Users</p>
           </NavLink>
           <NavLink to="/manage-questions" className="sidebar-option">
-            <QuestionMarkIcon />
+            <QuestionMarkIcon/>
             <p>Questions</p>
           </NavLink>
           <NavLink to="/manage-answers" className="sidebar-option">
