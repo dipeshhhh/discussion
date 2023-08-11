@@ -12,10 +12,8 @@ const { ObjectId } = require('mongodb');
 
 router.post('/Signup', async (req,res)=>{
 
-   let {name, email, Divisionid, Smdid, password,status} = req.body;
-    
-
-    try{
+   let {name, email, Divisionid, Smdid, password,status, intrested} = req.body;   
+   try{
       
     const userExist = await Users.findOne({email:email})
     if(!userExist)
@@ -32,8 +30,7 @@ router.post('/Signup', async (req,res)=>{
         Group.push(data[i]._id)
     
     }
-
-       const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status,login});
+       const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status, login, intrested});
        const result = await fetch.save()
        if(result)
         {

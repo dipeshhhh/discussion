@@ -18,6 +18,7 @@ const Userschema = new mongoose.Schema({
         required:true
     },
     Group:[String],
+    intrested:[String],
     password:{
         type:String,
         required:true

@@ -82,8 +82,7 @@ const Index = () => {
        const status=0
         e.preventDefault()
         setLoading(true)
-        const {name, email,password, cpassword} = user
-        console.log(user)
+        const {name, email,password, cpassword} = user       
         if(!name || !email || !Divisionid || !password || !cpassword || !Smdid )
         {
             setError("Something missing");
@@ -101,31 +100,30 @@ const Index = () => {
             
             setLoading(false);
         }
-        else{    
-
-            console.log(intrested)
+        else{         
                   
-            // try{
-            //     const resp =await axios.post('/Signup',
-            //     {
-            //         name,
-            //         email,
-            //         Divisionid,
-            //         Smdid,
-            //         password,
-            //         status
+            try{
+                const resp =await axios.post('/Signup',
+                {
+                    name,
+                    email,
+                    Divisionid,
+                    Smdid,
+                    password,
+                    status,
+                    intrested
                     
-            //     }).then((resp)=>{
-            //         toast.success('Registration Sucessfully')
-            //         navigate('/')
-            //         setLoading(false)
-            //     })
-            // }
-            // catch(err)
-            // {
-            //     toast.error(err.response.data.err)
-            //     setLoading(false);
-            // }          
+                }).then((resp)=>{
+                    toast.success('Registration Sucessfully')
+                    navigate('/')
+                    setLoading(false)
+                })
+            }
+            catch(err)
+            {
+                toast.error(err.response.data.err)
+                setLoading(false);
+            }          
            
         }
                 
@@ -291,6 +289,16 @@ const handleLogin= async (e)=>{
                             
                             {
                                 register ? (<>
+
+                                <div className='input-field'>
+                                  <p>Select Your Designation</p>
+                                  <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
+                                  <option value=''>--Select Designation--</option> 
+                                  <option value='1'>As DG</option>                                                        
+                                  <option value='2'>As ADG & DDG</option>
+                                  <option value='3'>As Scientist</option>
+                                  </select>
+                              </div>
                                     <div className='input-field'>
                                   <p>Name</p>
                                   <input  type="text" name='name' autoComplete='off'
@@ -298,15 +306,7 @@ const handleLogin= async (e)=>{
                                   onChange={handleInput}
                                   placeholder='Enter your full name' />
                               </div>
-                              <div className='input-field'>
-                                  <p>Select Your Designation</p>
-                                  <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
-                                  <option value=''>--Select SMD--</option> 
-                                  <option value='1'>As DG</option>                                                        
-                                  <option value='2'>As ADG & DDG</option>
-                                  <option value='3'>As Scientist</option>
-                                  </select>
-                              </div>
+                              
                               <div className='input-field'>
                                   <p>ICAR Email</p>
                                   <input  type="email" name='email' autoComplete='off'
@@ -315,9 +315,9 @@ const handleLogin= async (e)=>{
                                   placeholder='Enter your icar mail' />
                               </div>
 
-                              <div className='input-field'>
+                              <div aria-hidden={Smdhidden} className='input-field'>
                                   <p>Select SMD</p>
-                                  <select name="division" hidden={Smdhidden} onChange={(e)=>handleSmd(e)} id="smd">
+                                  <select name="division" disabled={Smdhidden} onChange={(e)=>handleSmd(e)} id="smd">
                                   <option value=''>--Select SMD--</option> 
                                   {
                                     Smd.map((data)=>
@@ -329,21 +329,7 @@ const handleLogin= async (e)=>{
                                   </select>
                               </div>
                               <div className='input-field'>
-                                  <p>Select Main Subject</p>
-                                  <select disabled={enable} hidden={Subjecthidden} onChange={(e)=>{handeDivision(e)}} id="division">
-                                  <option value=''>--Select Subject--</option>
-                                  {
-                                     Division.map((resp)=>
-                                        resp.division.map((res)=>
-                                        <option value={res._id}>{res}</option>
-                                        )
-                                    )
-                                  }
-                                 
-                                  </select>
-                              </div>
-                              <div className='input-field'>
-                              <p>Select Intreseted Subjects</p>
+                              <p>Select Intrested Subjects</p>
                               <Multiselect 
                             
                               disable={Subjecthidden}
@@ -354,6 +340,20 @@ const handleLogin= async (e)=>{
                               isObject={false} 
                               displayValue='Your Intrested Subject' />
                               </div>
+                              <div className='input-field'>
+                                  <p>Select Main Subject</p>
+                                  <select disabled={enable} disable={Subjecthidden} onChange={(e)=>{handeDivision(e)}} id="division">
+                                  <option value=''>--Select Subject--</option>
+                                  {
+                                     Division.map((resp)=>
+                                        resp.division.map((res)=>
+                                        <option value={res._id}>{res}</option>
+                                        )
+                                    )
+                                  }
+                                 
+                                  </select>
+                              </div>                              
                               <div className='input-field'>
                                   <p>Password</p>
                                   <input  name='password' type="password" autoComplete='off'

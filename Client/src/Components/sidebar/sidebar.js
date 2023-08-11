@@ -31,10 +31,10 @@ const sidebar = ({Subject}) => {
                             <PeopleIcon />
                             <span className="link-title">{Subject.Divisionid}</span>
                         </NavLink>   
-                        <span className="sidebar-option-category-title">Your favourite Subject</span>  
+                       { Subject.intrested.length>0 && <span className="sidebar-option-category-title">Your favourite Subject</span>  }
                         
                         {
-                            Subject.Group.map((resp)=>
+                            Subject.intrested.map((resp)=>
                             <NavLink className='link-tag sidebar-option'>
                             <PeopleIcon />
                             <span className="link-title">{resp}</span>
