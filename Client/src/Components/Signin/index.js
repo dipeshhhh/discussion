@@ -51,6 +51,32 @@ const Index = () => {
           return false;
         } else return true;
       }
+
+    const [Smdhidden, SetSmdhidden]= useState(true)
+    const [Subjecthidden, setSubjecthidden]= useState(true)
+    const [designation, setDesignation]= useState('')
+
+    const  handldesignation = (e)=>{
+
+    setDesignation(e.target.value)
+    
+    if(e.target.value == 2)
+    {
+        SetSmdhidden(false)
+        setSubjecthidden(true)
+    } 
+    else if(e.target.value == 3)
+    {
+        SetSmdhidden(false)
+        setSubjecthidden(false)
+    }       
+    else{
+        SetSmdhidden(true)
+        setSubjecthidden(true)
+    }
+
+    }
+
 /// Registration button function call here
        const handleRegister= async (e)=>{
        const status=0
@@ -76,32 +102,42 @@ const Index = () => {
             setLoading(false);
         }
         else{    
+
+            console.log(intrested)
                   
-            try{
-                const resp =await axios.post('/Signup',
-                {
-                    name,
-                    email,
-                    Divisionid,
-                    Smdid,
-                    password,
-                    status
+            // try{
+            //     const resp =await axios.post('/Signup',
+            //     {
+            //         name,
+            //         email,
+            //         Divisionid,
+            //         Smdid,
+            //         password,
+            //         status
                     
-                }).then((resp)=>{
-                    toast.success('Registration Sucessfully')
-                    navigate('/')
-                    setLoading(false)
-                })
-            }
-            catch(err)
-            {
-                toast.error(err.response.data.err)
-                setLoading(false);
-            }          
+            //     }).then((resp)=>{
+            //         toast.success('Registration Sucessfully')
+            //         navigate('/')
+            //         setLoading(false)
+            //     })
+            // }
+            // catch(err)
+            // {
+            //     toast.error(err.response.data.err)
+            //     setLoading(false);
+            // }          
            
         }
                 
       }
+
+     const Registerdg = ()=>{
+        console.log('DG')
+     }
+
+     const Registerddg = ()=>{
+        console.log('DDG')
+     }
       
 const handleLogin= async (e)=>{
     const {email, password} = user
@@ -226,14 +262,17 @@ const handleLogin= async (e)=>{
             
         }
 
-
+/****************Select Intrested Subjects*********************/
       let options = []
 
         Division.map((resp)=>
             resp.division.map((res)=>
                 options.push(res)               
               )) 
-             console.log(options)
+           
+     const [intrested, setIntrested] = useState([])  
+    
+ /********************************************/ 
 
   return (
         <div className='auth'>
@@ -260,6 +299,15 @@ const handleLogin= async (e)=>{
                                   placeholder='Enter your full name' />
                               </div>
                               <div className='input-field'>
+                                  <p>Select Your Designation</p>
+                                  <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
+                                  <option value=''>--Select SMD--</option> 
+                                  <option value='1'>As DG</option>                                                        
+                                  <option value='2'>As ADG & DDG</option>
+                                  <option value='3'>As Scientist</option>
+                                  </select>
+                              </div>
+                              <div className='input-field'>
                                   <p>ICAR Email</p>
                                   <input  type="email" name='email' autoComplete='off'
                                   value={user.email}
@@ -269,7 +317,7 @@ const handleLogin= async (e)=>{
 
                               <div className='input-field'>
                                   <p>Select SMD</p>
-                                  <select name="division" onChange={(e)=>handleSmd(e)} id="smd">
+                                  <select name="division" hidden={Smdhidden} onChange={(e)=>handleSmd(e)} id="smd">
                                   <option value=''>--Select SMD--</option> 
                                   {
                                     Smd.map((data)=>
@@ -281,8 +329,8 @@ const handleLogin= async (e)=>{
                                   </select>
                               </div>
                               <div className='input-field'>
-                                  <p>Select Subject</p>
-                                  <select disabled={enable} onChange={(e)=>{handeDivision(e)}} id="division">
+                                  <p>Select Main Subject</p>
+                                  <select disabled={enable} hidden={Subjecthidden} onChange={(e)=>{handeDivision(e)}} id="division">
                                   <option value=''>--Select Subject--</option>
                                   {
                                      Division.map((resp)=>
@@ -295,7 +343,16 @@ const handleLogin= async (e)=>{
                                   </select>
                               </div>
                               <div className='input-field'>
-                              <Multiselect options={options} displayValue='Your' />
+                              <p>Select Intreseted Subjects</p>
+                              <Multiselect 
+                            
+                              disable={Subjecthidden}
+                              options={options}
+                              selectionLimit={5}
+                              onRemove={(e)=>{setIntrested(e)}} 
+                              onSelect={(e)=>{setIntrested(e)}} 
+                              isObject={false} 
+                              displayValue='Your Intrested Subject' />
                               </div>
                               <div className='input-field'>
                                   <p>Password</p>
@@ -311,9 +368,28 @@ const handleLogin= async (e)=>{
                                   onChange={handleInput}
                                   placeholder='Enter the Confirm password' />
                               </div>
-                              <button style={{ marginTop: "20px" }} onClick={handleRegister}>
+                              {
+                                designation== 1 &&
+                                <button style={{ marginTop: "20px" }} onClick={Registerdg}>
                               {loading ? "Registering..." : "Register"}
                               </button>
+
+                              }
+                              {
+                                designation == 2 &&
+                                <button style={{ marginTop: "20px" }} onClick={Registerddg}>
+                                {loading ? "Registering..." : "Register"}
+                                </button>
+                              }
+                              {
+                                designation == 3 &&
+                                <button style={{ marginTop: "20px" }} onClick={handleRegister}>
+                              {loading ? "Registering..." : "Register"}
+                              </button>
+                              }
+                              
+                             
+                              
                                 </>
                                 ) : (
                                 
