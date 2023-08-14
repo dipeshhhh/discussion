@@ -272,6 +272,57 @@ const handleLogin= async (e)=>{
     
  /********************************************/ 
 
+const [verify, setVerify] = useState(false)
+const [otps, setOtps] = useState('')
+const [demail, setDemail] = useState(false)
+
+ const Getotp = async(e) =>{
+
+    const {email} = user
+
+    e.preventDefault()
+    setLoading(true)
+
+    if(!email)
+    {
+        toast.error('Please enter your email')
+        setLoading(false);
+
+    }
+    else if (!validateEmail(email))
+    {
+        toast.error('Email is not in valid formate')       
+        setLoading(false);
+    }
+    else
+    {
+        toast.success('Please Check your Email ID')
+        setOtps(Math.random().toString(36).substring(2,7))
+        setVerify(true)
+       
+    }}
+
+    console.log(otps)
+
+   const Verifyotp = async(e)=>{
+
+    const {otp} = user
+
+   if(otp == otps)
+   {
+    toast.success('Right OTP')
+    setDemail(true)
+    setLoading(false);
+
+   }
+   else
+   {
+     toast.error('Wrong OTP')
+     setLoading(false);
+   }
+
+   }
+
   return (
         <div className='auth'>
             <Helmet>
@@ -290,7 +341,47 @@ const handleLogin= async (e)=>{
                             {
                                 register ? (<>
 
-                                <div className='input-field'>
+                              <div className='input-field'>
+                                  <p>ICAR Email</p>
+                                  <input disabled={demail}  type="email" name='email' autoComplete='off'
+                                  value={user.email}
+                                  onChange={handleInput}
+                                  placeholder='Enter your icar mail' />
+                              </div>
+                             {
+                                demail == false &&
+
+                                <>
+                                 <button style={{ marginTop: "20px" }} onClick={Getotp}>
+                                   Get OTP
+                                 </button>
+                                </>
+
+
+                             }                                         
+                             
+                              {
+                                 demail == false ? 
+
+                                 verify == true &&
+                                 <>
+                                  <div className='input-field'>
+                                   <p>Enter OTP</p>
+                                   <input  type="text" name='otp' autoComplete='off'
+                                   value={user.otp}
+                                   onChange={handleInput}
+                                   placeholder='Please Enter OTP' />
+                               </div>
+                               <button style={{ marginTop: "20px" }} onClick={Verifyotp}>
+                               Verify OTP
+                               </button>                                
+                                 </>
+
+                                 :
+
+                                <>                                
+
+                            <div className='input-field'>
                                   <p>Select Your Designation</p>
                                   <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
                                   <option value=''>--Select Designation--</option> 
@@ -307,15 +398,11 @@ const handleLogin= async (e)=>{
                                   placeholder='Enter your full name' />
                               </div>
                               
-                              <div className='input-field'>
-                                  <p>ICAR Email</p>
-                                  <input  type="email" name='email' autoComplete='off'
-                                  value={user.email}
-                                  onChange={handleInput}
-                                  placeholder='Enter your icar mail' />
-                              </div>
-
-                              <div aria-hidden={Smdhidden} className='input-field'>
+                             
+                                {
+                                    Smdhidden == false && 
+                                    <>
+                                     <div className='input-field'>
                                   <p>Select SMD</p>
                                   <select name="division" disabled={Smdhidden} onChange={(e)=>handleSmd(e)} id="smd">
                                   <option value=''>--Select SMD--</option> 
@@ -324,15 +411,20 @@ const handleLogin= async (e)=>{
                                       
                                         <option value={data.name}>{data.name}</option>
                                     )
-                                  }                                                        
+                                  }                                                      
                                  
                                   </select>
-                              </div>
-                              <div className='input-field'>
+                                    </div>
+                                    </>
+
+                                }
+                                {
+                                    Subjecthidden == false  && 
+                                    <>
+                                     <div className='input-field'>
                               <p>Select Intrested Subjects</p>
-                              <Multiselect 
-                            
-                              disable={Subjecthidden}
+                              <Multiselect                       
+                             
                               options={options}
                               selectionLimit={5}
                               onRemove={(e)=>{setIntrested(e)}} 
@@ -342,7 +434,7 @@ const handleLogin= async (e)=>{
                               </div>
                               <div className='input-field'>
                                   <p>Select Main Subject</p>
-                                  <select disabled={enable} disable={Subjecthidden} onChange={(e)=>{handeDivision(e)}} id="division">
+                                  <select onChange={(e)=>{handeDivision(e)}} id="division">
                                   <option value=''>--Select Subject--</option>
                                   {
                                      Division.map((resp)=>
@@ -353,7 +445,14 @@ const handleLogin= async (e)=>{
                                   }
                                  
                                   </select>
-                              </div>                              
+                              </div>
+
+                                    </>
+
+
+                                }
+                             
+                                                           
                               <div className='input-field'>
                                   <p>Password</p>
                                   <input  name='password' type="password" autoComplete='off'
@@ -386,8 +485,10 @@ const handleLogin= async (e)=>{
                                 <button style={{ marginTop: "20px" }} onClick={handleRegister}>
                               {loading ? "Registering..." : "Register"}
                               </button>
-                              }
+                              }                                
+                                </>
                               
+                              }               
                              
                               
                                 </>

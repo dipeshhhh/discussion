@@ -14,7 +14,6 @@ app.use(require('./Router/Questions'))
 app.use(require('./Router/Answers'))
 app.use(require('./Router/Group'))
 
-
 app.listen(PORT, ()=>{
         console.log(`server running on port no. ${PORT}`)
 })

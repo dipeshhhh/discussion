@@ -3,12 +3,46 @@ const router = express.Router();
 require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
+const Otp = require('../DB/Otp')
 const Groupdivision = require('../DB/Group')
 const { default: mongoose } = require('mongoose');
 const { ObjectId } = require('mongodb');
 
 //Signup Page query
 
+
+router.post('/SendOtp', async(req,res)=>{
+    
+    const data = await Users.find({email:req.body.email})
+    const response = {}
+
+    if(data)
+    {
+        return res.status(422).json({err:'Email already Exist'})
+    }
+    else
+    {
+        let otpcode = Math.floor((Math.random()*10000+1))
+        let otpData = new Otp({
+            email:req.body.email,
+            code:otpcode,
+            expireIn:new Date().getTime()+300*1000
+        })
+
+        let otpResponse = await otpData.save()
+        if(otpResponse)
+        {
+            return res.status(200).json('otp send to you email ID')
+        }
+    }
+
+
+})
+
+
+router.post('/VerifyOtp', async(req,res)=>{
+    res.send('verify')
+})
 
 router.post('/Signup', async (req,res)=>{
 
