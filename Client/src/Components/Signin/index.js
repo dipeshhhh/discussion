@@ -342,11 +342,11 @@ const [demail, setDemail] = useState(false)
                                 register ? (<>
 
                               <div className='input-field'>
-                                  <p>ICAR Email</p>
+                                  <p>ICAR Email (xxx@icar.gov.in)</p>
                                   <input disabled={demail}  type="email" name='email' autoComplete='off'
                                   value={user.email}
                                   onChange={handleInput}
-                                  placeholder='Enter your icar mail' />
+                                  placeholder='xxx@icar.gov.in' />
                               </div>
                              {
                                 demail == false &&
@@ -380,23 +380,25 @@ const [demail, setDemail] = useState(false)
                                  :
 
                                 <>                                
-
+                            
                             <div className='input-field'>
-                                  <p>Select Your Designation</p>
-                                  <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
-                                  <option value=''>--Select Designation--</option> 
-                                  <option value='1'>As DG</option>                                                        
-                                  <option value='2'>As ADG & DDG</option>
-                                  <option value='3'>As Scientist</option>
-                                  </select>
-                              </div>
-                                    <div className='input-field'>
                                   <p>Name</p>
                                   <input  type="text" name='name' autoComplete='off'
                                   value={user.name}
                                   onChange={handleInput}
                                   placeholder='Enter your full name' />
                               </div>
+
+                            <div className='input-field'>
+                                  <p>Select Your Designation (optional)</p>
+                                  <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
+                                  <option value=''>--Select Designation--</option> 
+                                  <option value='1'>DG</option>                                                        
+                                  <option value='2'>DDG</option>
+                                  <option value='2'>ADG</option>
+                                  <option value='3'>As Scientist</option>
+                                  </select>
+                              </div>                                   
                               
                              
                                 {
@@ -424,9 +426,9 @@ const [demail, setDemail] = useState(false)
                                      <div className='input-field'>
                               <p>Select Intrested Subjects</p>
                               <Multiselect                       
-                             
+                              showCheckbox={true}
                               options={options}
-                              selectionLimit={5}
+                              selectionLimit={4}
                               onRemove={(e)=>{setIntrested(e)}} 
                               onSelect={(e)=>{setIntrested(e)}} 
                               isObject={false} 

@@ -12,10 +12,11 @@ const { ObjectId } = require('mongodb');
 
 
 router.post('/SendOtp', async(req,res)=>{
+   
+   
+    const data = await Users.findOne({email:req.body.email}) 
     
-    const data = await Users.find({email:req.body.email})
-    const response = {}
-
+   
     if(data)
     {
         return res.status(422).json({err:'Email already Exist'})
@@ -41,7 +42,28 @@ router.post('/SendOtp', async(req,res)=>{
 
 
 router.post('/VerifyOtp', async(req,res)=>{
-    res.send('verify')
+    let data = await Otp.findOne({email:req.body.email,code:req.body.otpcode})
+   
+    if(data)
+    {
+        let currentTime = new Date()
+       
+       res.send(currentTime)
+        // if(diff<0)
+        // {
+        //     return res.status(422).json({err:'Otp Expired'})
+        // }
+        // else
+        // {
+        //     return res.status(200).json(req.body.email)            
+        // }
+
+    }
+    else
+    {
+        return res.status(422).json({err:'Invalid Otp'})
+
+    }
 })
 
 router.post('/Signup', async (req,res)=>{
