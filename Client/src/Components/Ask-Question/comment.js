@@ -1,124 +1,84 @@
-import React, { useState, useEffect } from 'react'
+import React, {useState,useEffect} from 'react'
+import axios from 'axios'
 
+const Comment = () => {
 
-/**********Dummy comments*********/
-interface Comment {
+  const [Smd , setSmd] = useState([])
+  const [Smdid, setSmdid] = useState('')
+  const [Division, setDivision]= useState([])
+  const [Divisionid, setDivisionid]= useState('')
+  const [enable, setEnable] = useState(true)
 
-  body: String,
-  comment: Array<Comment>
-}
-
-const dummyComments : Array<Comment> = 
-[
-  {
-    body: 'This is my first comment',
-    comments:[]
-  },
-  {
-    body: 'This is my second comment',
-    comments:[]
-  },
-  {
-    body: 'This is my third comment',
-    comments:[]
-  },
-  {
-    body:'This is my Fourth comment',
-    comments:[]
-  }
-]
-
-export default function Home ()  {
-   
-  const [comments, setComments] = useState(dummyComments)
-  
-
-  const onComment = (newComment:Comment)=>{
-    
-    setComments(prev => [newComment, ...prev])
-   
-  }
-  return (
-
- <div className="">
-
-<span className=''>
-React Nested comment
-</span>
-<CommentInput onComment={onComment}/>
-
-<div>
-  {
-    comments.map((comment)=>
-    (
-       <CommentItem comment={comment}/>
-    )
-
-    )
-  }
-</div>
- </div>
-
-  )
-}
-
-
-const CommentItem = ({comment}) =>{
-
-  const [isReplying, setIsReplying]=useState(false)
-
-  const [comments,setComments] = useState(comment.comments)
-
-
-
-  const onComment =(newComment, Comment) =>{
-
-    setComments(prev => [newComment, ...prev])
-  }
-
-  return(
-    <div><span>{comment.body}</span>
+  useEffect(()=>{
+    async function getSmd()
     {
-      isReplying ? (<button onClick={ ()=> setIsReplying(false)}>Cancel</button>) : (<button onClick={ () => setIsReplying(true)}>Reply</button>)
+      await axios.get('/smddetail').then((res)=>{
+         
+          //console.log(res.data)
+          setSmd(res.data)
+      }).catch((err)=>{
+        console.log(err)
+      })
     }
-    {
-      isReplying &&
-      (<CommentInput onComment={onComment}/>)
-      }
-      {
-    comments.map((comment)=>
-    (
-       <CommentItem comment={comment}/>
-    )
+    getSmd()
+  },[])  
 
-    )
-  }
-    </div>
-  )
-}
-
-interface CommentInputProps {
-  onComment:(newComment: Comment) => void
-}
-
-const CommentInput = ({onComment}: CommentInputProps) =>{
-
-  const [commentBody, setCommentBody] = useState('')
-
- 
-
-  return(
-    <div>
-       <input type="" value={commentBody} onChange={event => setCommentBody(event.target.value)} />
+  const handleSmd = async (e)=>{           
+            
+    setSmdid('')
+    setDivision([])
     
-    <button onClick={()=> {
-      onComment({body: commentBody, comments:[]});
-      setCommentBody('')
-    } 
-  }>comment</button>
+    const Smdname = e.target.value
+    
+    console.log(Smdname)
 
-    </div>
-   
-  )
+    if(Smdname!='')
+    {                   
+        await axios.get(`/groupdetail/${Smdname}`).then((res)=>{
+           
+          console.log(res.data)
+            // setDivision(res.data)
+            // setSmdid(Smdname)
+            // setEnable(false)
 
+           
+            }).catch((err)=>{
+          console.log(err)
+        })
+
+       
+    }
+    else
+    {
+        setDivisionid('')
+        setSmdid('')       
+        setDivision([])
+        setEnable(true)
+
+    }
 }
+
+
+
+  return (
+    <div>
+     <div className='input-field'>
+                                  <p>Select SMD</p>
+                                  <select name="division" onChange={(e)=>handleSmd(e)} id="smd">
+                                  <option value=''>--Select SMD--</option> 
+                                  {
+                                    Smd.map((data)=>
+                                      
+                                        <option value={data.name}>{data.name}</option>
+                                    )
+                                  }                                                      
+                                 
+                                  </select>
+                                    </div>
+    </div>
+
+
+  )
+}
+
+export default Comment

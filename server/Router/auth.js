@@ -23,7 +23,7 @@ router.post('/SendOtp', async(req,res)=>{
     }
     else
     {
-        let otpcode = Math.floor((Math.random()*10000+1))
+        let otpcode = Math.random().toString(36).substring(2,7)
         let otpData = new Otp({
             email:req.body.email,
             code:otpcode,
@@ -40,23 +40,53 @@ router.post('/SendOtp', async(req,res)=>{
 
 })
 
+router.post('/Resotp',async(req,res)=>{
+
+    const data = await Otp.findOne({email:req.body.email},{_id:0,expireIn:1}) 
+  
+    const currentTime = new Date().getTime()
+
+    const diff = data.expireIn - currentTime
+
+    if(diff<0)
+    {
+        let otpcode = Math.random().toString(36).substring(2,7)
+
+        Otp.updateOne({email:req.body.email},{code:otpcode,expireIn:new Date().getTime()+300*1000}).then((resp)=>{
+
+            return res.status(200).json('otp send to you email ID')
+            
+        })       
+
+    }
+    else
+    {
+        return res.status(422).json({err:'Wait for 6 Minute to Resend OTP'})
+
+    }
+
+
+})
+
 
 router.post('/VerifyOtp', async(req,res)=>{
-    let data = await Otp.findOne({email:req.body.email,code:req.body.otpcode})
+    const data = await Otp.findOne({email:req.body.email,code:req.body.otp})
    
     if(data)
     {
-        let currentTime = new Date()
        
-       res.send(currentTime)
-        // if(diff<0)
-        // {
-        //     return res.status(422).json({err:'Otp Expired'})
-        // }
-        // else
-        // {
-        //     return res.status(200).json(req.body.email)            
-        // }
+        let currentTime = new Date().getTime()      
+      
+        const diff = data.expireIn - currentTime
+       
+        if(diff<0)
+        {
+            return res.status(422).json({err:'Otp Expired'})
+        }
+        else
+        {
+            return res.status(200).json(req.body.email)            
+        }
 
     }
     else
@@ -150,6 +180,7 @@ router.post('/Signin', async (req, res) => {
     }
 }
 )
+
 
 router.post('/SignAdmin', async (req, res) => {
     const { email, password } = req.body;
