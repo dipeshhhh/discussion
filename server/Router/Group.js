@@ -19,6 +19,9 @@ router.get('/smddetail', (req,res)=>{
         res.status(400).send(e)
     })
 })
+
+
+
 //Dvision details fetch
 router.get('/smddetail/:name', (req,res)=>{
 
@@ -32,6 +35,15 @@ router.get('/smddetail/:name', (req,res)=>{
 
     SmdDivision.find({name:req.params.name},{_id:0, division:1}).limit(1).then((resp)=>{
 
+        res.status(200).send(resp)
+    }).catch((e)=>{
+        res.status(400).send(e)
+    })
+})
+
+router.get('/Group', (req,res)=>{
+
+    SmdDivision.find({},{name:1}).then((resp)=>{
         res.status(200).send(resp)
     }).catch((e)=>{
         res.status(400).send(e)

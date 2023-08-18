@@ -1,5 +1,6 @@
 import React, {useState,useEffect} from 'react'
 import axios from 'axios'
+import {Multiselect} from 'multiselect-react-dropdown'
 
 const Comment = () => {
 
@@ -12,7 +13,7 @@ const Comment = () => {
   useEffect(()=>{
     async function getSmd()
     {
-      await axios.get('/smddetail').then((res)=>{
+      await axios.get('/Group').then((res)=>{
          
           //console.log(res.data)
           setSmd(res.data)
@@ -26,20 +27,17 @@ const Comment = () => {
   const handleSmd = async (e)=>{           
             
     setSmdid('')
-    setDivision([])
-    
-    const Smdname = e.target.value
-    
-    console.log(Smdname)
+    setDivisionid('')    
+    const Smdname = e.target.value    
+  
 
     if(Smdname!='')
     {                   
         await axios.get(`/groupdetail/${Smdname}`).then((res)=>{
-           
-          console.log(res.data)
-            // setDivision(res.data)
-            // setSmdid(Smdname)
-            // setEnable(false)
+                  
+            setDivision(res.data)
+            setSmdid(Smdname)
+            setEnable(false)
 
            
             }).catch((err)=>{
@@ -58,7 +56,21 @@ const Comment = () => {
     }
 }
 
+const handeDivision = async (e)=>{
+  setDivisionid(e.target.value)
+   
+}
 
+let options = []
+
+Division.map((resp)=>
+            options.push(resp)               
+      ) 
+   
+const [intrested, setIntrested] = useState([])
+const [value, setValue] = useState([])
+
+console.log(value)
 
   return (
     <div>
@@ -75,6 +87,33 @@ const Comment = () => {
                                  
                                   </select>
                                     </div>
+
+                                    <div className='input-field'>
+                                  <p>Select Main Subject</p>
+                                  <select onChange={(e)=>{handeDivision(e)}} id="division">
+                                  <option value=''>--Select Subject--</option>
+                                  {
+                                     Division.map((resp)=>
+                                     <option value={resp._id}>{resp.name}</option>
+                                    )
+                                  }
+                                 
+                                  </select>
+                              </div>
+                              <div className='input-field'>
+                              <p>Select Intrested Subjects</p>
+                              <Multiselect                       
+                              showCheckbox={true}
+                              options={options.map((resp)=>resp.name)}
+                              selectionLimit={4}
+                              onRemove={value=>{setValue(value)}} 
+                              onSelect={value=>{setValue(value)}}
+                              value={options.map((resp)=>resp._id)}
+                              // labelField='name'
+                              // valueField='_id' 
+                              isObject={false}                               
+                              displayValue='Your Intrested Subject' />
+                              </div>
     </div>
 
 
