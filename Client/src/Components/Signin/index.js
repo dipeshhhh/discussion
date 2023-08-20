@@ -147,7 +147,7 @@ const handleLogin= async (e)=>{
     }
     else if (!validateEmail(email))
     {
-        setError("Email is not in valid formate");
+        setError("Email is not in valid format");
         setLoading(false);
     }
     else{
@@ -274,6 +274,7 @@ const handleLogin= async (e)=>{
 
 const [verify, setVerify] = useState(false)
 const [otps, setOtps] = useState('')
+const [resmail, setResmail]= useState(false)
 const [demail, setDemail] = useState(false)
 
  const Getotp = async(e) =>{
@@ -291,37 +292,71 @@ const [demail, setDemail] = useState(false)
     }
     else if (!validateEmail(email))
     {
-        toast.error('Email is not in valid formate')       
+        toast.error('Email is not in valid format')       
         setLoading(false);
     }
     else
     {
-        toast.success('Please Check your Email ID')
-        setOtps(Math.random().toString(36).substring(2,7))
-        setVerify(true)
+       try{
+
+            const data = await axios.post('/SendOtp',{
+                email
+            }).then((resp)=>{
+                toast.success('Please Check your Email') 
+                setResmail(true)              
+                setVerify(true)               
+            })
+
+        }
+        catch(err){
+            toast.error(err.response.data.err)
+            setLoading(false);
+        } 
        
     }}
+ 
+  const Resotp = async(e)=>{
 
-    console.log(otps)
+    const {email} = user
+
+    try
+    {
+        const data = await axios.post('/Resotp',{
+            email,
+        }).then((resp)=>{
+            toast.success('OTP Resend Successfully')            
+        })
+    }
+    catch(err)
+    {
+        toast.error(err.response.data.err)
+        setLoading(false);
+    }
+
+
+   }
 
    const Verifyotp = async(e)=>{
 
-    const {otp} = user
+    const {otp,email} = user
 
-   if(otp == otps)
-   {
-    toast.success('Right OTP')
-    setDemail(true)
-    setLoading(false);
-
-   }
-   else
-   {
-     toast.error('Wrong OTP')
-     setLoading(false);
-   }
-
-   }
+    try
+    {
+        const data = await axios.post('/VerifyOtp',{
+            otp,
+            email,
+    
+        }).then((resp)=>{
+            toast.success('Right OTP')
+            setDemail(true)             
+            setLoading(false);            
+        })
+    }
+    catch(err)
+    {
+        toast.error(err.response.data.err)
+        setLoading(false);
+    }   }
 
   return (
         <div className='auth'>
@@ -349,15 +384,20 @@ const [demail, setDemail] = useState(false)
                                   placeholder='xxx@icar.gov.in' />
                               </div>
                              {
-                                demail == false &&
+                                resmail == false ?
 
                                 <>
                                  <button style={{ marginTop: "20px" }} onClick={Getotp}>
                                    Get OTP
                                  </button>
                                 </>
-
-
+                                :
+                                demail == false && 
+                                <>
+                                <button style={{ marginTop: "20px" }} onClick={Resotp}>
+                                   Resent OTP
+                                 </button>
+                                </>
                              }                                         
                              
                               {

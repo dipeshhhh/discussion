@@ -3,6 +3,7 @@ const router = express.Router();
 require('../DB/conn');
 const SmdDivision = require('../DB/SMDDivision')
 const Group = require('../DB/Group')
+const Division = require('../DB/Division')
 const User = require('../DB/module')
 const { default: mongoose } = require('mongoose');
 const { ObjectId } = require('mongodb')
@@ -87,6 +88,28 @@ router.get('/smddetail/:name', (req, res) => {
   }).catch((e) => {
     res.status(400).send(e)
   })
+})
+
+router.get('/Group', (req,res)=>{
+
+    SmdDivision.find({},{name:1}).then((resp)=>{
+        res.status(200).send(resp)
+    }).catch((e)=>{
+        res.status(400).send(e)
+    })
+})
+
+router.get('/groupdetail/:name',(req,res)=>{
+
+    Group.findOne({name:req.params.name},{_id:0,division:1}).then((resp)=>{
+
+               
+        Division.find({_id:resp.division}).then((resp)=>{
+            res.send(resp)
+        })
+
+    })
+
 })
 
 router.get('/SMD', (req, res) => {
