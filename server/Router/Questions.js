@@ -99,6 +99,13 @@ router.post('/Question', upload,async(req,res)=>{
     
 })
 
+router.get('/user-questions-all/:id', async(req, res)=>{
+  Question.find({auth: req.params.id})
+    .sort({created_at:-1})
+    .then(questionsFromDB => res.status(200).send(questionsFromDB))
+    .catch(error => res.status(400).send(error));
+})
+
 router.get('/Question/:id', async(req,res)=>{
 
 
@@ -203,9 +210,17 @@ router.get('/get_Question/:id',(req,res)=>{
 
     Question.find({_id:id}).then((resp)=>{
         return res.status(200).send(resp)
-    })
+    }).catch(err => res.status(400).send(err));
 
 
+})
+router.get('/get_one_Question/:id',(req,res)=>{
+   
+  const id = new ObjectId(req.params.id)
+
+  Question.findOne({_id:id})
+    .then((resp)=>{res.status(200).send(resp)})
+    .catch(err => console.log(err));
 })
 
 router.get('/deletepost/:id', (req, res) => {

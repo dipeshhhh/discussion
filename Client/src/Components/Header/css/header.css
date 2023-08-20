@@ -68,14 +68,19 @@ header{
     flex-direction: column;
     align-items: end;
 }
-
+.header-right>a,
+.header-right>a:active,
+.header-right>a:visited{
+  color: rgb(15, 93, 21);
+  text-align: right;
+}
+.header-right > a:hover{
+    cursor: pointer;
+    color: var(--secondary-color-forlink);
+}
 .header-right > h4{
     color: rgb(15, 93, 21);
     /* animation: blinker 1s linear infinite; */
-    text-align: right;
-}
-.header-right > h4:hover{
-    cursor: pointer;
 }
 
 @keyframes blinker {

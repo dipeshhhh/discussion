@@ -396,7 +396,7 @@ const [demail, setDemail] = useState(false)
                                   <option value='1'>DG</option>                                                        
                                   <option value='2'>DDG</option>
                                   <option value='2'>ADG</option>
-                                  <option value='3'>As Scientist</option>
+                                  <option value='3'>Scientist</option>
                                   </select>
                               </div>                                   
                               

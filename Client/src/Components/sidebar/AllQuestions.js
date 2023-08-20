@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './css/AllQuestions.css';
+import Cookies from 'js-cookie';
 import { NavLink } from 'react-router-dom';
 import { Avatar } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
@@ -8,185 +9,194 @@ import parse from 'html-react-parser';
 import DeleteIcon from '@mui/icons-material/Delete';
 import axios from 'axios';
 import SearchIcon from '@mui/icons-material/Search';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import StarIcon from '@mui/icons-material/Star';
+
+function truncate(str, n) {
+  return str.length > n ? str.substr(0, n - 1) + '...' : str;
+}
 
 const AllQuestions = ({ question }) => {
-
-  const [search, setSearch] = useState('') 
-
-
-  let result = question?.map((resp) => {   
-    
-    return resp;
-   
-  }); 
-
-  result.reverse();
-
-  function truncate(str, n) {
-    return str.length > n ? str.substr(0, n - 1) + '...' : str;
-  }
-
-  const auth = sessionStorage.getItem('username');
-  const [userdetail, setUserDetail] = useState('');
+  const [search, setSearch] = useState('');
+  // Initially kept null to prevent rendering data before it is fetched from DB
+  const [currentUserDetailsFromDB, setCurrentUserDetailsFromDB] = useState(null);
+  const currentUserEmailFromCookies = Cookies.get('auth')?.split(',')[0] || '';
 
   useEffect(() => {
     async function getUser() {
-      await axios
-        .get(`/user-detail/${auth}`)
+      await axios.get(`/user-detail/${currentUserEmailFromCookies}`)
         .then((res) => {
-          setUserDetail(res.data);
-        }).catch((err) => {          
-          console.log(err);
-        });        
-    }    
+          setCurrentUserDetailsFromDB(res.data)
+        })
+        .catch((error) => console.error(error));
+    }
     getUser();
   }, []);
-  
-  var status;
-  if (userdetail.status === 2) {
-    status = userdetail.status;
-  }
-  const handeDelete = async (e) => {
-    if (window.confirm('Please enter to confirm')) {
-      axios.get(`/deletepost/${e}`).then((resp) => {
-        window.location.reload(false);
-      });
-    }
-  };
-  
+
+  let result = question?.map((resp) => { return resp });
+  result.reverse();
+
   return (
     <div className='all-questions'>
-        <div className='search-bar'>       
-              <input name="searchItem" id="searchItem" value={search} onChange={(e)=>{setSearch(e.target.value)}} className="search-input" placeholder='Search question'></input>           
-                <SearchIcon className='search-icon'/>            
-          </div>
-          {
-            search == '' ?
 
-            <>
+      <div className='search-bar'>
+        <input
+          name="searchItem"
+          id="searchItem"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          className="search-input"
+          placeholder='Search question'
+        />
+        <SearchIcon className='search-icon' />
+      </div>
+      { currentUserDetailsFromDB ?
+        (search == '' ?
+          <>
+            {
+              result.map((data, index) => (
+                <Question
+                  key={data._id}
+                  data={data}
+                  currentUser={currentUserDetailsFromDB}
+                  isAlreadyStarred={currentUserDetailsFromDB.starred.includes(data._id) ? true : false}
+                />
+              ))
+            }
+          </>
+          :
+          <>
+            {
+              result.filter((user) => user.title.toLowerCase().includes(search.toLowerCase()) || user.auth.toLowerCase().includes(search.toLowerCase()))
+                .map((data, index) => (
+                  <Question
+                    key={data._id}
+                    data={data}
+                    currentUser={currentUserDetailsFromDB}
+                    isAlreadyStarred={currentUserDetailsFromDB.starred.includes(data._id) ? true : false}
+                  />
+                ))
+            }
+            {/* {result.map((data, index) => (
+            <div className='all-questions-container' key={data._id}>
+              <div className='all-questions-left'>
+                <div className='all-options'>
+                  <p className='option-icon expand'>
+                    <ExpandLessIcon />
+                  </p>
+                  <p className='option-icon expand active'>
+                    <ExpandMoreIcon />
+                  </p>
 
-{result.map((data, index) => (
-        <div className='all-questions-container' key={data._id}>
-          <div className='all-questions-left'>
-            <div className='all-options'>
-              <p className='option-icon expand'>
-                <ExpandLessIcon />
-              </p>
-              <p className='option-icon expand active'>
-                <ExpandMoreIcon />
-              </p>
-                           
-            </div>
-          </div>
+                </div>
+              </div>
 
-          <div className='question-answer'>
-            <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>
-            <div style={{ width: '90%', marginBottom: '16px' }}>
-              <div>{parse(truncate(data.body, 200))}</div>
-            </div>           
+              <div className='question-answer'>
+                <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>
+                <div style={{ width: '90%', marginBottom: '16px' }}>
+                  <div>{parse(truncate(data.body, 200))}</div>
+                </div>
 
-            <div className='author'>
-              {status ? (
-                <DeleteIcon className='react-button' onClick={(e) => { handeDelete(data._id) }} />
-              ) : (
-                <p></p>
-              )}
-              <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
-              <div className='author-details'>
-                <Avatar />
-                <p>{String(data?.auth).split('@')[0]}</p>
+                <div className='author'>
+                  {status ? (
+                    <DeleteIcon className='react-button' onClick={(e) => { handeDelete(data._id) }} />
+                  ) : (
+                    <p></p>
+                  )}
+                  <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
+                  <div className='author-details'>
+                    <Avatar />
+                    <p>{String(data?.auth).split('@')[0]}</p>
+                  </div>
+                </div>
               </div>
             </div>
-          </div>
-        </div>
-      ))}
-            </>
-            :
-            <>
+          ))} */}
+          </>)
+          :
+          <div>Loading...</div>
+      }
 
-    {
-      result.filter((user)=>user.title.includes(search) || user.auth.includes(search)).map((data,index)=>{
-        return(
-          <div className='all-questions-container' key={data._id}>
-          <div className='all-questions-left'>
-            <div className='all-options'>
-              <p className='option-icon expand'>
-                <ExpandLessIcon />
-              </p>
-              <p className='option-icon expand active'>
-                <ExpandMoreIcon />
-              </p>
-                           
-            </div>
-          </div>
-
-          <div className='question-answer'>
-            <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>
-            <div style={{ width: '90%', marginBottom: '16px' }}>
-              <div>{parse(truncate(data.body, 200))}</div>
-            </div>           
-
-            <div className='author'>
-              {status ? (
-                <DeleteIcon className='react-button' onClick={(e) => { handeDelete(data._id) }} />
-              ) : (
-                <p></p>
-              )}
-              <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
-              <div className='author-details'>
-                <Avatar />
-                <p>{String(data?.auth).split('@')[0]}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        )
-      })
-    }
-
-{/* {result.map((data, index) => (
-        <div className='all-questions-container' key={data._id}>
-          <div className='all-questions-left'>
-            <div className='all-options'>
-              <p className='option-icon expand'>
-                <ExpandLessIcon />
-              </p>
-              <p className='option-icon expand active'>
-                <ExpandMoreIcon />
-              </p>
-                           
-            </div>
-          </div>
-
-          <div className='question-answer'>
-            <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>
-            <div style={{ width: '90%', marginBottom: '16px' }}>
-              <div>{parse(truncate(data.body, 200))}</div>
-            </div>           
-
-            <div className='author'>
-              {status ? (
-                <DeleteIcon className='react-button' onClick={(e) => { handeDelete(data._id) }} />
-              ) : (
-                <p></p>
-              )}
-              <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
-              <div className='author-details'>
-                <Avatar />
-                <p>{String(data?.auth).split('@')[0]}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      ))} */}
-
-            </>
-
-          }
-     
     </div>
   );
 };
+
+function Question({ data, currentUser, isAlreadyStarred }) {
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isStarred, setIsStarred] = useState(isAlreadyStarred);
+
+  const setStarred = async () => {
+    await axios.patch(`/set-starred/${data._id}/${currentUser.email}`)
+      .then(resp => { })
+      .catch(error => console.error(error));
+  };
+
+  const removeStarred = async () => {
+    await axios.patch(`/remove-starred/${data._id}/${currentUser.email}`)
+      .then(resp => { })
+      .catch(error => console.error(error));
+  };
+
+  const toggleStarred = () => {
+    setIsStarred(prevIsStarred => {
+      if (prevIsStarred) {
+        removeStarred();
+      } else {
+        setStarred();
+      }
+      return !prevIsStarred;
+    });
+  };
+
+  const toggleExpanded = () => {
+    setIsExpanded(!isExpanded);
+  }
+
+  const handleDelete = async (e) => {
+    if (window.confirm('Please confirm deletion')) {
+      axios.get(`/deletepost/${e}`)
+        .then((resp) => {
+          // Update state or fetch new data to trigger a re-render instead of reloading the page
+          window.location.reload(false);
+        })
+        .catch(error => console.error(error));
+    }
+  };
+
+  return (
+    <div className='all-questions-container' key={data._id}>
+      <div className='all-questions-left'>
+        <div className='all-options'>
+          <p className='option-icon expand active'>
+            {isExpanded ? <ExpandLessIcon onClick={toggleExpanded} /> : <ExpandMoreIcon onClick={toggleExpanded} />}
+          </p>
+          <p className='option-icon'>
+            {isStarred ? <StarIcon onClick={toggleStarred} /> : <StarBorderIcon onClick={toggleStarred} />}
+          </p>
+        </div>
+      </div>
+
+      <div className='question-answer'>
+        <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>
+        <div>
+          <div className='question-answer-body-text'>{isExpanded ? parse(data.body) : parse(truncate(data.body, 200))}</div>
+        </div>
+
+        <div className='author'>
+          <NavLink to={`/profile?id=${data.auth}`} className='author-details'>
+            <Avatar />
+            <p>{String(data?.auth).split('@')[0]}</p>
+          </NavLink>
+          <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
+          {currentUser.status === 2 ? (
+            <DeleteIcon className='react-button' onClick={(e) => { handleDelete(data._id) }} />
+          ) : (
+            <p></p>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
 
 export default AllQuestions;

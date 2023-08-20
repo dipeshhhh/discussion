@@ -69,6 +69,13 @@ router.post('/Answer', upload, async (req, res) => {
 
 })
 
+router.get('/user-answers-all/:id', async(req, res)=>{
+  Answer.find({auth: req.params.id})
+    .sort({created_at:-1})
+    .then(answersFromDB => res.status(200).send(answersFromDB))
+    .catch(error => res.status(400).send(error));
+})
+
 /****************Fetch Answer from Answer collection************************/
 router.get('/Answer-detail/:id', (req, res) => {
 

@@ -19,6 +19,7 @@ const Userschema = new mongoose.Schema({
     },
     Group:[String],
     intrested:[String],
+    starred:[String],
     password:{
         type:String,
         required:true

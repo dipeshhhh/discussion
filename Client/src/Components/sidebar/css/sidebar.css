@@ -7,7 +7,7 @@
 .sidebar-container {
   height: 100%;
   border-right: 1px solid var(--primary-faded-color);
-  /* height: 100vh; */
+  height: calc(100vh - 120px);
   width: min(25%, 300px);
   padding: 16px;
   padding-right: 0px;
@@ -30,13 +30,15 @@
   color: var(--secondary-color);
   transition: background-color 0.1s ease-in-out;
   transition: border 0.1s ease-in-out;
+  box-sizing: border-box;
 }
 
-.sidebar-option:hover {
+.sidebar-option:hover, .sidebar-option:focus {
   background-color: var(--primary-faded-color);
   color: var(--primary-color);
   cursor: pointer;
   border-left: 5px solid green;
+  outline: none;
 }
 
 .sidebar-option-category {

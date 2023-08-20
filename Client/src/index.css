@@ -37,7 +37,10 @@
 background: lightgray;
 }
 ::-webkit-scrollbar-thumb {
-background: var(--primary-color);
+  background: var(--primary-color);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary-color);
 }
 
 body {
