@@ -441,19 +441,11 @@ function StarredMenu({ userDetails, currentUserDetails }) {
     const getStarredItems = async () => {
       try {
         // Getting new data for updated starred questions, i.e. User might have updated starred questions while being in the question activity menu so to reflect the changes here without reloading the page hence, getting new data.
-        const userNewDetails = await axios.get(`/user-details/${userDetails.email}`);
-        setCurrentUserStarredArray(userNewDetails.data.starred)
-        const starredQuestionsPromises = userNewDetails.data.starred.reverse().map(async starredId => {
-          try {
-            const starredQuestionResponse = await axios.get(`/get_one_Question/${starredId}`);
-            return starredQuestionResponse.data;
-          } catch (error) {
-            console.error(error);
-            return null;
-          }
-        });
-        const starredQuestions = await Promise.all(starredQuestionsPromises);
-        setStarredQuestions(prevStarredQuestions => [...starredQuestions]);
+        const userNewDetails = await axios.get(`/user-details/${currentUserDetails.email}`);
+        const starredQuestionsFromDB = await axios.get(`/user-starred-questions/${userDetails.email}`);
+
+        setCurrentUserStarredArray(userNewDetails.data.starred);
+        setStarredQuestions(starredQuestionsFromDB.data);
       } catch (error) {
         console.error(error);
       }
