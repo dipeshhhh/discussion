@@ -147,7 +147,7 @@ const handleLogin= async (e)=>{
     }
     else if (!validateEmail(email))
     {
-        setError("Email is not in valid formate");
+        setError("Email is not in valid format");
         setLoading(false);
     }
     else{
@@ -292,13 +292,12 @@ const [demail, setDemail] = useState(false)
     }
     else if (!validateEmail(email))
     {
-        toast.error('Email is not in valid formate') 
-
+        toast.error('Email is not in valid format')       
         setLoading(false);
     }
     else
     {
-        try{
+       try{
 
             const data = await axios.post('/SendOtp',{
                 email
@@ -312,14 +311,14 @@ const [demail, setDemail] = useState(false)
         catch(err){
             toast.error(err.response.data.err)
             setLoading(false);
-        }      
+        } 
        
-    }}   
-    
-   const Resotp = async(e)=>{
+    }}
+ 
+  const Resotp = async(e)=>{
 
     const {email} = user
-    
+
     try
     {
         const data = await axios.post('/Resotp',{
@@ -333,9 +332,9 @@ const [demail, setDemail] = useState(false)
         toast.error(err.response.data.err)
         setLoading(false);
     }
-        
 
-   } 
+
+   }
 
    const Verifyotp = async(e)=>{
 
@@ -379,7 +378,7 @@ const [demail, setDemail] = useState(false)
 
                               <div className='input-field'>
                                   <p>ICAR Email (xxx@icar.gov.in)</p>
-                                  <input disabled={resmail}  type="email" name='email' autoComplete='off'
+                                  <input disabled={demail}  type="email" name='email' autoComplete='off'
                                   value={user.email}
                                   onChange={handleInput}
                                   placeholder='xxx@icar.gov.in' />
@@ -408,7 +407,7 @@ const [demail, setDemail] = useState(false)
                                  <>
                                   <div className='input-field'>
                                    <p>Enter OTP</p>
-                                   <input  type="password" name='otp' autoComplete='off'
+                                   <input  type="text" name='otp' autoComplete='off'
                                    value={user.otp}
                                    onChange={handleInput}
                                    placeholder='Please Enter OTP' />
@@ -417,7 +416,9 @@ const [demail, setDemail] = useState(false)
                                Verify OTP
                                </button>                                
                                  </>
+
                                  :
+
                                 <>                                
                             
                             <div className='input-field'>
@@ -435,7 +436,7 @@ const [demail, setDemail] = useState(false)
                                   <option value='1'>DG</option>                                                        
                                   <option value='2'>DDG</option>
                                   <option value='2'>ADG</option>
-                                  <option value='3'>As Scientist</option>
+                                  <option value='3'>Scientist</option>
                                   </select>
                               </div>                                   
                               

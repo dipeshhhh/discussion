@@ -1,4 +1,4 @@
-a{
+.sidebar-option-category-container>a{
   text-decoration: none;
   font-weight: 500;
   font-size: 1.05rem;
@@ -21,11 +21,12 @@ a{
   flex-direction: row;
   gap: 10px;
   align-items: center;
-  padding-left: 16px;
-  padding-right: 16px;
+  padding: 16px;
   /* font-size: 15px; */
+  word-break: break-word;
   color: var(--secondary-color);
   transition: background-color 0.1s ease-in-out;
+  transition: border 0.1s ease-in-out;
 }
 .sidebar-option:hover{
   background-color: var(--primary-faded-color);

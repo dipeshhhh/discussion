@@ -5,7 +5,7 @@ const content = () => {
     <div className='thread-body'>
         <h1>
             <u>Discussion Forum  for ICAR Employees </u> </h1>
-            <p class="description">
+            <p className ="description">
              <span>
               #Test Description
                Our website is a discussion forum designed for ICAR employees from various divisions and posts
