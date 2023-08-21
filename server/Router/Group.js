@@ -123,22 +123,30 @@ router.get('/SMD', (req, res) => {
 //Group detail fetch from user collection
 router.get('/group/:id', (req, res) => {
 
-
-  User.find({ email: req.params.id }, { _id: 0, Divisionid: 1, status: 1, intrested: 1, Smdid: 1 })
-    .then((resp) => {
-
-      resp.map((rsp) => {
-
-        // Group.find({ _id: rsp.Group }, { name: 1 })
-        //   .then((grsp) => {
-        res.send(rsp)
-        // })
-      })
+  User.findOne({ email: req.params.id }, {_id:0,intrested: 1})
+    .then((resp) => {     
+     Division.find({_id:resp.intrested}).then((rsp)=>{
+      res.send(rsp)
+     })
 
     }).catch((e) => {
       res.status(400).send(e)
     })
 })
+
+router.get('/MainGroup/:id', (req, res) => {
+
+  User.findOne({ email: req.params.id }, {_id:0,Divisionid: 1})
+    .then((resp) => {     
+     Division.findOne({_id:resp.Divisionid}).then((rsp)=>{
+      res.send(rsp)
+     })
+
+    }).catch((e) => {
+      res.status(400).send(e)
+    })
+})
+
 
 router.get('/main_group/:id', (req, res) => {
   User.find({ email: req.params.id }, { _id: 0, Group: 1 })

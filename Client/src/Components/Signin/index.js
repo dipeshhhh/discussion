@@ -9,7 +9,7 @@ import { Helmet } from 'react-helmet';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
-import {Multiselect} from 'multiselect-react-dropdown'
+import Select from 'react-dropdown-select'
 
 const Index = () => {
     const navigate = useNavigate()      
@@ -129,14 +129,15 @@ const Index = () => {
                 
       }
 
+ /************Register as DG**************/     
      const Registerdg = ()=>{
         console.log('DG')
      }
-
+/************Register as DDG & ADG**************/
      const Registerddg = ()=>{
         console.log('DDG')
      }
-      
+ /*******************Handle Login Page button*************************/     
 const handleLogin= async (e)=>{
     const {email, password} = user
     e.preventDefault()
@@ -209,7 +210,7 @@ const handleLogin= async (e)=>{
         useEffect(()=>{
           async function getSmd()
           {
-            await axios.get('/smddetail').then((res)=>{
+            await axios.get('/Group').then((res)=>{
                
                 //console.log(res.data)
                 setSmd(res.data)
@@ -219,29 +220,28 @@ const handleLogin= async (e)=>{
           }
           getSmd()
         },[])      
-       
-        //Handle SMD select options
+
+     /****************Handle SMD Button****************/   
         const handleSmd = async (e)=>{           
             
             setSmdid('')
-            setDivision([])
-            
-            const Smdname = e.target.value
-            
-
+            setDivisionid('')    
+            const Smdname = e.target.value    
+          
+        
             if(Smdname!='')
             {                   
-                await axios.get(`/smddetail/${Smdname}`).then((res)=>{
-                    
+                await axios.get(`/groupdetail/${Smdname}`).then((res)=>{
+                          
                     setDivision(res.data)
                     setSmdid(Smdname)
                     setEnable(false)
-
+        
                    
                     }).catch((err)=>{
                   console.log(err)
                 })
-
+        
                
             }
             else
@@ -250,10 +250,11 @@ const handleLogin= async (e)=>{
                 setSmdid('')       
                 setDivision([])
                 setEnable(true)
-
+        
             }
         }
-
+       
+       
         //handle division select options
         const handeDivision = async (e)=>{
            setDivisionid(e.target.value)
@@ -263,12 +264,19 @@ const handleLogin= async (e)=>{
 /****************Select Intrested Subjects*********************/
       let options = []
 
-        Division.map((resp)=>
-            resp.division.map((res)=>
-                options.push(res)               
-              )) 
+     Division?.map((resp)=>{
+        options.push(resp)
+     })      
+      
+      let intrested = []        
            
-     const [intrested, setIntrested] = useState([])  
+    const [values, setValues] = useState([])
+
+              values.map((resp)=>{
+                 intrested.push(resp._id)
+              }) 
+
+       
     
  /********************************************/ 
 
@@ -464,26 +472,27 @@ const [demail, setDemail] = useState(false)
                                     Subjecthidden == false  && 
                                     <>
                                      <div className='input-field'>
-                              <p>Select Intrested Subjects</p>
-                              <Multiselect                       
-                              showCheckbox={true}
-                              options={options}
-                              selectionLimit={4}
-                              onRemove={(e)=>{setIntrested(e)}} 
-                              onSelect={(e)=>{setIntrested(e)}} 
-                              isObject={false} 
-                              displayValue='Your Intrested Subject' />
+                              <p>Select Intrested Subjects</p>                           
+                              <Select
+                            name='select'
+                            options={values.length>3 ? values : options }
+                            labelField='name'
+                            valueField='name'                           
+                            multi                                                                                                                      
+                            onChange={values =>                
+
+                              setValues(values)                              
+                              }
+                            />
                               </div>
                               <div className='input-field'>
                                   <p>Select Main Subject</p>
                                   <select onChange={(e)=>{handeDivision(e)}} id="division">
                                   <option value=''>--Select Subject--</option>
                                   {
-                                     Division.map((resp)=>
-                                        resp.division.map((res)=>
-                                        <option value={res._id}>{res}</option>
-                                        )
-                                    )
+                                      Division.map((resp)=>
+                                      <option value={resp._id}>{resp.name}</option>
+                                     )
                                   }
                                  
                                   </select>

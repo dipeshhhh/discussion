@@ -22,8 +22,7 @@ const Header = () => {
     const singout = new Promise(async (res, rej) => {
       res(Cookies.remove('auth'))
     })
-    singout.then((out) => {
-      console.log(Cookies.get())
+    singout.then((out) => {     
       toast.success('Logout Sucessfully')
       navigate('/auth')
     })

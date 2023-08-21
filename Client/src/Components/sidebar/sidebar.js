@@ -17,15 +17,37 @@ const sidebar = () => {
   }
 
   const [group, setGroup] = useState('');
+  const [mainG, setMainG]= useState('');
+  const [detail, setDetail] = useState('')
+
+
 
   useEffect(() => {
-    async function getGroup() {
-      await axios.get(`/group/${auth}`)
-        .then(res => setGroup(res.data))
+
+    async function getUser() {
+      await axios.get(`/user-detail/${auth}`)
+        .then(res => setDetail(res.data))
         .catch(err => console.log(err));
     }
-    getGroup();
+    getUser();
+    
+    async function getGroup() {
+      await axios.get(`/group/${auth}`)
+        .then(res => setGroup(res))
+        .catch(err => console.log(err));
+    }
+    async function getMain(){
+      await axios.get(`/MainGroup/${auth}`)
+      .then(res => setMainG(res.data))
+        .catch(err => console.log(err));
+    }   
+      getGroup();
+      getMain();
+    
+  
   }, [])
+
+  
 
   return (
     <div className='sidebar-container'>
@@ -86,31 +108,32 @@ const sidebar = () => {
           </NavLink>
         </div>
 
-        {
-          group.status == 1 ? (
-            <>
-              <div className='sidebar-option-category-container'>
+            {
+              detail.status ==1 ?
+              <>
+               <div className='sidebar-option-category-container'>
                 <small className="sidebar-option-category">Your Subject</small>
                 <NavLink to='/index' className='sidebar-option'>
                   <PeopleIcon />
-                  <p>{group.Divisionid}</p>
+                  <p>{mainG.name}</p>
                 </NavLink>
               </div>
 
-              {group.intrested.length > 0 &&
-                <div className='sidebar-option-category-container'>
+                           <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Your favourite subject</small>
-                  {group.intrested.map((resp) =>
+                  {group.data?.map((resp) =>
                     <NavLink className='sidebar-option'>
                       <PeopleIcon />
-                      <p>{resp}</p>
+                      <p>{resp.name}</p>
                     </NavLink>
                   )}
                 </div>
-              }
-            </>
-          ) : (
-            <>
+
+              </>
+              :
+
+              <>
+              
               <div className='sidebar-option-category-container'>
                 <small className="sidebar-option-category">Your SMD</small>
                 <NavLink className='sidebar-option'>
@@ -118,9 +141,12 @@ const sidebar = () => {
                   <p>{group.Smdid}</p>
                 </NavLink>
               </div>
-            </>
-          )
-        }
+
+              </>
+            }
+             
+       
+       
 
         {/* {
           group.data?.map((resp) => (

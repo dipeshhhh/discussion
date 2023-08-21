@@ -1,6 +1,7 @@
 import React, {useState,useEffect} from 'react'
 import axios from 'axios'
 import {Multiselect} from 'multiselect-react-dropdown'
+import Select from 'react-dropdown-select'
 
 const Comment = () => {
 
@@ -67,10 +68,18 @@ Division.map((resp)=>
             options.push(resp)               
       ) 
    
-const [intrested, setIntrested] = useState([])
-const [value, setValue] = useState([])
+let intrest = []
+// const [value, setValue] = useState([])
 
-console.log(value)
+// console.log(value)
+
+const [values, setValues] = useState([])
+
+values.map((resp)=>{
+   intrest.push(resp._id)
+})
+
+
 
   return (
     <div>
@@ -102,17 +111,19 @@ console.log(value)
                               </div>
                               <div className='input-field'>
                               <p>Select Intrested Subjects</p>
-                              <Multiselect                       
-                              showCheckbox={true}
-                              options={options.map((resp)=>resp.name)}
-                              selectionLimit={4}
-                              onRemove={value=>{setValue(value)}} 
-                              onSelect={value=>{setValue(value)}}
-                              value={options.map((resp)=>resp._id)}
-                              // labelField='name'
-                              // valueField='_id' 
-                              isObject={false}                               
-                              displayValue='Your Intrested Subject' />
+
+
+                            <Select
+                            name='select'
+                            options={values.length>3 ? values : options }
+                            labelField='name'
+                            valueField='name'                           
+                            multi                                                                                                                      
+                            onChange={values =>                
+
+                              setValues(values)                              
+                              }
+                            />
                               </div>
     </div>
 
