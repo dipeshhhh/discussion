@@ -24,12 +24,26 @@ const Index = () => {
   let [questions, setQuestions] = useState([]);
 
   useEffect(() => {
-    async function getQuestion() {
-      await axios.get(`/subject_question/${auth}`)
-        .then(res => setQuestions(res.data))
-        .catch(err => console.log(err));
-    }
-    getQuestion()
+
+    let userDetails = new Promise (async(resolve,reject)=>{
+      const response =  await axios.get(`/main_G/${auth}`)
+      resolve(response.data.Divisionid)
+    })
+    userDetails.then(
+      async function(value)
+      {
+        console.log(value)
+       
+      const M_Data = await axios.get('/subject_question',{params:{id_1:value,id_2:auth}})        
+        
+      setQuestions(M_Data.data)
+
+      },
+      function(error)
+      {
+        console.log(error)
+      }
+    )
   }, [])
 
   return (

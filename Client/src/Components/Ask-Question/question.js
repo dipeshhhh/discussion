@@ -15,6 +15,7 @@ import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
+
 const Question = () => {
 
   const navigate = useNavigate()
@@ -30,13 +31,12 @@ const Question = () => {
     const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');  
   const [title, setTitle] =useState('')
-  const [group,setGroup] = useState('')
-  const [groupid,setGroupid] = useState('')
+  const [groupidd,setGroupidd] = useState('')
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
   const [user, setUser] = useState('')
   const [members, setMembers]= useState('')
-  const [member, setMember] = useState('')
+  const [member, setMember] = useState([])
   const [bthidden, setBthidden] = useState(false);
   const [gStatus, setGStatus]= useState(true)
   const handleQuill = (value) => {
@@ -78,41 +78,31 @@ const Question = () => {
     /***************************************/    
 
   useEffect(()=>{
-   /************This is *************/ 
-      async function getGroup()
-      {
-        await axios.get(`/main_group/${auth}`).then((res)=>{
-            
-       setGroupid(res)
+   /************This is *************/
       
-        }).catch((err)=>{
-          console.log(err)
+        let userDetails = new Promise (async(resolve,reject)=>{
+          const response =  await axios.get(`/main_G/${auth}`)
+          resolve(response.data.Divisionid)
         })
-      }      
-      getGroup()  
-    let userDetails = new Promise(async(resolve,reject)=>{
-      const response = await axios.get(`/user-detail/${auth}`)        
-       resolve(response.data)  
-    })
-    userDetails.then(
-      async function(value)
-      {
-      const M_Data = await axios.get('/Member',{params:{id_1:value.Divisionid,id_2:auth}})
-       
-        setUser(value)
-        setMembers(M_Data.data)
+        userDetails.then(
+            async function(value)
+            {
+             
+            const M_Data = await axios.get('/user-group',{params:{id_1:value,id_2:auth}})        
+            
+            setGroupidd(value)            
+            setMembers(M_Data.data)
+      
+            },
+            function(error)
+            {
+              console.log(error)
+            }
+          )
 
-      },
-      function(error)
-      {
-        console.log(error)
-      }
-    )   
-
-    }, [])
-    
-  
+    }, [])    
    
+
 
    const handleFileChange = (event) => {
               
@@ -139,7 +129,7 @@ const Question = () => {
     data.append('title',title)
     data.append('body',body)
     data.append('auth',auth)
-    data.append('subject',user.Divisionid)
+    data.append('subject',groupidd)
     data.append('Members', member)
     //data.append('group',group)
      
@@ -196,8 +186,6 @@ const Question = () => {
 
 
    /**************Handle user Regarding the Subjects **************/ 
-
-
      
    const groupMember= (e)=>{
         const val = e.target.value
@@ -210,12 +198,8 @@ const Question = () => {
         {
           setError(" ");            
           setGStatus(true)
-          setMember([])
-          let Member = members.map((resp)=>{ return (resp.email)})
-          setMember(Member)
-          Member.push(auth)
-                    
-             
+          setMember([])          
+          setMember(groupidd)      
         }
         else if(val == 1)
         {
@@ -280,33 +264,19 @@ const Question = () => {
         <div className='question-option'>
           <div className='group'>
             <h3>Groups</h3>
-            {
-          user.status==1 ? 
+           
              
               <p>
                 Your Subject is : {user.Divisionid}
               </p>
-              :
-
               
-              //  <small>Please Select the group</small>
               
-              <select value={group} onChange={(e)=>setGroup(e.target.value)}>
-          <option value=''>--Select Group--</option>
-         
-          {
-              groupid.data?.map((resp)=>
-              <option value={resp._id}>{resp.name}</option>
-              )
-          } 
-                    </select>      
-        }          
+               <small>Please Select the group</small>              
           
               
           </div>
         </div>
-        {
-          user.status==1 ? 
+        
           
           <div className='question-option'>
           <div className='group'>
@@ -319,15 +289,13 @@ const Question = () => {
               <option value='0'>To All Member Subject</option>
               <option value='1'>To Specific Member Subject</option>
        
-                    </select>
-                      
+                    </select>                      
               
           </div>
-        </div>          
+        </div>   
 
-          :
-          <p>hi... you Super Admin</p>
-        }
+
+
 
 <Autocomplete      
       hidden={gStatus}

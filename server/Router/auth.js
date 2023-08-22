@@ -4,6 +4,7 @@ require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
 const Otp = require('../DB/Otp')
+const Division = require('../DB/Division')
 const Groupdivision = require('../DB/Group')
 const { default: mongoose } = require('mongoose');
 const { ObjectId } = require('mongodb');
@@ -118,10 +119,14 @@ router.post('/Signup', async (req,res)=>{
     }
        const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status, login, intrested});
        const result = await fetch.save()
-       if(result)
+       Division.updateMany({$or:[{_id:intrested},{_id:Divisionid}]},{$push:{member:email}}).then((resp)=>{
+        
+           if(result)
         {
         res.status(201).json({message: 'inserted'})
         }
+
+       })  
         
         
     }
@@ -269,15 +274,36 @@ router.get('/disapprove/:id',(req,res)=>{
 
 //Get Member of a Specific Subject
 
+// router.get('/Member',(req,res)=>{
+    
+   
+//        Users.find({$and: [{Divisionid:req.query.id_1},{email:{$ne:req.query.id_2}}]} ,{_id:0,email:1,name:1}).then((resp)=>{
+        
+//         res.status(200).send(resp)
+//     }).catch((e)=>{
+//         res.status(400).send(e)
+//      })
+// })
+
 router.get('/Member',(req,res)=>{
     
    
-       Users.find({$and: [{Divisionid:req.query.id_1},{email:{$ne:req.query.id_2}}]} ,{_id:0,email:1,name:1}).then((resp)=>{
-        
-        res.status(200).send(resp)
-    }).catch((e)=>{
-        res.status(400).send(e)
-     })
+    Users.find({$and: [{Divisionid:req.query.id_1},{email:{$ne:req.query.id_2}}]} ,{_id:0,email:1,name:1}).then((resp)=>{
+     
+     res.status(200).send(resp)
+ }).catch((e)=>{
+     res.status(400).send(e)
+  })
 })
+
+router.get('/main_G/:id',(req,res)=>{   
+   
+    Users.findOne({email:req.params.id},{_id:0,Divisionid:1}).then((resp)=>{     
+     res.status(200).send(resp)
+ }).catch((e)=>{
+     res.status(400).send(e)
+  })
+})
+
 
 module.exports = router;

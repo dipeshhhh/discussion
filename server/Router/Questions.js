@@ -169,9 +169,9 @@ router.get('/all_question', (req, res) => {
 })
 
 
-router.get('/subject_question/:id', (req, res) => {
+router.get('/subject_question', (req, res) => {
 
-  Question.find({ member: req.params.id }).then((resp) => {
+  Question.find({$or:[{ member: req.query.id_1},{ member: req.query.id_2}]}).then((resp) => {
     return res.status(200).send(resp)
   })
 
