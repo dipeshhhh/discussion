@@ -10,24 +10,17 @@ const Userschema = new mongoose.Schema({
         required:true
     },
     Smdid:{
-        type:String,
-        required:true
+        type:String,    
     },
     Divisionid:{
-        type:String,
-        required:true
-    },
-    Group:[String],
+        type:String,    
+    },    
     intrested:[String],
     starred:[String],
     password:{
         type:String,
         required:true
-    },
-    login:{
-        type:Number,
-        required:true
-    },
+    },    
     status:{
         type:Number,
         required:true

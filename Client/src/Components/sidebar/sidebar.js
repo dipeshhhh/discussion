@@ -19,17 +19,36 @@ const sidebar = () => {
   const [group, setGroup] = useState('');
   const [mainG, setMainG]= useState('');
   const [detail, setDetail] = useState('')
+  const [smd, setSmd] = useState('')
 
 
 
   useEffect(() => {
 
-    async function getUser() {
-      await axios.get(`/user-detail/${auth}`)
-        .then(res => setDetail(res.data))
-        .catch(err => console.log(err));
-    }
-    getUser();
+
+    let userDetails = new Promise (async(resolve,reject)=>{
+      const response =  await axios.get(`/user-detail/${auth}`)
+      resolve(response.data)
+    })
+
+    userDetails.then(
+      async function(value)
+      {       
+       
+        
+        const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`) 
+
+        setDetail(value)   
+
+        setSmd(Smd_Name.data)
+        
+
+      },
+      function(error)
+      {
+        console.log(error)
+      }
+    )   
     
     async function getGroup() {
       await axios.get(`/group/${auth}`)
@@ -42,8 +61,7 @@ const sidebar = () => {
         .catch(err => console.log(err));
     }   
       getGroup();
-      getMain();
-    
+      getMain();    
   
   }, [])
 
@@ -132,30 +150,31 @@ const sidebar = () => {
               </>
               :
 
+              detail.status ==2 ?
               <>
               
               <div className='sidebar-option-category-container'>
                 <small className="sidebar-option-category">Your SMD</small>
                 <NavLink className='sidebar-option'>
                   <PeopleIcon />
-                  <p>{group.Smdid}</p>
+                  <p>{smd.name}</p>
                 </NavLink>
               </div>
 
               </>
-            }
-             
-       
-       
+              :
+              <>   
+               <div className='sidebar-option-category-container'>
+                <small className="sidebar-option-category">Your SMD</small>
+                <NavLink className='sidebar-option'>
+                  <PeopleIcon />
+                  <p>{console.log('You have access all Subject')}</p>
+                </NavLink>
+              </div>
 
-        {/* {
-          group.data?.map((resp) => (
-            <NavLink to={`/Group-Question?id=${resp}`} className='link-tag sidebar-option'>
-              <PeopleIcon />
-              <span className="link-title">{resp}</span>
-            </NavLink>
-          )
-        } */}
+
+              </>
+            }      
       </div>
     </div>
   )

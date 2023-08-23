@@ -99,41 +99,17 @@ router.post('/VerifyOtp', async(req,res)=>{
 
 router.post('/Signup', async (req,res)=>{
 
-   let {name, email, Divisionid, Smdid, password,status, intrested} = req.body;   
-   try{
-      
-    const userExist = await Users.findOne({email:email})
-    if(!userExist)
-    {
-        let Group=[]
-
-        const login =0
-       
-       
-       const data =await Groupdivision.find({division:Divisionid},{_id:1})
-       
-    for(var i=0;i<data.length;i++)
-    {
-        Group.push(data[i]._id)
+   let {name, email,Smdid, password,status, intrested, Divisionid} = req.body;   
+   try{ 
     
-    }
-       const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status, login, intrested});
-       const result = await fetch.save()
-       Division.updateMany({$or:[{_id:intrested},{_id:Divisionid}]},{$push:{member:email}}).then((resp)=>{
+       const fetch = new Users({name, email, Divisionid,Smdid,password,status, intrested});
+       const result = await fetch.save()     
         
            if(result)
         {
         res.status(201).json({message: 'inserted'})
         }
 
-       })  
-        
-        
-    }
-    else{
-        return res.status(422).json({err:'Email already Exist'})
-    }
-      
     }
     catch(err){
     console.log(err);
@@ -159,7 +135,7 @@ router.post('/Signin', async (req, res) => {
             {
                 return res.status(402).json({ err: 'User is not Activated' }) 
             }
-            else if (userExist.status > 2)
+            else if (userExist.status > 3)
             {
                 return res.status(402).json({ err: 'Wrong Credentails' })
             } 
@@ -227,7 +203,7 @@ router.post('/SignAdmin', async (req, res) => {
 //User Details fetch 
 router.get('/user-detail/:id',(req,res)=>{
 
-    Users.findOne({email:req.params.id},{status:1, starred:1}).then((resp)=>{
+    Users.findOne({email:req.params.id},{status:1, starred:1,Smdid:1}).then((resp)=>{
         res.status(200).send(resp)
     }).catch((e)=>{
        res.status(400).send(e)
@@ -298,7 +274,7 @@ router.get('/Member',(req,res)=>{
 
 router.get('/main_G/:id',(req,res)=>{   
    
-    Users.findOne({email:req.params.id},{_id:0,Divisionid:1}).then((resp)=>{     
+    Users.findOne({email:req.params.id},{_id:0,Divisionid:1,status:1,Smdid:1}).then((resp)=>{     
      res.status(200).send(resp)
  }).catch((e)=>{
      res.status(400).send(e)

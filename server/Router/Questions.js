@@ -26,7 +26,7 @@ router.post('/Question', upload, async (req, res) => {
 
   // console.log(req.body,req.file)
 
-  const { title, body, auth, subject, Members } = req.body;
+  const { title, body, auth, subject, Members, division } = req.body;
 
   const created_at = new Date();
 
@@ -51,7 +51,7 @@ router.post('/Question', upload, async (req, res) => {
     const file = req.file.path
 
     try {
-      const data = new Question({ auth, title, body, file, subject, created_at, member });
+      const data = new Question({ auth, title, body, file, subject, created_at, member, division });
       const result = await data.save()
 
       if (result) {
@@ -72,7 +72,7 @@ router.post('/Question', upload, async (req, res) => {
   else {
 
     try {
-      const data = new Question({ auth, title, body, subject, created_at, member });
+      const data = new Question({ auth, title, body, subject, created_at, member, division});
       const result = await data.save()
 
       if (result) {
@@ -176,6 +176,15 @@ router.get('/subject_question', (req, res) => {
   })
 
 })
+
+router.get('/subject_question_smd', (req, res) => {  
+
+  Question.find({ division:req.query.id_1}).then((resp) => {
+    return res.status(200).send(resp)
+  })
+
+})
+
 
 router.get('/Question-detail/:id', (req, res) => {
 

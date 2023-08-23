@@ -76,42 +76,7 @@ const AllQuestions = ({ question }) => {
                     isAlreadyStarred={currentUserDetailsFromDB.starred.includes(data._id) ? true : false}
                   />
                 ))
-            }
-            {/* {result.map((data, index) => (
-            <div className='all-questions-container' key={data._id}>
-              <div className='all-questions-left'>
-                <div className='all-options'>
-                  <p className='option-icon expand'>
-                    <ExpandLessIcon />
-                  </p>
-                  <p className='option-icon expand active'>
-                    <ExpandMoreIcon />
-                  </p>
-
-                </div>
-              </div>
-
-              <div className='question-answer'>
-                <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>
-                <div style={{ width: '90%', marginBottom: '16px' }}>
-                  <div>{parse(truncate(data.body, 200))}</div>
-                </div>
-
-                <div className='author'>
-                  {status ? (
-                    <DeleteIcon className='react-button' onClick={(e) => { handeDelete(data._id) }} />
-                  ) : (
-                    <p></p>
-                  )}
-                  <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
-                  <div className='author-details'>
-                    <Avatar />
-                    <p>{String(data?.auth).split('@')[0]}</p>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))} */}
+            }            
           </>)
           :
           <div>Loading...</div>

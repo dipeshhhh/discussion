@@ -22,21 +22,40 @@ const Index = () => {
   // ============================================== //
 
   let [questions, setQuestions] = useState([]);
+  let [status, setStatus] = useState('')
 
   useEffect(() => {
 
     let userDetails = new Promise (async(resolve,reject)=>{
       const response =  await axios.get(`/main_G/${auth}`)
-      resolve(response.data.Divisionid)
+      resolve(response.data)
     })
     userDetails.then(
       async function(value)
+      {       
+      
+      if(value.status ===1)
       {
-        console.log(value)
-       
-      const M_Data = await axios.get('/subject_question',{params:{id_1:value,id_2:auth}})        
+        const M_Data = await axios.get('/subject_question',{params:{id_1:value.Divisionid,id_2:auth}})        
         
-      setQuestions(M_Data.data)
+        setQuestions(M_Data.data)
+        setStatus(value.status)
+      }
+      else if (value.status === 2)
+      {
+              const M_Data = await axios.get('/subject_question_smd',{params:{id_1:value.Smdid}})  
+       
+              setQuestions(M_Data.data)
+              setStatus(value.status)
+      }
+      else
+      {
+        const M_Data = await axios.get('/all_question')  
+       
+              setQuestions(M_Data.data)
+              setStatus(value.status)
+      }    
+     
 
       },
       function(error)
@@ -50,7 +69,7 @@ const Index = () => {
     <div className='stack-index'>
       <div className='stack-index-content'>
         <Sidebar />
-        <Main questions={questions} />
+        <Main questions={questions} status={status} />
       </div>
     </div>
   )

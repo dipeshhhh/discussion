@@ -79,7 +79,7 @@ const Index = () => {
 
 /// Registration button function call here
        const handleRegister= async (e)=>{
-       const status=0
+       const status=1
         e.preventDefault()
         setLoading(true)
         const {name, email,password, cpassword} = user       
@@ -130,12 +130,109 @@ const Index = () => {
       }
 
  /************Register as DG**************/     
-     const Registerdg = ()=>{
-        console.log('DG')
+     const Registerdg = async(e)=>{
+        
+        const status=3
+        e.preventDefault()
+        setLoading(true)
+        const {name, email,password, cpassword} = user       
+        if(!name || !email|| !password || !cpassword)
+        {
+            setError("Something missing");
+            setLoading(false);
+        }
+        else if (!validateEmail(email))
+        {
+            setError("Email is not in valid formate");
+            setLoading(false);
+        }
+        else if(!(password === cpassword))
+        {
+            
+            setError("Password is not Matched");
+            
+            setLoading(false);
+        }
+        else{         
+                  
+            try{
+                
+                const resp =await axios.post('/Signup',
+                {
+                    name,
+                    email,                   
+                    password,
+                    status,
+                    intrested
+                    
+                }).then((resp)=>{
+                    toast.success('Registration Sucessfully')
+                    navigate('/')
+                    setLoading(false)
+                })
+            }
+            catch(err)
+            {
+                toast.error(err.response.data.err)
+                setLoading(false);
+            }          
+           
+        }
+
      }
 /************Register as DDG & ADG**************/
-     const Registerddg = ()=>{
-        console.log('DDG')
+     const Registerddg = async(e)=>{
+       
+        const status=2
+        e.preventDefault()
+        setLoading(true)
+        const {name, email,password, cpassword} = user       
+        if(!name || !email|| !password || !cpassword || !Smdid )
+        {
+            setError("Something missing");
+            setLoading(false);
+        }
+        else if (!validateEmail(email))
+        {
+            setError("Email is not in valid formate");
+            setLoading(false);
+        }
+        else if(!(password === cpassword))
+        {
+            
+            setError("Password is not Matched");
+            
+            setLoading(false);
+        }
+        else{         
+                  
+            try{
+                
+                const resp =await axios.post('/Signup',
+                {
+                    name,
+                    email,
+                    Smdid,
+                    password,
+                    status,
+                    intrested
+                    
+                }).then((resp)=>{
+                    toast.success('Registration Sucessfully')
+                    navigate('/')
+                    setLoading(false)
+                })
+            }
+            catch(err)
+            {
+                toast.error(err.response.data.err)
+                setLoading(false);
+            }          
+           
+        }
+
+
+
      }
  /*******************Handle Login Page button*************************/     
 const handleLogin= async (e)=>{
@@ -175,7 +272,7 @@ const handleLogin= async (e)=>{
                     else
                     {
                         toast.success('Login successfully')           
-                        navigate('/add-question') 
+                        navigate('/index') 
 
                     }    
 
@@ -459,7 +556,7 @@ const [demail, setDemail] = useState(false)
                                   {
                                     Smd.map((data)=>
                                       
-                                        <option value={data.name}>{data.name}</option>
+                                        <option value={data._id}>{data.name}</option>
                                     )
                                   }                                                      
                                  

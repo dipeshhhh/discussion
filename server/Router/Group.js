@@ -92,7 +92,7 @@ router.get('/smddetail/:name', (req, res) => {
 
 router.get('/Group', (req,res)=>{
 
-    SmdDivision.find({},{name:1}).then((resp)=>{
+    SmdDivision.find({},{name:1,_id:1}).then((resp)=>{
         res.status(200).send(resp)
     }).catch((e)=>{
         res.status(400).send(e)
@@ -101,8 +101,9 @@ router.get('/Group', (req,res)=>{
 
 router.get('/groupdetail/:name',(req,res)=>{
 
-    Group.findOne({name:req.params.name},{_id:0,division:1}).then((resp)=>{
+  const id = new ObjectId(req.params.name)  
 
+    Group.findOne({_id:id},{_id:0,division:1}).then((resp)=>{
                
         Division.find({_id:resp.division}).then((resp)=>{
             res.send(resp)
@@ -111,6 +112,19 @@ router.get('/groupdetail/:name',(req,res)=>{
     })
 
 })
+
+
+router.get('/SmdName/:id', (req, res) => {
+ 
+  const id = new ObjectId(req.params.id)
+
+  Group.findOne({_id:id},{_id:0,name:1}).then((resp) => {
+    res.status(200).send(resp)
+  }).catch((e) => {
+    res.status(400).send(e)
+  })
+})
+
 
 router.get('/SMD', (req, res) => {
   SmdDivision.find({}).then((resp) => {

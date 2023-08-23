@@ -31,6 +31,7 @@ const Question = () => {
     const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');  
   const [title, setTitle] =useState('')
+  const [smdid, setSmdid] = useState('')
   const [groupidd,setGroupidd] = useState('')
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
@@ -82,16 +83,21 @@ const Question = () => {
       
         let userDetails = new Promise (async(resolve,reject)=>{
           const response =  await axios.get(`/main_G/${auth}`)
-          resolve(response.data.Divisionid)
+          resolve(response.data)
         })
         userDetails.then(
             async function(value)
-            {
-             
-            const M_Data = await axios.get('/user-group',{params:{id_1:value,id_2:auth}})        
+            {            
             
-            setGroupidd(value)            
-            setMembers(M_Data.data)
+            if(value.status ===1)
+            {
+              const M_Data = await axios.get('/user-group',{params:{id_1:value.Divisionid,id_2:auth}})        
+            
+              setSmdid(value.Smdid)
+              setGroupidd(value.Divisionid)            
+              setMembers(M_Data.data)
+
+            }
       
             },
             function(error)
@@ -131,7 +137,7 @@ const Question = () => {
     data.append('auth',auth)
     data.append('subject',groupidd)
     data.append('Members', member)
-    //data.append('group',group)
+    data.append('division',smdid)  
      
     if(!title || !body)
       {       
@@ -163,7 +169,7 @@ const Question = () => {
           try {
             axios.post("/Question",data).then(res => {
   
-                  console.log(res)
+                
                   toast.success('Post uploaded sucessfully')
                   navigate('/')
                   setLoading(false)
@@ -214,7 +220,7 @@ const Question = () => {
 
     setError(" "); 
     const {name, checked} =e.target
-    console.log(`${name} is ${checked}`)
+    // console.log(`${name} is ${checked}`)
 
     if(checked)
     {      
@@ -226,7 +232,7 @@ const Question = () => {
     }
    } 
      
-   console.log(member)
+  
 
   return (
    
