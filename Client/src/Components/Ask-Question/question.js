@@ -10,6 +10,7 @@ import Cookies from 'js-cookie';
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
+import Select from 'react-dropdown-select'
 import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
@@ -28,10 +29,12 @@ const Question = () => {
     auth = data[0]  
   }
   
-    const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');  
   const [title, setTitle] =useState('')
   const [smdid, setSmdid] = useState('')
+  const [subject, setSubject] = useState([])
+  const [smd, setSmd] = useState('')
   const [groupidd,setGroupidd] = useState('')
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
@@ -87,15 +90,27 @@ const Question = () => {
         })
         userDetails.then(
             async function(value)
-            {            
-            
+            {     
+
             if(value.status ===1)
             {
               const M_Data = await axios.get('/user-group',{params:{id_1:value.Divisionid,id_2:auth}})        
             
               setSmdid(value.Smdid)
-              setGroupidd(value.Divisionid)            
-              setMembers(M_Data.data)
+              setGroupidd(value)                          
+              setMembers(M_Data.data.rsp)
+              setUser(M_Data.data.resp.name)             
+
+            }
+            else if(value.status === 2)
+            {
+              
+                const response =  await axios.get('/smd-group',{params:{id_1:value.Smdid}})
+                            
+                setSubject(response.data.rsp)
+                setSmd(response.data.resp.name)
+                setGroupidd(value)
+              
 
             }
       
@@ -231,6 +246,8 @@ const Question = () => {
       setMember(member.filter((e)=> e!=name))
     }
    } 
+
+   console.log(member)
      
   
 
@@ -269,22 +286,34 @@ const Question = () => {
         </div>
         <div className='question-option'>
           <div className='group'>
-            <h3>Groups</h3>
-           
+            
+            {groupidd.status === 1 ?
+            <>
+             <h3>
+                Your Subject is : {user}
+              </h3>
+              
+
+            </>
+            :  
+            <>
+                <h3>
+                 Your SMD is : {smd}
+                </h3>
+            </>
+          }
+    
              
-              <p>
-                Your Subject is : {user.Divisionid}
-              </p>
-              
-              
-               <small>Please Select the group</small>              
-          
-              
           </div>
         </div>
         
           
-          <div className='question-option'>
+        
+
+{
+  groupidd.status === 1 ?
+  <>
+    <div className='question-option'>
           <div className='group'>
             <h3>Member</h3>
            
@@ -299,10 +328,7 @@ const Question = () => {
               
           </div>
         </div>   
-
-
-
-
+    
 <Autocomplete      
       hidden={gStatus}
       multiple      
@@ -330,6 +356,33 @@ const Question = () => {
       )}
     />
 
+
+
+
+  </>
+  :
+
+  <>
+  <div className='input-field'>
+        <p>Select the Group of Subjects</p>                           
+        <Select
+      name='select'
+      options={subject}
+      labelField='name'
+      valueField='name'                           
+       multi                                                                                                                      
+      onChange={member =>                
+
+        setMember(member)                              
+        }
+      />
+        </div>
+  </>
+
+}
+
+
+
                    
 
         
@@ -352,21 +405,10 @@ const Question = () => {
       <button hidden={bthidden} className='button' onClick={add_question}>
       {loading ? "Posting..." : "Post"}     
         </button>  
-      </div>
-        {/* {error !== "" && (
-      <p style={{ color: "red", fontSize: "14px"}} >
-          {error}
-      </p>
-      )}     */}
+      </div>      
     </div>
   )
 }
 
 export default Question
 
-
-// const members = [
-//   { email: 'nitin@icar.gov.in', name: 'nitin' },
-//   { email: 'anil@icar.gov.in', name: 'anil' },
-//   { email: 'chhavi@icar.gov.in', name: 'chhavi' }
-// ]

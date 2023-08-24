@@ -6,6 +6,7 @@ import Header from './Components/Header/header';
 import Index from './Components/sidebar/index';
 import Profile from './Components/Profile/profile';
 import Question from './Components/Ask-Question/question';
+import Questions from './Components/Ask-Question/question';
 import Comment from './Components/Ask-Question/comment';
 import GroupQuestion from './Components/Group-Question/index';
 import ViewQuestion from './Components/View-Question/index';
@@ -26,7 +27,7 @@ function App() {
             <Route exact path='/' element={<Index />}></Route>
             <Route exact path='/index' element={<Index />}></Route>
             <Route exact path='/profile' element={<Profile />}></Route>
-            <Route exact path='/add-question' element={<Question />}></Route>
+            <Route exact path='/add-question' element={<Question />}></Route>           
             <Route exact path='/view-question' element={<ViewQuestion />}></Route>
             <Route exact path='/comment' element={<Comment />}></Route>
             <Route exact path='/group-question' element={<GroupQuestion />}></Route>

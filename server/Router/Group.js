@@ -179,15 +179,46 @@ router.get('/main_group/:id', (req, res) => {
 router.get('/user-group',(req,res)=>{
 
   const id = new ObjectId(req.query.id_1)
-  Division.findOne({_id:id},{_id:0,member:1}).then((resp)=>{   
+  Division.findOne({_id:id},{_id:0,member:1,name:1}).then((resp)=>{   
     
     User.find({$and:[{email:resp.member},{email:{$ne:req.query.id_2}}]},{_id:0,email:1,name:1}).then((rsp)=>{
-      res.status(200).send(rsp)
+      res.status(200).send({rsp,resp})
     })
 
   }).catch((e)=>{
      res.status(400).send(e)
   })
+})
+
+router.get('/smd-group',(req,res)=>{
+
+  const id = new ObjectId(req.query.id_1)
+
+  Group.findOne({_id:id},{_id:0,division:1,name:1}).then((resp)=>{
+  
+    Division.find({_id:resp.division},{name:1,member:1}).then((rsp)=>{
+
+      res.status(200).send({resp,rsp})
+
+    })   
+  
+  }).catch((e)=>{
+       res.status(400).send(e)
+    })
+  
+  // Division.findOne({_id:id},{_id:0,member:1,name:1}).then((resp)=>{   
+    
+  //   User.find({$and:[{email:resp.member},{email:{$ne:req.query.id_2}}]},{_id:0,email:1,name:1}).then((rsp)=>{
+  //     res.status(200).send({rsp,resp})
+  //   })
+
+  // }).catch((e)=>{
+  //    res.status(400).send(e)
+  // })
+
+
+  
+
 })
 
 
