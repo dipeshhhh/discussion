@@ -4,7 +4,7 @@ const QuestionSchema = new mongoose.Schema({
     body:String,
     auth:String,
     division:String,
-    subject:String,
+    subject:[String],
     member:[String],
     items:[],
     created_at:{

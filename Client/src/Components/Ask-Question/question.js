@@ -34,6 +34,7 @@ const Question = () => {
   const [title, setTitle] =useState('')
   const [smdid, setSmdid] = useState('')
   const [subject, setSubject] = useState([])
+  const [subjectid, setSubjectid] = useState([])
   const [smd, setSmd] = useState('')
   const [groupidd,setGroupidd] = useState('')
   const [body, setBody] = useState('')
@@ -43,6 +44,7 @@ const Question = () => {
   const [member, setMember] = useState([])
   const [bthidden, setBthidden] = useState(false);
   const [gStatus, setGStatus]= useState(true)
+  const [mStatus, setMstatus] = useState(true)
   const handleQuill = (value) => {
       setBody(value)
     
@@ -97,7 +99,8 @@ const Question = () => {
               const M_Data = await axios.get('/user-group',{params:{id_1:value.Divisionid,id_2:auth}})        
             
               setSmdid(value.Smdid)
-              setGroupidd(value)                          
+              setGroupidd(value)
+              setSubjectid(value.Divisionid)                          
               setMembers(M_Data.data.rsp)
               setUser(M_Data.data.resp.name)             
 
@@ -108,7 +111,8 @@ const Question = () => {
                 const response =  await axios.get('/smd-group',{params:{id_1:value.Smdid}})
                             
                 setSubject(response.data.rsp)
-                setSmd(response.data.resp.name)
+                setSmd(response.data.resp)
+                setSmdid(response.data.resp._id)
                 setGroupidd(value)
               
 
@@ -150,7 +154,7 @@ const Question = () => {
     data.append('title',title)
     data.append('body',body)
     data.append('auth',auth)
-    data.append('subject',groupidd)
+    data.append('subject',subjectid)
     data.append('Members', member)
     data.append('division',smdid)  
      
@@ -168,7 +172,7 @@ const Question = () => {
       {
         setError("You Should write only 150 Word in Body");
       setLoading(false);
-      }
+      }       
       else if(member.length<=1)
       {
         setError("Please Select the Group Member");
@@ -204,6 +208,7 @@ const Question = () => {
     
       }
     } 
+    
 
 
    /**************Handle user Regarding the Subjects **************/ 
@@ -220,7 +225,7 @@ const Question = () => {
           setError(" ");            
           setGStatus(true)
           setMember([])          
-          setMember(groupidd)      
+          setMember(subjectid)      
         }
         else if(val == 1)
         {
@@ -248,7 +253,76 @@ const Question = () => {
    } 
 
    console.log(member)
+
+   console.log(subjectid)
+
+   const [selectMember , setSelectMember] = useState('')
+ 
+
+   const get_subjet = (e)=>{
+   
+  const val = e.map((resp)=>(resp._id)) 
+
+   setSubjectid(val)
+   setMember(val)    
+    
+   }
      
+   const Select_Member = (e)=>{
+
+      setSelectMember(e.target.value)
+
+      const Ssubject = e.target.value 
+      
+      setMember([])
+      setSubjectid([])
+      if(Ssubject == '')
+      {        
+        setMember([])
+
+      }
+      else if(Ssubject == 1)
+      {
+        let val = []
+        for(let i=0;i<subject.length;i++)
+        {          
+          val.push(subject[i]._id)  
+       }
+        setMember(val)
+        setSubjectid(val)
+
+      }
+      else if(Ssubject == 2)
+      {      
+        
+      }
+      else if(Ssubject == 3)
+      {
+        setMember([auth])        
+      }
+
+   }
+
+
+   const handleSubject = async (e) =>{     
+    
+    const id = e.target.value
+    
+    
+    if(e.target.value == '')
+    {    
+      setMstatus(true)
+      console.log('Its blank')
+
+    }
+    else 
+    {
+      const user = await axios.get('/user-group',{params:{id_1:id,id_2:auth}}) 
+      setMstatus(false)  
+      setMembers(user.data.rsp)  
+
+    }
+   }
   
 
   return (
@@ -298,7 +372,7 @@ const Question = () => {
             :  
             <>
                 <h3>
-                 Your SMD is : {smd}
+                 Your SMD is : {smd.name}
                 </h3>
             </>
           }
@@ -363,20 +437,85 @@ const Question = () => {
   :
 
   <>
+   <div className='input-field'>    
+    <select name="division" onChange={(e)=>Select_Member(e)} id="smd">
+    <option value=''>--Select Subject--</option> 
+    <option value='1'>All Subject</option>                                                        
+    <option value='2'>Multiple Subject</option>
+    <option value='3'>Specificit Subject Member</option>   
+    </select>
+</div>   
+
+  {  selectMember == 2 &&
+
   <div className='input-field'>
-        <p>Select the Group of Subjects</p>                           
-        <Select
+        <p>--Select Subject--</p>                           
+        <Select        
       name='select'
       options={subject}
       labelField='name'
       valueField='name'                           
        multi                                                                                                                      
-      onChange={member =>                
-
-        setMember(member)                              
+      onChange={value =>get_subjet(value)                              
         }
       />
-        </div>
+        </div> }
+
+    {
+       selectMember == 3 &&
+        <>
+          <div className='input-field'>
+         <p>Select Subject</p>
+         <select name="division" onChange={(e)=>handleSubject(e)} id="smd">
+         <option value=''>--Select Subject--</option> 
+         {
+           subject.map((data)=>             
+               <option value={data._id}>{data.name}</option>
+           )
+         }                                                      
+        
+         </select>
+           </div>
+
+           <div className='input-field'>     
+      <Autocomplete
+      hidden={mStatus}     
+      multiple      
+      id="checkboxes-tags-demo"      
+      options={members}
+      disableCloseOnSelect
+      getOptionLabel={(option) => option.name}
+      renderOption={(props, option, { selected }) => (
+           
+        <li {...props}>
+          <Checkbox                        
+            icon={icon}           
+            checkedIcon={checkedIcon}
+            style={{ marginRight: 8 }}
+            checked={selected}
+            onChange={handleMember}
+            name={option.email}
+          />                  
+          {option.name}
+        </li>
+      )}
+      style={{ width: 500 }}
+      renderInput={(params) => (
+        <TextField {...params} label="Search Group Member Name" placeholder="Favorites" />
+      )}
+    />
+    </div>
+
+
+        </>
+       
+
+           
+
+
+    }    
+
+  
   </>
 
 }
