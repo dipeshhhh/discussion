@@ -123,6 +123,7 @@ function Question({ data, currentUser, isAlreadyStarred }) {
         .then((resp) => {
           // Update state or fetch new data to trigger a re-render instead of reloading the page
           window.location.reload(false);
+         
         })
         .catch(error => console.error(error));
     }

@@ -26,13 +26,14 @@ router.post('/Question', upload, async (req, res) => {
 
   // console.log(req.body,req.file)
 
-  const { title, body, auth, subject, Members, division } = req.body;
+  const { title, body, auth, subjects, Members, division } = req.body;
 
   const created_at = new Date();
 
   const member = Members.split(',')
-  
-  console.log(req.body)
+
+  const subject = subjects.split(',') 
+ 
 
   /* for upload the file     
      upload(req,res, function(err)
@@ -48,48 +49,48 @@ router.post('/Question', upload, async (req, res) => {
      This code for Check file uploaded or not
      */
 
-  // if (req.file) {
-  //   const file = req.file.path
+  if (req.file) {
+    const file = req.file.path
 
-  //   try {
-  //     const data = new Question({ auth, title, body, file, subject, created_at, member, division });
-  //     const result = await data.save()
+    try {
+      const data = new Question({ auth, title, body, file, subject, created_at, member, division });
+      const result = await data.save()
 
-  //     if (result) {
+      if (result) {
 
-  //       res.status(200).json({ message: 'inserted' })
-  //     }
-  //     else {
-  //       console.log('error')
-  //       return res.status(402).json({ err: 'not inserted' })
-  //     }
-  //   }
-  //   catch (err) {
-  //     console.log(err);
-  //   }
+        res.status(200).json({ message: 'inserted' })
+      }
+      else {
+        console.log('error')
+        return res.status(402).json({ err: 'not inserted' })
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
 
-  // }
+  }
 
-  // else {
+  else {
 
-  //   try {
-  //     const data = new Question({ auth, title, body, subject, created_at, member, division});
-  //     const result = await data.save()
+    try {
+      const data = new Question({ auth, title, body, subject, created_at, member, division});
+      const result = await data.save()
 
-  //     if (result) {
+      if (result) {
 
-  //       res.status(200).json({ message: 'inserted' })
-  //     }
-  //     else {
-  //       console.log('error')
-  //       return res.status(402).json({ err: 'not inserted' })
-  //     }
-  //   }
-  //   catch (err) {
-  //     console.log(err);
-  //   }
+        res.status(200).json({ message: 'inserted' })
+      }
+      else {
+        console.log('error')
+        return res.status(402).json({ err: 'not inserted' })
+      }
+    }
+    catch (err) {
+      console.log(err);
+    }
 
-  // }
+  }
 
 
 })
@@ -172,7 +173,7 @@ router.get('/all_question', (req, res) => {
 
 router.get('/subject_question', (req, res) => {
 
-  Question.find({$or:[{ member: req.query.id_1},{ member: req.query.id_2}]}).then((resp) => {
+  Question.find({$or:[{ member: req.query.id_1},{member: req.query.id_2},{auth:req.query.id_2}]}).then((resp) => {
     return res.status(200).send(resp)
   })
 
@@ -253,23 +254,20 @@ router.get('/get_one_Question/:id', (req, res) => {
 
 router.get('/deletepost/:id', (req, res) => {
 
-
   const id = new ObjectId(req.params.id)
 
-
   Question.findOne({ _id: id }, { _id: 0, file: 1 })
-    .then((resp) => {
-
-      fs.unlinkSync(resp.file)
+      .then((resp) => {
+      if(resp.file)
+      {
+        fs.unlinkSync(resp.file)
+      }     
 
       Question.deleteOne({ _id: id }).then((response) => {
         return res.status(200).send(response)
       })
     })
-    .catch((e) => {
-      console.log("Error:", e)
-      res.status(400).send(e)
-    })
+   
 })
 
 router.get('/Q_download/:id', (req, resp) => {

@@ -194,7 +194,7 @@ router.get('/smd-group',(req,res)=>{
 
   const id = new ObjectId(req.query.id_1)
 
-  Group.findOne({_id:id},{_id:0,division:1,name:1}).then((resp)=>{
+  Group.findOne({_id:id},{division:1,name:1}).then((resp)=>{
   
     Division.find({_id:resp.division},{name:1,member:1}).then((rsp)=>{
 

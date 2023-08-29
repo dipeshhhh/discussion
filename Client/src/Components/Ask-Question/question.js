@@ -111,7 +111,7 @@ const Question = () => {
                 const response =  await axios.get('/smd-group',{params:{id_1:value.Smdid}})
                             
                 setSubject(response.data.rsp)
-                setSmd(response.data.resp)
+                setSmd(response.data.resp)                
                 setSmdid(response.data.resp._id)
                 setGroupidd(value)
               
@@ -154,7 +154,7 @@ const Question = () => {
     data.append('title',title)
     data.append('body',body)
     data.append('auth',auth)
-    data.append('subject',subjectid)
+    data.append('subjects',subjectid)
     data.append('Members', member)
     data.append('division',smdid)  
      
@@ -173,7 +173,7 @@ const Question = () => {
         setError("You Should write only 150 Word in Body");
       setLoading(false);
       }       
-      else if(member.length<=1)
+      else if(member.length<1)
       {
         setError("Please Select the Group Member");
         setLoading(false);
@@ -230,7 +230,7 @@ const Question = () => {
         else if(val == 1)
         {
           setError(" "); 
-          setMember([auth])
+          setMember([])
           setGStatus(false)
         }
        
@@ -252,42 +252,42 @@ const Question = () => {
     }
    } 
 
-   console.log(member)
-
-   console.log(subjectid)
+   console.log(member,subjectid)
+  
 
    const [selectMember , setSelectMember] = useState('')
  
 
-   const get_subjet = (e)=>{
+   const get_subject = (e)=>{
    
   const val = e.map((resp)=>(resp._id)) 
 
    setSubjectid(val)
-   setMember(val)    
-    
+   setMember(val)  
    }
      
    const Select_Member = (e)=>{
 
       setSelectMember(e.target.value)
 
-      const Ssubject = e.target.value 
-      
+      const Ssubject = e.target.value     
+
       setMember([])
       setSubjectid([])
+
       if(Ssubject == '')
       {        
         setMember([])
 
       }
       else if(Ssubject == 1)
-      {
+      { 
         let val = []
         for(let i=0;i<subject.length;i++)
         {          
-          val.push(subject[i]._id)  
-       }
+          val.push(subject[i]._id)           
+        }
+
         setMember(val)
         setSubjectid(val)
 
@@ -298,7 +298,8 @@ const Question = () => {
       }
       else if(Ssubject == 3)
       {
-        setMember([auth])        
+        setMember([])       
+
       }
 
    }
@@ -317,9 +318,22 @@ const Question = () => {
     }
     else 
     {
-      const user = await axios.get('/user-group',{params:{id_1:id,id_2:auth}}) 
-      setMstatus(false)  
-      setMembers(user.data.rsp)  
+      if(groupidd.status === 1)
+      {
+        const user = await axios.get('/user-group',{params:{id_1:id,id_2:auth}}) 
+        setMstatus(false)  
+        setMembers(user.data.rsp)
+
+      }
+      else
+      {
+        const user = await axios.get('/user-group',{params:{id_1:id,id_2:auth}}) 
+        setMstatus(false)        
+        setSubjectid(user.data.resp._id) 
+        setMembers(user.data.rsp)
+      }
+
+     
 
     }
    }
@@ -456,7 +470,7 @@ const Question = () => {
       labelField='name'
       valueField='name'                           
        multi                                                                                                                      
-      onChange={value =>get_subjet(value)                              
+      onChange={value =>get_subject(value)                              
         }
       />
         </div> }

@@ -97,24 +97,67 @@ router.post('/VerifyOtp', async(req,res)=>{
     }
 })
 
+// router.post('/Signup', async (req,res)=>{
+
+//    let {name, email,Smdid, password,status, intrested, Divisionid} = req.body;   
+//    try{ 
+    
+//        const fetch = new Users({name, email, Divisionid,Smdid,password,status, intrested});
+//        const result = await fetch.save()     
+        
+//            if(result)
+//         {
+//         res.status(201).json({message: 'inserted'})
+//         }
+
+//     }
+//     catch(err){
+//     console.log(err);
+//     }
+//         })
+
+
 router.post('/Signup', async (req,res)=>{
 
-   let {name, email,Smdid, password,status, intrested, Divisionid} = req.body;   
-   try{ 
-    
-       const fetch = new Users({name, email, Divisionid,Smdid,password,status, intrested});
-       const result = await fetch.save()     
+    let {name, email, Divisionid, Smdid, password,status, intrested} = req.body;   
+    try{
+       
+     const userExist = await Users.findOne({email:email})
+     if(!userExist)
+     {
+         let Group=[]       
         
-           if(result)
-        {
-        res.status(201).json({message: 'inserted'})
-        }
+        
+        const data =await Groupdivision.find({division:Divisionid},{_id:1})
+        
+     for(var i=0;i<data.length;i++)
+     {
+         Group.push(data[i]._id)
+     
+     }
+        const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status, intrested});
+        const result = await fetch.save()
+        Division.updateMany({$or:[{_id:intrested},{_id:Divisionid}]},{$push:{member:email}}).then((resp)=>{
+         
+            if(result)
+         {
+         res.status(201).json({message: 'inserted'})
+         }
+ 
+        })  
+         
+         
+     }
+     else{
+         return res.status(422).json({err:'Email already Exist'})
+     }
+       
+     }
+     catch(err){
+     console.log(err);
+     }
+         })
 
-    }
-    catch(err){
-    console.log(err);
-    }
-        })
 
 //Signin Page Query
 router.post('/Signin', async (req, res) => {
