@@ -121,8 +121,12 @@ function Question({ data, currentUser, isAlreadyStarred }) {
     if (window.confirm('Please confirm deletion')) {
       axios.get(`/deletepost/${e}`)
         .then((resp) => {
-          // Update state or fetch new data to trigger a re-render instead of reloading the page
-          window.location.reload(false);
+          // Update state or fetch new data to trigger a re-render instead of reloading the page 
+          if(resp)
+          {
+            window.location.reload(false);
+          }         
+         
          
         })
         .catch(error => console.error(error));
@@ -154,7 +158,7 @@ function Question({ data, currentUser, isAlreadyStarred }) {
             <p>{String(data?.auth).split('@')[0]}</p>
           </NavLink>
           <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
-          {currentUser.status === 2 ? (
+          {currentUser.status > 1 ? (
             <DeleteIcon className='react-button' onClick={(e) => { handleDelete(data._id) }} />
           ) : (
             <p></p>

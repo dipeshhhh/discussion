@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 require('../DB/conn');
 const Question = require('../DB/Questions')
+const Answer = require('../DB/Answers')
 const User = require('../DB/module')
 const multer = require('multer');
 const { default: mongoose } = require('mongoose');
@@ -252,21 +253,40 @@ router.get('/get_one_Question/:id', (req, res) => {
     .catch(err => console.log(err));
 })
 
+
+/*******************Delete Post with all comment on Post**********************/
 router.get('/deletepost/:id', (req, res) => {
 
   const id = new ObjectId(req.params.id)
 
-  Question.findOne({ _id: id }, { _id: 0, file: 1 })
+  Answer.find({question_id:id},{_id:0,file:1}).then((rsp)=>{
+
+    for(let i=0;i<rsp.length;i++)
+    {
+      if(rsp[i].file)
+      {
+        fs.unlinkSync(rsp[i].file)
+      }     
+
+    }
+    Answer.deleteMany({question_id:id}).then((rspo) => {
+      //   return res.status(200).send(response)     
+      }) 
+    Question.findOne({ _id: id }, { _id: 0, file: 1 })
       .then((resp) => {
       if(resp.file)
       {
         fs.unlinkSync(resp.file)
       }     
-
       Question.deleteOne({ _id: id }).then((response) => {
         return res.status(200).send(response)
       })
-    })
+    })  
+      
+
+  })
+
+ 
    
 })
 
@@ -283,7 +303,6 @@ router.get('/Q_download/:id', (req, resp) => {
       resp.status(400).send(e)
     })
 })
-
 
 
 /************************Delete Question Thread After 30 days if no activity in Post************************************/

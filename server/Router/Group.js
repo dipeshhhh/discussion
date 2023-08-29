@@ -92,7 +92,7 @@ router.get('/smddetail/:name', (req, res) => {
 
 router.get('/Group', (req,res)=>{
 
-    SmdDivision.find({},{name:1,_id:1}).then((resp)=>{
+    Group.find({},{name:1,_id:1}).then((resp)=>{
         res.status(200).send(resp)
     }).catch((e)=>{
         res.status(400).send(e)
