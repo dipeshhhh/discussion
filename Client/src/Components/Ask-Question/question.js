@@ -3,6 +3,7 @@ import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css' // quill css 
 import './question.css'
 import axios from 'axios'
+import Filter from 'bad-words'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useNavigate} from 'react-router-dom'
@@ -15,9 +16,10 @@ import CheckBoxOutlineBlankIcon from '@mui/icons-material/CheckBoxOutlineBlank';
 import CheckBoxIcon from '@mui/icons-material/CheckBox';
 const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
 const checkedIcon = <CheckBoxIcon fontSize="small" />;
+const words = require('./extra-words.json')
 
 
-const Question = () => {
+const Question = () => {  
 
   const navigate = useNavigate()
 
@@ -148,6 +150,9 @@ const Question = () => {
     e.preventDefault() 
     setLoading(true)
 
+    const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
+    filter.addWords(...words)
+
     const data = new FormData()
       
     data.append('file', file)
@@ -161,6 +166,16 @@ const Question = () => {
     if(!title || !body)
       {       
         setError("Something missing");
+        setLoading(false);
+      }
+      else if (filter.isProfane(title) == true)
+      {
+        setError('You Should Remove bad words from Title');
+        setLoading(false);
+      }
+      else if (filter.isProfane(body) == true)
+      {
+        setError('You Should Remove bad words from body');
         setLoading(false);
       }      
       else if (t_clearList.length > 25)
@@ -177,7 +192,7 @@ const Question = () => {
       {
         setError("Please Select the Group Member");
         setLoading(false);
-      }          
+      }                      
      
       else
       {   
@@ -252,7 +267,7 @@ const Question = () => {
     }
    } 
 
-   console.log(member,subjectid)
+  //  console.log(member,subjectid)
   
 
    const [selectMember , setSelectMember] = useState('')
