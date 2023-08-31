@@ -72,7 +72,7 @@ router.get('/smddetail', (req, res) => {
   })
 })
 //Dvision details fetch
-router.get('/smddetail/:name', (req, res) => {
+router.get('/smddetail/:id', (req, res) => {
 
   // SmdDivision.find({ name: req.params.name }).then((resp) => {
 
@@ -166,7 +166,6 @@ router.get('/main_group/:id', (req, res) => {
   User.find({ email: req.params.id }, { _id: 0, Group: 1 })
     .then((resp) => {
       resp.map((rsp) => {
-
         SmdDivision.find({ _id: rsp.Group }, { name: 1 })
           .then((grsp) => {
             res.send(grsp)

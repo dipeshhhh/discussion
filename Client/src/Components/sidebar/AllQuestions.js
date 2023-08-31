@@ -153,7 +153,11 @@ function Question({ data, currentUser, isAlreadyStarred }) {
         </div>
 
         <div className='author'>
-          <NavLink to={`/profile?id=${data.auth}`} className='author-details'>
+          {/* <NavLink to={`/profile?id=${data.auth}`} className='author-details'>
+            <Avatar />
+            <p>{String(data?.auth).split('@')[0]}</p>
+          </NavLink> */}
+          <NavLink className='author-details'>
             <Avatar />
             <p>{String(data?.auth).split('@')[0]}</p>
           </NavLink>

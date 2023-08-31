@@ -63,11 +63,14 @@ const Header = () => {
             <div className='header-right'>
 
               <NavLink
-                to={`/profile?id=${auth[0]}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  navigate(`/profile?id=${auth[0]}`);
+                to={{
+                  pathname:'/profile',                 
                 }}
+                // to={`/profile?id=${auth[0]}`}
+                // onClick={(e) => {
+                //   e.preventDefault();
+                //   navigate(`/profile?id=${auth[0]}`);
+                // }}
               ><h4>{auth[1].toUpperCase()}</h4></NavLink>
               {/* <h4>User Name</h4> */}
 

@@ -28,6 +28,9 @@ const Profile = () => {
   const [userDetails, setUserDetails] = useState(null);
   const [currentUserDetails, setCurrentUserDetails] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [group, setGroup] = useState('');
+  const [smd, setSmd] = useState('')
+  const [mainG, setMainG]= useState('');
   const currentUserEmailFromCookies = Cookies.get('auth')?.split(',')[0] || '';
 
   const location = useLocation();
@@ -38,10 +41,22 @@ const Profile = () => {
     const fetchUserData = async () => {
       try {
         setIsLoading(true);
-        const userResponse = await axios.get(`/user-details/${id}`);
+        const userResponse = await axios.get(`/user-details/${currentUserEmailFromCookies}`);
         const currentUserResponse = await axios.get(`/user-details/${currentUserEmailFromCookies}`);
         setUserDetails(userResponse.data);
-        setCurrentUserDetails(currentUserResponse.data);
+        setCurrentUserDetails(currentUserResponse.data)
+
+      
+        const Smd = await axios.get(`/SmdName/${userResponse.data.Smdid}`);
+        const Intrested = await axios.get(`/group/${currentUserEmailFromCookies}`)
+        const Main = await axios.get(`/MainGroup/${currentUserEmailFromCookies}`)
+        
+        setGroup(Intrested.data)
+        setMainG(Main.data)
+        setSmd(Smd.data)  
+        
+
+
       } catch (error) {
         console.error('Error fetching user data:', error);
       } finally {
@@ -78,14 +93,14 @@ const Profile = () => {
                     <p id='profile-user-email'>{userDetails.email}</p>
                   </section>
                   <fieldset className='basic-info-container-section'>
-                    <legend>Group And Division</legend>
-                    <p id='profile-user-smdid'>{capitalize(userDetails.Smdid)}</p>
-                    <p id='profile-user-divisionid'>{capitalize(userDetails.Divisionid)}</p>
+                    <legend>Smd And Main Subject</legend>
+                    <p id='profile-user-smdid'>{capitalize(smd.name)}</p>
+                    <p id='profile-user-divisionid'>{capitalize(mainG.name)}</p>
                   </fieldset>
                   <fieldset className='basic-info-container-section'>
                     <legend>Interested Groups</legend>
                     <div className='basic-info-interested-tag-container'>
-                      {userDetails.intrested.map(interestedSubject => <InterestedTag data={interestedSubject} />)}
+                      {group.map(interestedSubject => <InterestedTag data={interestedSubject.name} />)}
                     </div>
                   </fieldset>
                 </div>
