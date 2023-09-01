@@ -16,6 +16,7 @@ const sidebar = () => {
     auth = data[0];
   }
 
+  const [ssmd, setSsmd] = useState([])
   const [group, setGroup] = useState('');
   const [mainG, setMainG]= useState('');
   const [detail, setDetail] = useState('')
@@ -27,45 +28,49 @@ const sidebar = () => {
 
 
     let userDetails = new Promise (async(resolve,reject)=>{
-      const response =  await axios.get(`/user-detail/${auth}`)
+      const response =  await axios.get(`/user-detail/${auth}`)  
       resolve(response.data)
     })
 
     userDetails.then(
+      
       async function(value)
-      {       
-       
-        
-        const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`) 
-
-        setDetail(value)   
+      {    
+        if(value.status == 1 || value.status == 2)
+        {
+          const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`)        
+           setDetail(value)   
 
         setSmd(Smd_Name.data)
-        
+       
+        async function getGroup() {
+          await axios.get(`/group/${auth}`)
+            .then(res => setGroup(res))
+            .catch(err => console.log(err));
+        }
+        async function getMain(){
+          await axios.get(`/MainGroup/${auth}`)
+          .then(res => setMainG(res.data))
+            .catch(err => console.log(err));
+        }   
+          getGroup();
+          getMain(); 
+
+        }        
+        else if(value.status == 3)
+        {
+          const Smd_Name = await axios.get('/Group')          
+          setSsmd(Smd_Name.data)          
+        }            
+         
 
       },
       function(error)
       {
         console.log(error)
       }
-    )   
-    
-    async function getGroup() {
-      await axios.get(`/group/${auth}`)
-        .then(res => setGroup(res))
-        .catch(err => console.log(err));
-    }
-    async function getMain(){
-      await axios.get(`/MainGroup/${auth}`)
-      .then(res => setMainG(res.data))
-        .catch(err => console.log(err));
-    }   
-      getGroup();
-      getMain();    
-  
+    ) 
   }, [])
-
-  
 
   return (
     <div className='sidebar-container'>
@@ -151,8 +156,7 @@ const sidebar = () => {
               :
 
               detail.status ==2 ?
-              <>
-              
+              <>              
               <div className='sidebar-option-category-container'>
                 <small className="sidebar-option-category">Your SMD</small>
                 <NavLink className='sidebar-option'>
@@ -165,15 +169,15 @@ const sidebar = () => {
               :
               <>   
                <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your SMD</small>
+                <small className="sidebar-option-category">SMD's</small>
+                {ssmd.map((resp)=>
                 <NavLink className='sidebar-option'>
-                  <PeopleIcon />
-                  <p>{console.log('You have access all Subject')}</p>
+                <PeopleIcon />
+                <p>{resp.name}</p>
                 </NavLink>
+                )}        
               </div>
-
-
-              </>
+               </>
             }      
       </div>
     </div>

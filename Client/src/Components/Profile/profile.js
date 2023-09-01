@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useReducer } from 'react';
 import './profile.css';
 import Sidebar from '../sidebar/sidebar';
 
@@ -33,9 +33,9 @@ const Profile = () => {
   const [mainG, setMainG]= useState('');
   const currentUserEmailFromCookies = Cookies.get('auth')?.split(',')[0] || '';
 
-  const location = useLocation();
-  const searchParams = new URLSearchParams(location.search);
-  const id = searchParams.get('id');
+  // const location = useLocation();
+  // const searchParams = new URLSearchParams(location.search);
+  // const id = searchParams.get('id');
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -46,16 +46,24 @@ const Profile = () => {
         setUserDetails(userResponse.data);
         setCurrentUserDetails(currentUserResponse.data)
 
-      
-        const Smd = await axios.get(`/SmdName/${userResponse.data.Smdid}`);
+        if(userResponse.data.status == 1)
+        {
+          const Smd = await axios.get(`/SmdName/${userResponse.data.Smdid}`);
         const Intrested = await axios.get(`/group/${currentUserEmailFromCookies}`)
         const Main = await axios.get(`/MainGroup/${currentUserEmailFromCookies}`)
-        
+
         setGroup(Intrested.data)
         setMainG(Main.data)
         setSmd(Smd.data)  
-        
 
+        }
+        else if(userResponse.data.status == 2)
+        {
+          const Msmd = await axios.get('smd-group',{params:{id_1:userResponse.data.Smdid}})
+          setSmd(Msmd.data.resp)
+          setGroup(Msmd.data.rsp)
+        }       
+       
 
       } catch (error) {
         console.error('Error fetching user data:', error);
@@ -64,7 +72,7 @@ const Profile = () => {
       }
     };
     fetchUserData();
-  }, [id]);
+  },[]);
 
   const auth = Cookies.get('auth');
 
@@ -86,8 +94,9 @@ const Profile = () => {
               <div className='profile-picture-container'>
                 <Avatar />
               </div>
-              {userDetails &&
-                <div className='basic-info-container'>
+              {userDetails.status == 1 ?
+              <>
+              <div className='basic-info-container'>
                   <section className='basic-info-container-section'>
                     <p id='profile-user-name'>{capitalize(userDetails.name)}</p>
                     <p id='profile-user-email'>{userDetails.email}</p>
@@ -104,6 +113,38 @@ const Profile = () => {
                     </div>
                   </fieldset>
                 </div>
+              </>
+              :
+              userDetails.status == 2  ?
+              <>
+              <div className='basic-info-container'>
+                  <section className='basic-info-container-section'>
+                    <p id='profile-user-name'>{capitalize(userDetails.name)}</p>
+                    <p id='profile-user-email'>{userDetails.email}</p>
+                  </section>
+                  <fieldset className='basic-info-container-section'>
+                    <legend>Your SMD</legend>
+                    <p id='profile-user-smdid'>{capitalize(smd.name)}</p>                    
+                  </fieldset>
+                  <fieldset className='basic-info-container-section'>
+                    <legend>Subjects</legend>
+                    <div className='basic-info-interested-tag-container'>
+                      {group.map(interestedSubject => <InterestedTag data={interestedSubject.name}/>)}
+                    </div>
+                  </fieldset>
+                </div>
+              </>
+              :
+              <>
+              <div className='basic-info-container'>
+                  <section className='basic-info-container-section'>
+                    <p id='profile-user-name'>{capitalize(userDetails.name)}</p>
+                    <p id='profile-user-email'>{userDetails.email}</p>
+                  </section>           
+                </div>
+             
+              </>
+                
               }
             </section>
             <section className='extra-info-container'>
