@@ -16,7 +16,7 @@ function truncate(str, n) {
   return str.length > n ? str.substr(0, n - 1) + '...' : str;
 }
 
-const AllQuestions = ({ question }) => {
+const AllQuestions = ({ question, currentUserEmail}) => {
   const [search, setSearch] = useState('');
   // Initially kept null to prevent rendering data before it is fetched from DB
   const [currentUserDetailsFromDB, setCurrentUserDetailsFromDB] = useState(null);
@@ -59,6 +59,7 @@ const AllQuestions = ({ question }) => {
                   key={data._id}
                   data={data}
                   currentUser={currentUserDetailsFromDB}
+                  currentUserEmail={currentUserEmail}
                   isAlreadyStarred={currentUserDetailsFromDB.starred.includes(data._id) ? true : false}
                 />
               ))
@@ -73,6 +74,7 @@ const AllQuestions = ({ question }) => {
                     key={data._id}
                     data={data}
                     currentUser={currentUserDetailsFromDB}
+                    currentUserEmail={currentUserEmail}
                     isAlreadyStarred={currentUserDetailsFromDB.starred.includes(data._id) ? true : false}
                   />
                 ))
@@ -86,18 +88,18 @@ const AllQuestions = ({ question }) => {
   );
 };
 
-function Question({ data, currentUser, isAlreadyStarred }) {
+function Question({ data, currentUser, isAlreadyStarred, currentUserEmail }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isStarred, setIsStarred] = useState(isAlreadyStarred);
 
   const setStarred = async () => {
-    await axios.patch(`/set-starred/${data._id}/${currentUser.email}`)
+    await axios.patch(`/set-starred/${data._id}/${currentUserEmail}`)
       .then(resp => { })
       .catch(error => console.error(error));
   };
 
   const removeStarred = async () => {
-    await axios.patch(`/remove-starred/${data._id}/${currentUser.email}`)
+    await axios.patch(`/remove-starred/${data._id}/${currentUserEmail}`)
       .then(resp => { })
       .catch(error => console.error(error));
   };
