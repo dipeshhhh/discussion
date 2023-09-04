@@ -13,6 +13,10 @@
   padding-right: 0px;
 }
 
+.sidebar-container *{
+  box-sizing: border-box;
+}
+
 .sidebar-options {
   display: flex;
   flex-direction: column;

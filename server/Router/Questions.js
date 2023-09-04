@@ -4,6 +4,8 @@ require('../DB/conn');
 const Question = require('../DB/Questions')
 const Answer = require('../DB/Answers')
 const User = require('../DB/module')
+const Division = require('../DB/Division')
+const SmdDivision = require('../DB/SMDDivision')
 const multer = require('multer');
 const { default: mongoose } = require('mongoose');
 const { ObjectId } = require('mongodb');
@@ -32,8 +34,8 @@ router.post('/Question', upload, async (req, res) => {
 
   const member = Members.split(',')
 
-  const subject = subjects.split(',') 
- 
+  const subject = subjects.split(',')
+
 
   /* for upload the file     
      upload(req,res, function(err)
@@ -74,7 +76,7 @@ router.post('/Question', upload, async (req, res) => {
   else {
 
     try {
-      const data = new Question({ auth, title, body, subject, created_at, member, division});
+      const data = new Question({ auth, title, body, subject, created_at, member, division });
       const result = await data.save()
 
       if (result) {
@@ -93,6 +95,45 @@ router.post('/Question', upload, async (req, res) => {
   }
 
 
+})
+
+router.get('/selected-questions-division/:divisionName/:id', async (req, res) => {
+  const divName = decodeURIComponent(req.params.divisionName)
+  if ((divName.toLowerCase() == 'all') || (divName.toLowerCase() == '')) {
+  //   User.findOne({ email: req.params.id }, { Smdid: 1, Divisionid: 1, intrested: 1, status: 1 })
+  //     .then(userDetails => {
+  //       if (userDetails.status == 1) {
+  //         Division.find({ _id: { $in: [userDetails.Divisionid, ...(userDetails.intrested)] } })
+  //           .then(resp => res.status(200).send(resp))
+  //           .catch(err => res.status(400).send(err))
+  //       }
+  //       else if (userDetails.status == 2) {
+  //         SmdDivision.findOne({ _id: userDetails.Smdid }).then(resp => {
+  //           Division.find({ name: { $in: resp.division } })
+  //             .then(resp => res.status(200).send(resp))
+  //             .catch(err => res.status(400).send(err))
+  //         }
+  //         )
+  //       }
+  //       else if (userDetails.status == 3) {
+  //         SmdDivision.find({})
+  //           .then((resp) => { res.status(200).send(resp) })
+  //           .catch((e) => { res.status(400).send(e) })
+  //       }
+  //     }
+  //     )
+  }
+  else {    
+    Division.findOne({ name: divName }).then(div => {
+      Question.find({ subject: div._id })
+        .then(resp => {
+          res.status(200).send(resp)
+        })
+        .catch(err => res.status(400).send(err))
+    }
+    )
+      .catch(err => res.status(400).send(err))
+  }
 })
 
 router.get('/user-questions-all/:id', async (req, res) => {
@@ -173,15 +214,15 @@ router.get('/all_question', (req, res) => {
 
 router.get('/subject_question', (req, res) => {
 
-  Question.find({$or:[{ member: req.query.id_1},{member: req.query.id_2},{auth:req.query.id_2}]}).then((resp) => {
+  Question.find({ $or: [{ member: req.query.id_1 }, { member: req.query.id_2 }, { auth: req.query.id_2 }] }).then((resp) => {
     return res.status(200).send(resp)
   })
 
 })
 
-router.get('/subject_question_smd', (req, res) => {  
+router.get('/subject_question_smd', (req, res) => {
 
-  Question.find({ division:req.query.id_1}).then((resp) => {
+  Question.find({ division: req.query.id_1 }).then((resp) => {
     return res.status(200).send(resp)
   })
 
@@ -258,35 +299,32 @@ router.get('/deletepost/:id', (req, res) => {
 
   const id = new ObjectId(req.params.id)
 
-  Answer.find({question_id:id},{_id:0,file:1}).then((rsp)=>{
+  Answer.find({ question_id: id }, { _id: 0, file: 1 }).then((rsp) => {
 
-    for(let i=0;i<rsp.length;i++)
-    {
-      if(rsp[i].file)
-      {
+    for (let i = 0; i < rsp.length; i++) {
+      if (rsp[i].file) {
         fs.unlinkSync(rsp[i].file)
-      }     
+      }
 
     }
-    Answer.deleteMany({question_id:id}).then((rspo) => {
+    Answer.deleteMany({ question_id: id }).then((rspo) => {
       //   return res.status(200).send(response)     
-      }) 
+    })
     Question.findOne({ _id: id }, { _id: 0, file: 1 })
       .then((resp) => {
-      if(resp.file)
-      {
-        fs.unlinkSync(resp.file)
-      }     
-      Question.deleteOne({ _id: id }).then((response) => {
-        return res.status(200).send(response)
+        if (resp.file) {
+          fs.unlinkSync(resp.file)
+        }
+        Question.deleteOne({ _id: id }).then((response) => {
+          return res.status(200).send(response)
+        })
       })
-    })  
-      
+
 
   })
 
- 
-   
+
+
 })
 
 router.get('/Q_download/:id', (req, resp) => {

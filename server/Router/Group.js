@@ -134,6 +134,31 @@ router.get('/SMD', (req, res) => {
   })
 })
 
+router.get('/get-division/:id', (req, res) => {
+  User.findOne({ email: req.params.id }, { Smdid:1, Divisionid:1, intrested:1, status:1 })
+    .then(userDetails => {
+      if(userDetails.status == 1){
+        Division.find({ _id: { $in: [userDetails.Divisionid, ...(userDetails.intrested)] } })
+          .then(resp => res.status(200).send(resp))
+          .catch(err => res.status(400).send(err))    
+      }
+      else if(userDetails.status == 2){
+        SmdDivision.findOne({ _id: userDetails.Smdid}).then(resp => {
+          Division.find({ name: { $in: resp.division } })
+            .then(resp => res.status(200).send(resp))
+            .catch(err => res.status(400).send(err))
+          }
+        )
+      }
+      else if(userDetails.status == 3){
+        SmdDivision.find({})
+        .then((resp) => { res.status(200).send(resp) })
+        .catch((e) => { res.status(400).send(e) })
+      }
+    }
+  )
+})
+
 //Group detail fetch from user collection
 router.get('/group/:id', (req, res) => {
 
