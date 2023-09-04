@@ -127,22 +127,31 @@ const Question = () => {
             }
           )
 
-    }, [])    
-   
+    }, [])      
 
 
    const handleFileChange = (event) => {
               
-        const files = event.target.files[0];
+    const files = event.target.files[0];
+      console.log(files,"files");
+      console.log(files == undefined,"files");
 
+    const cancelFile = (event) =>{
+      setError('');
+      setBthidden(false);
+      setFile(event.target.files[0]);
+    }
+
+    if(files == undefined) {
+      cancelFile(event)
+      return
+    } 
     if (files.size / 1024 > 5120 || files.type.split('/').pop() !== 'pdf') {
       setBthidden(true);
       setError('Please upload file as per the specified criteria');
     } else {
-      setError('');
-      setBthidden(false);
-      setFile(event.target.files[0]);
-    }                
+      cancelFile(event)
+    }      
     };  
 
     const add_question = async(e) => {
@@ -251,21 +260,32 @@ const Question = () => {
        
    }
 
-   const handleMember = (e) =>{
+  //  const handleMember = (e) =>{
 
-    setError(" "); 
-    const {name, checked} =e.target
-    // console.log(`${name} is ${checked}`)
+  //   setError(" "); 
+  //   const {name, checked} =e.target
+  //   console.log(`${name} is ${checked}`)
 
-    if(checked)
-    {      
-      setMember([...member,name])
+  //   if(checked)
+  //   {      
+  //     setMember([...member,name])
       
-    }
-    else{
-      setMember(member.filter((e)=> e!=name))
-    }
-   } 
+  //   }
+  //   else{
+  //     setMember(member.filter((e)=> e!=name))
+  //   }
+  //  } 
+
+   const handleMember = (e,members,removeOption) =>{
+
+    
+    let membersEmail = []
+    members.filter(function name(obj) {
+      membersEmail.push(obj.email);
+    })
+    setMember(membersEmail)
+    console.log(membersEmail,"membersEmail")
+   }
 
   //  console.log(member,subjectid)
   
@@ -352,6 +372,20 @@ const Question = () => {
 
     }
    }
+
+//    componentDidMount() {
+ // document.querySelector(".MuiChip-deleteIcon.MuiChip-deleteIconMedium")
+//     // Take the Reference of Close Button
+
+//     const close = document.getElementsByClassName(
+//         ".MuiChip-deleteIcon.MuiChip-deleteIconMedium"
+//     )[0];
+
+//     // Add a Click Event Listener to the button
+//     close.addEventListener("click", () => {
+//         alert("Add your Own Functionality Here...");
+//     });
+// }
   
 
   return (
@@ -438,6 +472,7 @@ const Question = () => {
       id="checkboxes-tags-demo"      
       options={members}
       disableCloseOnSelect
+      onChange={handleMember}
       getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
            
@@ -447,7 +482,6 @@ const Question = () => {
             checkedIcon={checkedIcon}
             style={{ marginRight: 8 }}
             checked={selected}
-            onChange={handleMember}
             name={option.email}
           />                  
           {option.name}
@@ -512,6 +546,7 @@ const Question = () => {
       multiple      
       id="checkboxes-tags-demo"      
       options={members}
+      onChange={handleMember}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
@@ -521,8 +556,7 @@ const Question = () => {
             icon={icon}           
             checkedIcon={checkedIcon}
             style={{ marginRight: 8 }}
-            checked={selected}
-            onChange={handleMember}
+            checked={selected}          
             name={option.email}
           />                  
           {option.name}
@@ -579,4 +613,3 @@ const Question = () => {
 }
 
 export default Question
-

@@ -132,7 +132,7 @@ const main = ({ questions, status, currentUserEmail }) => {
               }
               <div className="option-selector">
                 <div className="option-selector-title">
-                  -Division:
+                  Subject:
                 </div>
                 <div className="selected-option" onClick={() => {
                   toggleDivisionVisibility();

@@ -3,6 +3,7 @@ const router = express.Router();
 require('../DB/conn');
 const Answer = require('../DB/Answers')
 const Reply = require('../DB/Replies')
+const Question = require('../DB/Questions')
 const multer = require('multer')
 const { default: mongoose } = require('mongoose');
 const { ObjectId } = require('mongodb')
@@ -23,16 +24,20 @@ router.post('/Answer', upload, async (req, res) => {
 
     const { question_id, body, auth, file } = req.body;
 
-    const created_at = new Date();
+    const created_at = new Date(); 
+    
+    const postdata = await Question.updateOne({ _id: question_id},{$set:{updated_at:created_at}});    
 
     if (req.file) {
-        const file = req.file.path
+        const file = req.file.path       
 
-        try {
+        try {           
+
             const data = new Answer({ question_id, body, auth, file, created_at });
+
             const result = await data.save()
 
-            if (result) {
+            if (result && postdata) {
                 res.status(200).json({ message: 'inserted' })
             }
             else {
@@ -50,7 +55,7 @@ router.post('/Answer', upload, async (req, res) => {
         try {
             const data = new Answer({ question_id, body, auth, created_at });
             const result = await data.save()
-            if (result) {
+            if (result && postdata) {
                 res.status(200).json({ message: 'inserted' })
             }
             else {

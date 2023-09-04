@@ -11,6 +11,10 @@ const QuestionSchema = new mongoose.Schema({
         type:Date,
         //default:Date.now()
     },
+    updated_at:{
+        type:Date,
+        //default:Date.now()
+    },
     file:String,
     group:String
     
