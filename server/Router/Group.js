@@ -113,6 +113,18 @@ router.get('/groupdetail/:name',(req,res)=>{
 
 })
 
+/***************All Subject API****************/
+router.get('/subject', (req, res) => {
+  Division.find({}, { name: 1 }).then((resp) => {
+    res.status(200).send(resp)
+  }).catch((e) => {
+    res.status(400).send(e)
+  })
+})
+/***********************************************/
+
+
+
 
 router.get('/SmdName/:id', (req, res) => {
  
@@ -229,19 +241,7 @@ router.get('/smd-group',(req,res)=>{
   }).catch((e)=>{
        res.status(400).send(e)
     })
-  
-  // Division.findOne({_id:id},{_id:0,member:1,name:1}).then((resp)=>{   
-    
-  //   User.find({$and:[{email:resp.member},{email:{$ne:req.query.id_2}}]},{_id:0,email:1,name:1}).then((rsp)=>{
-  //     res.status(200).send({rsp,resp})
-  //   })
-
-  // }).catch((e)=>{
-  //    res.status(400).send(e)
-  // })
-
-
-  
+   
 
 })
 

@@ -298,6 +298,7 @@ const handleLogin= async (e)=>{
 
       const [Smd , setSmd] = useState([])
       const [Smdid, setSmdid] = useState('')
+      const [subject, setSubject] = useState([])
       const [Division, setDivision]= useState([])
       const [Divisionid, setDivisionid]= useState('')
       const [enable, setEnable] = useState(true)
@@ -315,6 +316,17 @@ const handleLogin= async (e)=>{
               console.log(err)
             })
           }
+
+          async function getSubject()
+          {
+            await axios.get('/subject').then((res)=>{               
+                setSubject(res.data)               
+            }).catch((err)=>{
+              console.log(err)
+            })
+
+          }
+          getSubject()
           getSmd()
         },[])      
 
@@ -354,7 +366,8 @@ const handleLogin= async (e)=>{
        
         //handle division select options
         const handeDivision = async (e)=>{
-           setDivisionid(e.target.value)
+            console.log(e.target.value)
+        //    setDivisionid(e.target.value)
             
         }
 
@@ -370,8 +383,11 @@ const handleLogin= async (e)=>{
     const [values, setValues] = useState([])
 
               values.map((resp)=>{
+                console.log(resp)
                  intrested.push(resp._id)
-              }) 
+              })     
+              
+    console.log(intrested)       
 
        
     
@@ -543,7 +559,32 @@ const [demail, setDemail] = useState(false)
                                   <option value='2'>ADG</option>
                                   <option value='3'>Scientist</option>
                                   </select>
-                              </div>                                   
+                              </div>
+                              <div className='input-field'>
+                              <p>Select Intrested Subjects</p>                           
+                              <Select
+                            name='select'
+                            options={values.length>3 ? values : subject}
+                            labelField='name'
+                            valueField='name'                           
+                            multi                                                                                                                      
+                            onChange={values =>
+                              setValues(values)                              
+                              }
+                            />
+                              </div>
+                              <div className='input-field'>
+                                  <p>Select Main Subject</p>
+                                  <select onChange={(e)=>{handeDivision(e)}} id="division">
+                                  <option value=''>--Select Subject--</option>
+                                  {
+                                      subject.map((resp)=>
+                                      <option value={resp._id}>{resp.name}</option>
+                                     )
+                                  }
+                                 
+                                  </select>
+                              </div>                                                            
                               
                              
                                 {

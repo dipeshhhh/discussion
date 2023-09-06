@@ -69,7 +69,7 @@ const Index = () => {
     <div className='stack-index'>
       <div className='stack-index-content'>
         <Sidebar />
-        <Main questions={questions} status={status} currentUserEmail={auth} />
+        <Main questions={questions} status={status} />
       </div>
     </div>
   )
