@@ -299,6 +299,7 @@ const handleLogin= async (e)=>{
       const [Smd , setSmd] = useState([])
       const [Smdid, setSmdid] = useState('')
       const [subject, setSubject] = useState([])
+      const [institutes, setInstitutes] = useState([])
       const [Division, setDivision]= useState([])
       const [Divisionid, setDivisionid]= useState('')
       const [enable, setEnable] = useState(true)
@@ -316,7 +317,6 @@ const handleLogin= async (e)=>{
               console.log(err)
             })
           }
-
           async function getSubject()
           {
             await axios.get('/subject').then((res)=>{               
@@ -326,6 +326,16 @@ const handleLogin= async (e)=>{
             })
 
           }
+          async function getInstitute()
+          {
+            await axios.get('/institute').then((res)=>{               
+                setInstitutes(res.data)               
+            }).catch((err)=>{
+              console.log(err)
+            })
+
+          }
+          getInstitute()
           getSubject()
           getSmd()
         },[])      
@@ -366,10 +376,20 @@ const handleLogin= async (e)=>{
        
         //handle division select options
         const handeDivision = async (e)=>{
-            console.log(e.target.value)
-        //    setDivisionid(e.target.value)
+           setDivisionid(e.target.value)
             
         }
+        //handle institute select option
+     
+        let institute = []        
+        const [values1, setValues1] = useState([])       
+                  values1.map(async(resp)=>{                  
+                    institute.push(resp._id)
+                    const data = await axios.get(`/SMD/${resp._id}`)
+                    setSmdid(data.data._id)                    
+                  })          
+
+       console.log(Smdid)           
 
 /****************Select Intrested Subjects*********************/
       let options = []
@@ -383,11 +403,8 @@ const handleLogin= async (e)=>{
     const [values, setValues] = useState([])
 
               values.map((resp)=>{
-                console.log(resp)
                  intrested.push(resp._id)
-              })     
-              
-    console.log(intrested)       
+              }) 
 
        
     
@@ -478,7 +495,7 @@ const [demail, setDemail] = useState(false)
         toast.error(err.response.data.err)
         setLoading(false);
     }   }
-
+   
   return (
         <div className='auth'>
             <Helmet>
@@ -551,7 +568,7 @@ const [demail, setDemail] = useState(false)
                               </div>
 
                             <div className='input-field'>
-                                  <p>Select Your Designation (optional)</p>
+                                  <p>Select Your Designation</p>
                                   <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
                                   <option value=''>--Select Designation--</option> 
                                   <option value='1'>DG</option>                                                        
@@ -559,9 +576,21 @@ const [demail, setDemail] = useState(false)
                                   <option value='2'>ADG</option>
                                   <option value='3'>Scientist</option>
                                   </select>
-                              </div>
+                              </div>   
                               <div className='input-field'>
-                              <p>Select Intrested Subjects</p>                           
+                                  <p>Select Main Subject</p>
+                                  <select onChange={(e)=>{handeDivision(e)}} id="division">
+                                  <option value=''>--Select Subject--</option>
+                                  {
+                                      subject.map((resp)=>
+                                      <option value={resp._id}>{resp.name}</option>
+                                     )
+                                  }
+                                 
+                                  </select>
+                              </div>                                 
+                              <div className='input-field'>
+                              <p>---Select Intrested Subject(optional)----</p>                           
                               <Select
                             name='select'
                             options={values.length>3 ? values : subject}
@@ -574,18 +603,17 @@ const [demail, setDemail] = useState(false)
                             />
                               </div>
                               <div className='input-field'>
-                                  <p>Select Main Subject</p>
-                                  <select onChange={(e)=>{handeDivision(e)}} id="division">
-                                  <option value=''>--Select Subject--</option>
-                                  {
-                                      subject.map((resp)=>
-                                      <option value={resp._id}>{resp.name}</option>
-                                     )
-                                  }
-                                 
-                                  </select>
-                              </div>                                                            
-                              
+                              <p>---Select Institute----</p>                           
+                              <Select
+                            name='select'
+                            options={institutes}
+                            labelField='name'
+                            valueField='name'                                                                                                                                         
+                            onChange={values1 =>
+                              setValues1(values1)                              
+                              }
+                            />
+                              </div>        
                              
                                 {
                                     Smdhidden == false && 
