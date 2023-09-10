@@ -127,7 +127,8 @@ const Question = () => {
             }
           )
 
-    }, [])      
+    }, [])    
+   
 
 
    const handleFileChange = (event) => {
@@ -260,23 +261,23 @@ const Question = () => {
        
    }
 
-  //  const handleMember = (e) =>{
+   const handleMember = (e) =>{
 
-  //   setError(" "); 
-  //   const {name, checked} =e.target
-  //   console.log(`${name} is ${checked}`)
+    setError(" "); 
+    const {name, checked} =e.target
+    console.log(`${name} is ${checked}`)
 
-  //   if(checked)
-  //   {      
-  //     setMember([...member,name])
+    if(checked)
+    {      
+      setMember([...member,name])
       
-  //   }
-  //   else{
-  //     setMember(member.filter((e)=> e!=name))
-  //   }
-  //  } 
+    }
+    else{
+      setMember(member.filter((e)=> e!=name))
+    }
+   } 
 
-   const handleMember = (e,members,removeOption) =>{
+   const handleMemberForPrincipelSci = (e,members,removeOption) =>{
 
     
     let membersEmail = []
@@ -472,7 +473,7 @@ const Question = () => {
       id="checkboxes-tags-demo"      
       options={members}
       disableCloseOnSelect
-      onChange={handleMember}
+      onChange={handleMemberForPrincipelSci}
       getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
            
@@ -546,7 +547,6 @@ const Question = () => {
       multiple      
       id="checkboxes-tags-demo"      
       options={members}
-      onChange={handleMember}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
@@ -556,7 +556,8 @@ const Question = () => {
             icon={icon}           
             checkedIcon={checkedIcon}
             style={{ marginRight: 8 }}
-            checked={selected}          
+            checked={selected}
+            onChange={handleMember}
             name={option.email}
           />                  
           {option.name}
@@ -613,3 +614,4 @@ const Question = () => {
 }
 
 export default Question
+
