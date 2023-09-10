@@ -145,7 +145,7 @@ const sidebar = () => {
                            <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Your favourite subject</small>
                   {group.data?.map((resp) =>
-                    <NavLink className='sidebar-option' key={resp.name}>
+                    <NavLink className='sidebar-option'>
                       <PeopleIcon />
                       <p>{resp.name}</p>
                     </NavLink>
@@ -171,7 +171,7 @@ const sidebar = () => {
                <div className='sidebar-option-category-container'>
                 <small className="sidebar-option-category">SMD's</small>
                 {ssmd.map((resp)=>
-                <NavLink className='sidebar-option' key={resp.name}>
+                <NavLink className='sidebar-option'>
                 <PeopleIcon />
                 <p>{resp.name}</p>
                 </NavLink>
