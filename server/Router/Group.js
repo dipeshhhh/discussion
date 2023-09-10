@@ -4,9 +4,11 @@ require('../DB/conn');
 const SmdDivision = require('../DB/SMDDivision')
 const Group = require('../DB/Group')
 const Division = require('../DB/Division')
+const Institute = require('../DB/Institutes')
 const User = require('../DB/module')
 const { default: mongoose } = require('mongoose');
-const { ObjectId } = require('mongodb')
+const { ObjectId } = require('mongodb');
+const Institutes = require('../DB/Institutes');
 
 
 router.get('/user-details/:id', (req, res) => {
@@ -113,7 +115,8 @@ router.get('/groupdetail/:name',(req,res)=>{
 
 })
 
-/***************All Subject API****************/
+
+/**************ALL Subject API***************/
 router.get('/subject', (req, res) => {
   Division.find({}, { name: 1 }).then((resp) => {
     res.status(200).send(resp)
@@ -121,10 +124,17 @@ router.get('/subject', (req, res) => {
     res.status(400).send(e)
   })
 })
-/***********************************************/
+/*******************************************/
 
-
-
+/*****************ALL Institute API*********/
+router.get('/institute', (req, res) => {
+  Institute.find({}, { name: 1 }).then((resp) => {
+    res.status(200).send(resp)
+  }).catch((e) => {
+    res.status(400).send(e)
+  })
+})
+/******************************************/
 
 router.get('/SmdName/:id', (req, res) => {
  
@@ -138,37 +148,12 @@ router.get('/SmdName/:id', (req, res) => {
 })
 
 
-router.get('/SMD', (req, res) => {
-  SmdDivision.find({}).then((resp) => {
+router.get('/SMD/:id', (req, res) => {  
+  SmdDivision.findOne({division:req.params.id},{name:1}).then((resp) => {
     res.status(200).send(resp)
   }).catch((e) => {
     res.status(400).send(e)
   })
-})
-
-router.get('/get-division/:id', (req, res) => {
-  User.findOne({ email: req.params.id }, { Smdid:1, Divisionid:1, intrested:1, status:1 })
-    .then(userDetails => {
-      if(userDetails.status == 1){
-        Division.find({ _id: { $in: [userDetails.Divisionid, ...(userDetails.intrested)] } })
-          .then(resp => res.status(200).send(resp))
-          .catch(err => res.status(400).send(err))    
-      }
-      else if(userDetails.status == 2){
-        SmdDivision.findOne({ _id: userDetails.Smdid}).then(resp => {
-          Division.find({ name: { $in: resp.division } })
-            .then(resp => res.status(200).send(resp))
-            .catch(err => res.status(400).send(err))
-          }
-        )
-      }
-      else if(userDetails.status == 3){
-        SmdDivision.find({})
-        .then((resp) => { res.status(200).send(resp) })
-        .catch((e) => { res.status(400).send(e) })
-      }
-    }
-  )
 })
 
 //Group detail fetch from user collection
@@ -241,8 +226,6 @@ router.get('/smd-group',(req,res)=>{
   }).catch((e)=>{
        res.status(400).send(e)
     })
-   
-
 })
 
 
