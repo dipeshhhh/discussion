@@ -52,34 +52,42 @@ const Index = () => {
         } else return true;
       }
 
-    const [Smdhidden, SetSmdhidden]= useState(true)
-    const [Subjecthidden, setSubjecthidden]= useState(true)
+
+ /****************Handle Designation and Status********************************/     
     const [designation, setDesignation]= useState('')
+    const [status, setStatus] = useState('')
 
     const  handldesignation = (e)=>{
-
-    setDesignation(e.target.value)
     
-    if(e.target.value == 2)
-    {
-        SetSmdhidden(false)
-        setSubjecthidden(true)
-    } 
-    else if(e.target.value == 3)
-    {
-        SetSmdhidden(false)
-        setSubjecthidden(false)
-    }       
-    else{
-        SetSmdhidden(true)
-        setSubjecthidden(true)
-    }
+        setDesignation(e.target.value)
+        if(e.target.value == 'DG')
+        {
+            setStatus(4)
+        } 
+        else if(e.target.value == 'DDG')
+        {
+            setStatus(3)
+        }
+        else if(e.target.value == 'ADG')
+        {
+            setStatus(2)
+        }
+        else if(e.target.value == 'Scientist')
+        {
+            setStatus(1)
+        }
+        else
+        {
+            setStatus('')
+            setDesignation('')
+        }
+       
+     }
+/***************************************************/
 
-    }
 
 /// Registration button function call here
-       const handleRegister= async (e)=>{
-       const status=1
+       const handleRegister= async (e)=>{      
         e.preventDefault()
         setLoading(true)
         const {name, email,password, cpassword} = user       
@@ -100,140 +108,36 @@ const Index = () => {
             
             setLoading(false);
         }
-        else{         
-                  
-            try{
-                const resp =await axios.post('/Signup',
-                {
-                    name,
-                    email,
-                    Divisionid,
-                    Smdid,
-                    password,
-                    status,
-                    intrested
+        else{     
+            
+            console.log(institute)
+
+            // try{
+            //     const resp =await axios.post('/Signup',
+            //     {
+            //         name,
+            //         email,
+            //         Divisionid,
+            //         Smdid,
+            //         password,
+            //         status,
+            //         intrested
                     
-                }).then((resp)=>{
-                    toast.success('Registration Sucessfully')
-                    navigate('/')
-                    setLoading(false)
-                })
-            }
-            catch(err)
-            {
-                toast.error(err.response.data.err)
-                setLoading(false);
-            }          
+            //     }).then((resp)=>{
+            //         toast.success('Registration Sucessfully')
+            //         navigate('/')
+            //         setLoading(false)
+            //     })
+            // }
+            // catch(err)
+            // {
+            //     toast.error(err.response.data.err)
+            //     setLoading(false);
+            // }          
            
         }
                 
       }
-
- /************Register as DG**************/     
-     const Registerdg = async(e)=>{
-        
-        const status=3
-        e.preventDefault()
-        setLoading(true)
-        const {name, email,password, cpassword} = user       
-        if(!name || !email|| !password || !cpassword)
-        {
-            setError("Something missing");
-            setLoading(false);
-        }
-        else if (!validateEmail(email))
-        {
-            setError("Email is not in valid formate");
-            setLoading(false);
-        }
-        else if(!(password === cpassword))
-        {
-            
-            setError("Password is not Matched");
-            
-            setLoading(false);
-        }
-        else{         
-                  
-            try{
-                
-                const resp =await axios.post('/Signup',
-                {
-                    name,
-                    email,                   
-                    password,
-                    status,
-                    intrested
-                    
-                }).then((resp)=>{
-                    toast.success('Registration Sucessfully')
-                    navigate('/')
-                    setLoading(false)
-                })
-            }
-            catch(err)
-            {
-                toast.error(err.response.data.err)
-                setLoading(false);
-            }          
-           
-        }
-
-     }
-/************Register as DDG & ADG**************/
-     const Registerddg = async(e)=>{
-       
-        const status=2
-        e.preventDefault()
-        setLoading(true)
-        const {name, email,password, cpassword} = user       
-        if(!name || !email|| !password || !cpassword || !Smdid )
-        {
-            setError("Something missing");
-            setLoading(false);
-        }
-        else if (!validateEmail(email))
-        {
-            setError("Email is not in valid formate");
-            setLoading(false);
-        }
-        else if(!(password === cpassword))
-        {
-            
-            setError("Password is not Matched");
-            
-            setLoading(false);
-        }
-        else{         
-                  
-            try{
-                
-                const resp =await axios.post('/Signup',
-                {
-                    name,
-                    email,
-                    Smdid,
-                    password,
-                    status,
-                    intrested
-                    
-                }).then((resp)=>{
-                    toast.success('Registration Sucessfully')
-                    navigate('/')
-                    setLoading(false)
-                })
-            }
-            catch(err)
-            {
-                toast.error(err.response.data.err)
-                setLoading(false);
-            }          
-           
-        }
-
-
-
-     }
  /*******************Handle Login Page button*************************/     
 const handleLogin= async (e)=>{
     const {email, password} = user
@@ -306,17 +210,7 @@ const handleLogin= async (e)=>{
 
          
     //Here We fetch the SMD division data from server 
-        useEffect(()=>{
-          async function getSmd()
-          {
-            await axios.get('/Group').then((res)=>{
-               
-                //console.log(res.data)
-                setSmd(res.data)
-            }).catch((err)=>{
-              console.log(err)
-            })
-          }
+        useEffect(()=>{         
           async function getSubject()
           {
             await axios.get('/subject').then((res)=>{               
@@ -335,69 +229,91 @@ const handleLogin= async (e)=>{
             })
 
           }
-          getInstitute()
-          getSubject()
+          async function getSmd()
+          {
+            await axios.get('/smddetail').then((res)=>{               
+                setSmd(res.data)       
+            }).catch((err)=>{
+              console.log(err)
+            })
+          }
           getSmd()
-        },[])      
-
-     /****************Handle SMD Button****************/   
-        const handleSmd = async (e)=>{           
-            
-            setSmdid('')
-            setDivisionid('')    
-            const Smdname = e.target.value    
-          
-        
-            if(Smdname!='')
-            {                   
-                await axios.get(`/groupdetail/${Smdname}`).then((res)=>{
-                          
-                    setDivision(res.data)
-                    setSmdid(Smdname)
-                    setEnable(false)
-        
-                   
-                    }).catch((err)=>{
-                  console.log(err)
-                })
-        
-               
-            }
-            else
-            {
-                setDivisionid('')
-                setSmdid('')       
-                setDivision([])
-                setEnable(true)
-        
-            }
-        }
+          getInstitute()
+          getSubject()     
+        },[])   
        
+/************handle SMD*************/
+const handleSmd = (e)=>{
+    setSmdid(e.target.value)
+}
+
+/************************************/        
+/***************handle Subject which is as Division****************/
+
+const handleDivision = (e)=>{
+      setDivisionid(e.target.value)
+}
+
+/*******************************************************************/
+
+/**********handle Location*************/
+const [hideI, setHideI]= useState(true)
+const [hideSmd, setHideSmd] = useState(true)
+const [Hqrs, setHqrs] = useState('')
+const handleLocation = (e)=>{
+    
+    setHqrs(e.target.value)
+
+    if(e.target.value == 1)
+    {
+        setHideI(false)
+        setHideSmd(true)
+        setSmdid('')
+        setInstitute('')
+              
+    }
+    else if(e.target.value == 2)
+    {
+        setHideSmd(false)
+        setHideI(true)
+        setSmdid('')
+        setInstitute('')
+      
        
-        //handle division select options
-        const handeDivision = async (e)=>{
-           setDivisionid(e.target.value)
-            
-        }
-        //handle institute select option
-     
-        let institute = []        
-        const [values1, setValues1] = useState([])       
-                  values1.map(async(resp)=>{                  
-                    institute.push(resp._id)
-                    const data = await axios.get(`/SMD/${resp._id}`)
-                    setSmdid(data.data._id)                    
-                  })          
+    }
+    else 
+    {
+        setHideSmd(true)
+        setHideI(true)
+        setSmdid('')
+        setInstitute('')
+       
+        
+    }
+}
 
-       console.log(Smdid)           
+/**************************************/
+const [institute, setInstitute] = useState('')
+const handleInstitute = (e)=>{
+    setInstitute(e.target.value)
+}
 
+console.log(institute)
+/***********handle institute select option*************/     
+        // var institute = ''   
+        // const [values1, setValues1] = useState()       
+        //           values1.map(async(resp)=>{                  
+        //             institute = resp._id
+        //             const data = await axios.get(`/SMD/${resp._id}`)
+        //             setSmdid(data.data._id)                    
+        //           })             
+/***********************************************************/  
 /****************Select Intrested Subjects*********************/
       let options = []
 
      Division?.map((resp)=>{
         options.push(resp)
-     })      
-      
+     })            
       let intrested = []        
            
     const [values, setValues] = useState([])
@@ -405,9 +321,7 @@ const handleLogin= async (e)=>{
               values.map((resp)=>{
                  intrested.push(resp._id)
               }) 
-
-       
-    
+   
  /********************************************/ 
 
 const [verify, setVerify] = useState(false)
@@ -571,15 +485,15 @@ const [demail, setDemail] = useState(false)
                                   <p>Select Your Designation</p>
                                   <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
                                   <option value=''>--Select Designation--</option> 
-                                  <option value='1'>DG</option>                                                        
-                                  <option value='2'>DDG</option>
-                                  <option value='2'>ADG</option>
-                                  <option value='3'>Scientist</option>
+                                  <option value='DG'>DG</option>                                                        
+                                  <option value='DDG'>DDG</option>
+                                  <option value='ADG'>ADG</option>
+                                  <option value='Scientist'>Scientist</option>
                                   </select>
                               </div>   
                               <div className='input-field'>
                                   <p>Select Main Subject</p>
-                                  <select onChange={(e)=>{handeDivision(e)}} id="division">
+                                  <select onChange={(e)=>{handleDivision(e)}} id="division">
                                   <option value=''>--Select Subject--</option>
                                   {
                                       subject.map((resp)=>
@@ -590,7 +504,7 @@ const [demail, setDemail] = useState(false)
                                   </select>
                               </div>                                 
                               <div className='input-field'>
-                              <p>---Select Intrested Subject(optional)----</p>                           
+                              <p>Select Intrested Subject(optional)</p>                           
                               <Select
                             name='select'
                             options={values.length>3 ? values : subject}
@@ -603,72 +517,51 @@ const [demail, setDemail] = useState(false)
                             />
                               </div>
                               <div className='input-field'>
-                              <p>---Select Institute----</p>                           
-                              <Select
-                            name='select'
-                            options={institutes}
-                            labelField='name'
-                            valueField='name'                                                                                                                                         
-                            onChange={values1 =>
-                              setValues1(values1)                              
-                              }
-                            />
-                              </div>        
-                             
-                                {
-                                    Smdhidden == false && 
-                                    <>
-                                     <div className='input-field'>
-                                  <p>Select SMD</p>
-                                  <select name="division" disabled={Smdhidden} onChange={(e)=>handleSmd(e)} id="smd">
-                                  <option value=''>--Select SMD--</option> 
-                                  {
-                                    Smd.map((data)=>
-                                      
-                                        <option value={data._id}>{data.name}</option>
+                                  <p>Select Location</p>
+                                  <select name="division" onChange={(e)=>handleLocation(e)} id="smd">
+                                  <option value=''>--Select Location--</option> 
+                                  <option value='1'>Outside ICAR HQRS</option>                                                        
+                                  <option value='2'>ICAR HQRS</option>                                  
+                                  </select>
+                              </div>
+                              {
+                               hideI == false &&
+                               (
+                                <div className='input-field'>
+                                <p>Select Institute</p>
+                                <select name="division" onChange={(e)=>handleInstitute(e)} id="smd">
+                                    <option value="">---- Select Institute ----</option>
+                                {                                    
+                                    institutes.map((resp)=>
+                                       <option value={resp._id}>{resp.name}</option>
                                     )
-                                  }                                                      
-                                 
-                                  </select>
-                                    </div>
-                                    </>
-
-                                }
-                                {
-                                    Subjecthidden == false  && 
-                                    <>
-                                     <div className='input-field'>
-                              <p>Select Intrested Subjects</p>                           
-                              <Select
-                            name='select'
-                            options={values.length>3 ? values : options }
-                            labelField='name'
-                            valueField='name'                           
-                            multi                                                                                                                      
-                            onChange={values =>                
-
-                              setValues(values)                              
-                              }
-                            />
-                              </div>
-                              <div className='input-field'>
-                                  <p>Select Main Subject</p>
-                                  <select onChange={(e)=>{handeDivision(e)}} id="division">
-                                  <option value=''>--Select Subject--</option>
-                                  {
-                                      Division.map((resp)=>
-                                      <option value={resp._id}>{resp.name}</option>
-                                     )
-                                  }
-                                 
-                                  </select>
-                              </div>
-
-                                    </>
-
-
-                                }
+                                }                                                            
+                                </select>
+                            </div>
                              
+                        
+                               )
+                            }
+                            {
+                             hideSmd == false &&
+                                (
+                                    <div className='input-field'>
+                                    <p>Select SMD</p>
+                                    <select onChange={(e)=>{handleSmd(e)}} id="division">
+                                    <option value=''>--Select SMD--</option>
+                                    {
+                                        Smd.map((resp)=>
+                                        <option value={resp._id}>{resp.name}</option>
+                                       )
+                                    }
+                                   
+                                    </select>
+                                </div> 
+    
+                                )                            
+                               
+                              } 
+                                                  
                                                            
                               <div className='input-field'>
                                   <p>Password</p>
@@ -683,26 +576,10 @@ const [demail, setDemail] = useState(false)
                                   value={user.cpassword}
                                   onChange={handleInput}
                                   placeholder='Enter the Confirm password' />
-                              </div>
-                              {
-                                designation== 1 &&
-                                <button style={{ marginTop: "20px" }} onClick={Registerdg}>
-                              {loading ? "Registering..." : "Register"}
-                              </button>
-
-                              }
-                              {
-                                designation == 2 &&
-                                <button style={{ marginTop: "20px" }} onClick={Registerddg}>
-                                {loading ? "Registering..." : "Register"}
-                                </button>
-                              }
-                              {
-                                designation == 3 &&
+                              </div>                            
                                 <button style={{ marginTop: "20px" }} onClick={handleRegister}>
                               {loading ? "Registering..." : "Register"}
-                              </button>
-                              }                                
+                              </button>                            
                                 </>
                               
                               }               

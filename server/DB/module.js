@@ -12,6 +12,9 @@ const Userschema = new mongoose.Schema({
     Smdid:{
         type:String,    
     },
+    institute:{
+        type:String,
+    },
     Divisionid:{
         type:String,    
     },    

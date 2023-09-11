@@ -66,7 +66,6 @@ router.patch('/remove-starred/:questionId/:userId', (req, res) => {
 
 //Smd Details fetch
 router.get('/smddetail', (req, res) => {
-
   SmdDivision.find({}, { name: 1 }).then((resp) => {
     res.status(200).send(resp)
   }).catch((e) => {
