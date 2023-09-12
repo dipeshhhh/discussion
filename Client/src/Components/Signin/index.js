@@ -62,11 +62,11 @@ const Index = () => {
         setDesignation(e.target.value)
         if(e.target.value == 'DG')
         {
-            setStatus(4)
+            setStatus(2)
         } 
         else if(e.target.value == 'DDG')
         {
-            setStatus(3)
+            setStatus(2)
         }
         else if(e.target.value == 'ADG')
         {
@@ -80,8 +80,7 @@ const Index = () => {
         {
             setStatus('')
             setDesignation('')
-        }
-       
+        }       
      }
 /***************************************************/
 
@@ -91,9 +90,9 @@ const Index = () => {
         e.preventDefault()
         setLoading(true)
         const {name, email,password, cpassword} = user       
-        if(!name || !email || !Divisionid || !password || !cpassword || !Smdid )
+        if(!name || !email || !Divisionid || !password || !cpassword || !Smdid || !Hqrs )
         {
-            setError("Something missing");
+            setError("Please Fill All Field");
             setLoading(false);
         }
         else if (!validateEmail(email))
@@ -107,33 +106,35 @@ const Index = () => {
             setError("Password is not Matched");
             
             setLoading(false);
-        }
+        }      
         else{     
             
-            console.log(institute)
+           // console.log(institute,Smdid,Hqrs,intrested,Divisionid)
 
-            // try{
-            //     const resp =await axios.post('/Signup',
-            //     {
-            //         name,
-            //         email,
-            //         Divisionid,
-            //         Smdid,
-            //         password,
-            //         status,
-            //         intrested
+            try{
+                const resp =await axios.post('/Signup',
+                {
+                    name,
+                    email,
+                    Divisionid,
+                    Smdid,
+                    institute,
+                    password,
+                    status,
+                    intrested,
+                    Hqrs
                     
-            //     }).then((resp)=>{
-            //         toast.success('Registration Sucessfully')
-            //         navigate('/')
-            //         setLoading(false)
-            //     })
-            // }
-            // catch(err)
-            // {
-            //     toast.error(err.response.data.err)
-            //     setLoading(false);
-            // }          
+                }).then((resp)=>{
+                    toast.success('Registration Sucessfully')
+                    navigate('/')
+                    setLoading(false)
+                })
+            }
+            catch(err)
+            {
+                toast.error(err.response.data.err)
+                setLoading(false);
+            }          
            
         }
                 
@@ -294,20 +295,21 @@ const handleLocation = (e)=>{
 
 /**************************************/
 const [institute, setInstitute] = useState('')
-const handleInstitute = (e)=>{
-    setInstitute(e.target.value)
-}
 
-console.log(institute)
-/***********handle institute select option*************/     
-        // var institute = ''   
-        // const [values1, setValues1] = useState()       
-        //           values1.map(async(resp)=>{                  
-        //             institute = resp._id
-        //             const data = await axios.get(`/SMD/${resp._id}`)
-        //             setSmdid(data.data._id)                    
-        //           })             
-/***********************************************************/  
+const handleInstitute = (e)=>{
+    const INST = new Promise((res,rej)=>{
+        res(e.target.value)
+    })
+    INST.then(
+        async function(value)
+        {
+            const data = await axios.get(`/SMD/${value}`)
+            setSmdid(data.data._id)
+            setInstitute(e.target.value) 
+        }   
+    )
+    
+}  
 /****************Select Intrested Subjects*********************/
       let options = []
 

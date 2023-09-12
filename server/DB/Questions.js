@@ -6,6 +6,7 @@ const QuestionSchema = new mongoose.Schema({
     division:String,
     subject:[String],
     member:[String],
+    institute:[String],
     items:[],
     created_at:{
         type:Date,

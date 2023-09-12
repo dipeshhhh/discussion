@@ -32,22 +32,23 @@ const Index = () => {
     })
     userDetails.then(
       async function(value)
-      {       
-      
-      if(value.status ===1)
+      {     
+
+      if(value.status ===1 && value.Hqrs === 1)
       {
-        const M_Data = await axios.get('/subject_question',{params:{id_1:value.Divisionid,id_2:auth}})        
+        const M_Data = await axios.get('/subject_question',{params:{id_1:value.Divisionid,id_2:auth,id_3:value.institute}})        
         
         setQuestions(M_Data.data)
         setStatus(value.status)
       }
-      else if (value.status === 2)
+      else if (value.status === 2 && value.Hqrs === 1)
       {
               const M_Data = await axios.get('/subject_question_smd',{params:{id_1:value.Smdid}})  
        
               setQuestions(M_Data.data)
               setStatus(value.status)
       }
+
       else
       {
         const M_Data = await axios.get('/all_question')  

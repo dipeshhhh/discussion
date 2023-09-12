@@ -210,14 +210,29 @@ router.get('/user-group',(req,res)=>{
   })
 })
 
+router.get('/user-group-institute',(req,res)=>{
+
+  const id = new ObjectId(req.query.id_1)
+  Institute.findOne({_id:id},{member:1,name:1}).then((resp)=>{    
+    User.find({$and:[{email:resp.member},{email:{$ne:req.query.id_2}}]},{_id:0,email:1,name:1}).then((rsp)=>{
+      res.status(200).send({rsp,resp})
+    })
+
+  }).catch((e)=>{
+     res.status(400).send(e)
+  })
+})
+
+
 router.get('/smd-group',(req,res)=>{
 
   const id = new ObjectId(req.query.id_1)
 
-  Group.findOne({_id:id},{division:1,name:1}).then((resp)=>{
+  SmdDivision.findOne({_id:id},{name:1,division:1})
   
-    Division.find({_id:resp.division},{name:1,member:1}).then((rsp)=>{
-
+  .then((resp)=>{   
+  
+    Institute.find({_id:resp.division},{name:1,member:1}).then((rsp)=>{
       res.status(200).send({resp,rsp})
 
     })   

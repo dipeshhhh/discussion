@@ -5,6 +5,8 @@ const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
 const Otp = require('../DB/Otp')
 const Division = require('../DB/Division')
+const Institute = require('../DB/Institutes')
+const SmdDivision = require('../DB/SMDDivision')
 const Groupdivision = require('../DB/Group')
 const { default: mongoose } = require('mongoose');
 const { ObjectId } = require('mongodb');
@@ -69,7 +71,6 @@ router.post('/Resotp',async(req,res)=>{
 
 })
 
-
 router.post('/VerifyOtp', async(req,res)=>{
     const data = await Otp.findOne({email:req.body.email,code:req.body.otp})
    
@@ -97,55 +98,41 @@ router.post('/VerifyOtp', async(req,res)=>{
     }
 })
 
-// router.post('/Signup', async (req,res)=>{
-
-//    let {name, email,Smdid, password,status, intrested, Divisionid} = req.body;   
-//    try{ 
-    
-//        const fetch = new Users({name, email, Divisionid,Smdid,password,status, intrested});
-//        const result = await fetch.save()     
-        
-//            if(result)
-//         {
-//         res.status(201).json({message: 'inserted'})
-//         }
-
-//     }
-//     catch(err){
-//     console.log(err);
-//     }
-//         })
-
-
+/************************Signup API*************************/
 router.post('/Signup', async (req,res)=>{
 
-    let {name, email, Divisionid, Smdid, password,status, intrested} = req.body;   
+    let {name, email, Divisionid, Smdid, password,status, intrested,institute,Hqrs} = req.body;  
+   
     try{
        
      const userExist = await Users.findOne({email:email})
      if(!userExist)
-     {
-         let Group=[]       
-        
-        
-        const data =await Groupdivision.find({division:Divisionid},{_id:1})
-        
-     for(var i=0;i<data.length;i++)
-     {
-         Group.push(data[i]._id)
-     
-     }
-        const fetch = new Users({name, email, Divisionid, Group, Smdid, password,status, intrested});
+     {        
+
+        const fetch = new Users({name, email, Divisionid, Smdid, password,status, intrested,Hqrs,institute});
         const result = await fetch.save()
         Division.updateMany({$or:[{_id:intrested},{_id:Divisionid}]},{$push:{member:email}}).then((resp)=>{
-         
-            if(result)
-         {
-         res.status(201).json({message: 'inserted'})
-         }
- 
-        })  
-         
+
+            if(Hqrs == 1)
+            {         
+                
+               Institute.updateOne({_id:institute},{$push:{member:email}}).then((resp)=>{
+                 res.status(201).json({message: 'inserted'})
+              })
+    
+            }
+            else if(Hqrs == 2)
+            {
+                SmdDivision.updateOne({_id:Smdid},{$push:{member:email}}).then((resp)=>{
+                    res.status(201).json({message: 'inserted'})
+                })      
+                
+                
+            } 
+
+        })
+        
+       
          
      }
      else{
@@ -157,9 +144,11 @@ router.post('/Signup', async (req,res)=>{
      console.log(err);
      }
          })
+/***********************************************************************/
 
 
-//Signin Page Query
+/***************************SIGNIN API*******************************************/
+
 router.post('/Signin', async (req, res) => {
     const { email, password } = req.body;
     try {
@@ -204,6 +193,8 @@ router.post('/Signin', async (req, res) => {
     }
 }
 )
+
+/***********************************************************************************/
 
 router.post('/SignAdmin', async (req, res) => {
     const { email, password } = req.body;
@@ -291,19 +282,6 @@ router.get('/disapprove/:id',(req,res)=>{
     })
 })
 
-//Get Member of a Specific Subject
-
-// router.get('/Member',(req,res)=>{
-    
-   
-//        Users.find({$and: [{Divisionid:req.query.id_1},{email:{$ne:req.query.id_2}}]} ,{_id:0,email:1,name:1}).then((resp)=>{
-        
-//         res.status(200).send(resp)
-//     }).catch((e)=>{
-//         res.status(400).send(e)
-//      })
-// })
-
 router.get('/Member',(req,res)=>{
     
    
@@ -317,7 +295,7 @@ router.get('/Member',(req,res)=>{
 
 router.get('/main_G/:id',(req,res)=>{   
    
-    Users.findOne({email:req.params.id},{_id:0,Divisionid:1,status:1,Smdid:1}).then((resp)=>{     
+    Users.findOne({email:req.params.id},{_id:0,Divisionid:1,status:1,Smdid:1,Hqrs:1,institute:1}).then((resp)=>{     
      res.status(200).send(resp)
  }).catch((e)=>{
      res.status(400).send(e)

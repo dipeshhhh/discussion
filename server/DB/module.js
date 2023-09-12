@@ -27,6 +27,10 @@ const Userschema = new mongoose.Schema({
     status:{
         type:Number,
         required:true
+    },
+    Hqrs:{
+        type:Number,
+        required:true
     }
     });
 

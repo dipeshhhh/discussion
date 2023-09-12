@@ -96,15 +96,14 @@ const Question = () => {
             async function(value)
             {     
 
-            if(value.status ===1)
+            if(value.status === 1 || value.status === 2)
             {
               const M_Data = await axios.get('/user-group',{params:{id_1:value.Divisionid,id_2:auth}})        
             
-              setSmdid(value.Smdid)
               setGroupidd(value)
               setSubjectid(value.Divisionid)                          
               setMembers(M_Data.data.rsp)
-              setUser(M_Data.data.resp.name)             
+              setUser(M_Data.data.resp.name)                                       
 
             }
             else if(value.status === 2)
@@ -173,65 +172,67 @@ const Question = () => {
     data.append('Members', member)
     data.append('division',smdid)  
      
-    if(!title || !body)
-      {       
-        setError("Something missing");
-        setLoading(false);
-      }
-      else if (filter.isProfane(title) == true)
-      {
-        setError('You Should Remove bad words from Title');
-        setLoading(false);
-      }
-      else if (filter.isProfane(body) == true)
-      {
-        setError('You Should Remove bad words from body');
-        setLoading(false);
-      }      
-      else if (t_clearList.length > 25)
-      {      
-      setError("You Should write only 25 Word in Title");
-      setLoading(false);
-      }
-      else if(clearList.length >150)
-      {
-        setError("You Should write only 150 Word in Body");
-      setLoading(false);
-      }       
-      else if(member.length<1)
-      {
-        setError("Please Select the Group Member");
-        setLoading(false);
-      }                      
+
+    console.log(member)
+    // if(!title || !body)
+    //   {       
+    //     setError("Something missing");
+    //     setLoading(false);
+    //   }
+    //   else if (filter.isProfane(title) == true)
+    //   {
+    //     setError('You Should Remove bad words from Title');
+    //     setLoading(false);
+    //   }
+    //   else if (filter.isProfane(body) == true)
+    //   {
+    //     setError('You Should Remove bad words from body');
+    //     setLoading(false);
+    //   }      
+    //   else if (t_clearList.length > 25)
+    //   {      
+    //   setError("You Should write only 25 Word in Title");
+    //   setLoading(false);
+    //   }
+    //   else if(clearList.length >150)
+    //   {
+    //     setError("You Should write only 150 Word in Body");
+    //   setLoading(false);
+    //   }       
+    //   else if(member.length<1)
+    //   {
+    //     setError("Please Select the Group Member");
+    //     setLoading(false);
+    //   }                      
      
-      else
-      {   
-        if(window.confirm('Please confirm for Post'))
-        {
+    //   else
+    //   {   
+    //     if(window.confirm('Please confirm for Post'))
+    //     {
 
         
-          try {
-            axios.post("/Question",data).then(res => {
+    //       try {
+    //         axios.post("/Question",data).then(res => {
   
                 
-                  toast.success('Post uploaded sucessfully')
-                  navigate('/')
-                  setLoading(false)
+    //               toast.success('Post uploaded sucessfully')
+    //               navigate('/')
+    //               setLoading(false)
   
-                })
-          }
-          catch (err) {
-            console.log(err)
-            setLoading(false);
-          }
+    //             })
+    //       }
+    //       catch (err) {
+    //         console.log(err)
+    //         setLoading(false);
+    //       }
           
-        }
-        else 
-        {
-          setLoading(false);
-        } 
+    //     }
+    //     else 
+    //     {
+    //       setLoading(false);
+    //     } 
     
-      }
+    //   }
     } 
     
 
@@ -239,7 +240,7 @@ const Question = () => {
    /**************Handle user Regarding the Subjects **************/ 
      
    const groupMember= (e)=>{
-        const val = e.target.value
+        const val = e.target.value       
         if(val == '')
         {
           setGStatus(true)
@@ -247,6 +248,7 @@ const Question = () => {
         }
         else if(val == 0)
         {
+         
           setError(" ");            
           setGStatus(true)
           setMember([])          
@@ -301,6 +303,30 @@ const Question = () => {
    setSubjectid(val)
    setMember(val)  
    }
+
+   const [hsubject, setHsubject] = useState(true)
+   const [hinstitute, setHInstitute] = useState(true)
+
+   const Select_Type = (e)=>{
+    
+    if(e.target.value == 1)
+    {
+      setHsubject(false)
+      setHInstitute(true)
+      
+    }
+    else if(e.target.value == 2)
+    {
+      setHInstitute(false)
+      setHsubject(true)
+    }
+    else
+    {
+      setHInstitute(true)
+      setHsubject(true)
+    }
+
+   }
      
    const Select_Member = (e)=>{
 
@@ -345,11 +371,12 @@ const Question = () => {
     
     const id = e.target.value
     
+    console.log(id)
+    
     
     if(e.target.value == '')
     {    
-      setMstatus(true)
-      console.log('Its blank')
+      setMstatus(true)      
 
     }
     else 
@@ -363,31 +390,29 @@ const Question = () => {
       }
       else
       {
-        const user = await axios.get('/user-group',{params:{id_1:id,id_2:auth}}) 
-        setMstatus(false)        
-        setSubjectid(user.data.resp._id) 
-        setMembers(user.data.rsp)
+        if(hsubject == false)
+        {
+          const user = await axios.get('/user-group',{params:{id_1:id,id_2:auth}}) 
+          setMstatus(false)  
+          setMembers(user.data.rsp)
+        }
+        else
+        {
+          const user = await axios.get('/user-group-institute',{params:{id_1:id,id_2:auth}}) 
+          setMstatus(false)        
+          setSubjectid(user.data.resp._id) 
+          setMembers(user.data.rsp)
+
+        }
+
+
+       
       }
 
      
 
     }
-   }
-
-//    componentDidMount() {
- // document.querySelector(".MuiChip-deleteIcon.MuiChip-deleteIconMedium")
-//     // Take the Reference of Close Button
-
-//     const close = document.getElementsByClassName(
-//         ".MuiChip-deleteIcon.MuiChip-deleteIconMedium"
-//     )[0];
-
-//     // Add a Click Event Listener to the button
-//     close.addEventListener("click", () => {
-//         alert("Add your Own Functionality Here...");
-//     });
-// }
-  
+   } 
 
   return (
    
@@ -429,8 +454,7 @@ const Question = () => {
             <>
              <h3>
                 Your Subject is : {user}
-              </h3>
-              
+              </h3>           
 
             </>
             :  
@@ -443,13 +467,10 @@ const Question = () => {
     
              
           </div>
-        </div>
-        
-          
-        
+        </div>      
 
 {
-  groupidd.status === 1 ?
+  groupidd.status === 1?
   <>
     <div className='question-option'>
           <div className='group'>
@@ -499,21 +520,83 @@ const Question = () => {
 
   </>
   :
+  <>
+  <div className='input-field'>    
+    <select name="division" onChange={(e)=>Select_Type(e)} id="smd">
+    <option value=''>--Select options--</option> 
+    <option value='1'>Subject</option>                                                        
+    <option value='2'>SMD</option>       
+    </select>
+</div>  
+
+ {
+  hsubject == false && 
+  <>
+  <div className='question-option'>
+          <div className='group'>
+            <h3>Member</h3>
+           
+               <small>Please Select the Member</small>
+              
+             <select onChange={(e)=>{groupMember(e)}}>
+           <option value=''>--Select Group--</option>             
+              <option value='0'>To All Member Subject</option>
+              <option value='1'>To Specific Member Subject</option>
+       
+                    </select>                      
+              
+          </div>
+        </div>   
+    
+<Autocomplete      
+      hidden={gStatus}
+      multiple      
+      id="checkboxes-tags-demo"      
+      options={members}
+      disableCloseOnSelect
+      onChange={handleMemberForPrincipelSci}
+      getOptionLabel={(option) => option.name}
+      renderOption={(props, option, { selected }) => (
+           
+        <li {...props}>
+          <Checkbox                        
+            icon={icon}           
+            checkedIcon={checkedIcon}
+            style={{ marginRight: 8 }}
+            checked={selected}
+            name={option.email}
+          />                  
+          {option.name}
+        </li>
+      )}
+      style={{ width: 500 }}
+      renderInput={(params) => (
+        <TextField {...params} label="Search Group Member Name" placeholder="Favorites" />
+      )}
+    />
+  </>
+
+ }
+
+
+{
+  hinstitute == false && 
 
   <>
-   <div className='input-field'>    
+  
+  <div className='input-field'>    
     <select name="division" onChange={(e)=>Select_Member(e)} id="smd">
-    <option value=''>--Select Subject--</option> 
-    <option value='1'>All Subject</option>                                                        
-    <option value='2'>Multiple Subject</option>
-    <option value='3'>Specificit Subject Member</option>   
+    <option value=''>--Select Institute--</option> 
+    <option value='1'>All SMD Institute</option>                                                        
+    <option value='2'>Multiple Institute</option>
+    <option value='3'>Specific Institute Member</option>   
     </select>
 </div>   
 
   {  selectMember == 2 &&
 
   <div className='input-field'>
-        <p>--Select Subject--</p>                           
+        <p>Select Institute</p>                           
         <Select        
       name='select'
       options={subject}
@@ -529,9 +612,9 @@ const Question = () => {
        selectMember == 3 &&
         <>
           <div className='input-field'>
-         <p>Select Subject</p>
+         <p>Select Institute</p>
          <select name="division" onChange={(e)=>handleSubject(e)} id="smd">
-         <option value=''>--Select Subject--</option> 
+         <option value=''>--Select Institute--</option> 
          {
            subject.map((data)=>             
                <option value={data._id}>{data.name}</option>
@@ -570,13 +653,10 @@ const Question = () => {
     />
     </div>
 
+  </>
 
+}
         </>
-       
-
-           
-
-
     }    
 
   

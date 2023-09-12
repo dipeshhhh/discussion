@@ -3,6 +3,7 @@
     "$oid": "6487539f30cc72e9c608aaef"
   },
   "name": "CROP SCIENCES",
+  "member":[],
   "division": [
     "64f7098ee512f41f96ba9526",
     "64f7098ee512f41f96ba9527",
@@ -32,12 +33,14 @@
     "64f70b81e512f41f96ba9540"
    
   ]
+
 },
 {
   "_id": {
     "$oid": "6487539f30cc72e9c608aaf0"
   },
   "name": "HORTICULTURE SCIENCE",
+  "member":[],
   "division": [
     "64f82220964ab9d83e6a8ebe",
     "64f82220964ab9d83e6a8ebf",
@@ -69,6 +72,7 @@
     "$oid": "6487582d30cc72e9c608aaf1"
   },
   "name": "ANIMAL SCIENCES",
+  "member":[],
   "division": [
     "64f712a2e512f41f96ba9541",
     "64f712a2e512f41f96ba9542",
@@ -96,6 +100,7 @@
     "$oid": "6487582d30cc72e9c608aaf2"
   },
   "name": "FISHERY SCIENCES",
+  "member":[],
   "division": [
     "64f80016964ab9d83e6a8e93",
     "64f80016964ab9d83e6a8e94",
@@ -112,6 +117,7 @@
     "$oid": "6487585130cc72e9c608aaf3"
   },
   "name": "NATURAL RESOURCES MANAGMENT",
+  "member":[],
   "division": [
     "64f8006c964ab9d83e6a8e9b",
     "64f8009a964ab9d83e6a8e9c",
@@ -136,6 +142,7 @@
     "$oid": "6487585130cc72e9c608aaf4"
   },
   "name": "AGRICUTURAL EDUCATION INSTITUTES",
+  "member":[],
   "division": [
     "64f804bd964ab9d83e6a8eba",
     "64f804bd964ab9d83e6a8ebb",
@@ -148,6 +155,7 @@
     "$oid": "6487587d30cc72e9c608aaf5"
   },
   "name": "AGRICULTURAL EXTENTION",
+  "member":[],
   "division": [
     "64f80409964ab9d83e6a8eaf",
     "64f80409964ab9d83e6a8eb0",
@@ -167,6 +175,7 @@
     "$oid": "6487587d30cc72e9c608aaf6"
   },
   "name": "AGRICULTURAL ENGINEERING INSTITUTES",
+  "member":[],
   "division": [
     "64f801a4964ab9d83e6a8eaa",
     "64f801da964ab9d83e6a8eab",
