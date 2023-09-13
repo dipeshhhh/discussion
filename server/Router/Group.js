@@ -199,7 +199,9 @@ router.get('/main_group/:id', (req, res) => {
 router.get('/user-group',(req,res)=>{
 
   const id = new ObjectId(req.query.id_1)
-  Division.findOne({_id:id},{member:1,name:1}).then((resp)=>{   
+  Division.findOne({_id:id},{member:1,name:1}).then((resp)=>{
+    
+    console.log(resp.member)
     
     User.find({$and:[{email:resp.member},{email:{$ne:req.query.id_2}}]},{_id:0,email:1,name:1}).then((rsp)=>{
       res.status(200).send({rsp,resp})

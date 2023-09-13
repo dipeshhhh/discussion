@@ -96,8 +96,8 @@ const Question = () => {
             async function(value)
             {     
 
-            if(value.status === 1 || value.status === 2)
-            {
+            if(value.status === 1)
+            {              
               const M_Data = await axios.get('/user-group',{params:{id_1:value.Divisionid,id_2:auth}})        
             
               setGroupidd(value)
@@ -107,14 +107,19 @@ const Question = () => {
 
             }
             else if(value.status === 2)
-            {
+            {    
               
-                const response =  await axios.get('/smd-group',{params:{id_1:value.Smdid}})
-                            
+              const M_Data = await axios.get('/user-group',{params:{id_1:value.Divisionid,id_2:auth}})            
+              setGroupidd(value)
+              setSubjectid(value.Divisionid)                          
+              setMembers(M_Data.data.rsp)
+              setUser(M_Data.data.resp.name)              
+
+                const response =  await axios.get('/smd-group',{params:{id_1:value.Smdid}})              
+               
                 setSubject(response.data.rsp)
                 setSmd(response.data.resp)                
-                setSmdid(response.data.resp._id)
-                setGroupidd(value)
+                setSmdid(response.data.resp._id)              
               
 
             }
@@ -129,6 +134,7 @@ const Question = () => {
     }, [])    
    
 
+  console.log(members)
 
    const handleFileChange = (event) => {
               
@@ -168,12 +174,12 @@ const Question = () => {
     data.append('title',title)
     data.append('body',body)
     data.append('auth',auth)
-    data.append('subjects',subjectid)
+    // data.append('subjects',subjectid)
     data.append('Members', member)
-    data.append('division',smdid)  
-     
-
-    console.log(member)
+    data.append('division',smdid)
+  
+    console.log('Member:'+member)
+    
     // if(!title || !body)
     //   {       
     //     setError("Something missing");
@@ -230,8 +236,7 @@ const Question = () => {
     //     else 
     //     {
     //       setLoading(false);
-    //     } 
-    
+    //     }    
     //   }
     } 
     
@@ -286,8 +291,7 @@ const Question = () => {
     members.filter(function name(obj) {
       membersEmail.push(obj.email);
     })
-    setMember(membersEmail)
-    console.log(membersEmail,"membersEmail")
+    setMember(membersEmail)    
    }
 
   //  console.log(member,subjectid)
@@ -299,9 +303,47 @@ const Question = () => {
    const get_subject = (e)=>{
    
   const val = e.map((resp)=>(resp._id)) 
-
    setSubjectid(val)
    setMember(val)  
+   }    
+     
+   const Select_Member = (e)=>{
+
+      setSelectMember(e.target.value)
+
+      const Ssubject = e.target.value        
+
+      setMember([])
+      setSubjectid([])
+
+      if(Ssubject == '')
+      {        
+        setMember([])
+
+      }
+      else if(Ssubject == 1)
+      { 
+        console.log(subject)
+        let val = []
+        for(let i=0;i<subject.length;i++)
+        {          
+          val.push(subject[i]._id)           
+        }
+
+        setMember(val)
+        setSubjectid(val)
+
+      }
+      else if(Ssubject == 2)
+      {      
+        
+      }
+      else if(Ssubject == 3)
+      {
+        setMember([])       
+
+      }
+
    }
 
    const [hsubject, setHsubject] = useState(true)
@@ -327,90 +369,22 @@ const Question = () => {
     }
 
    }
-     
-   const Select_Member = (e)=>{
-
-      setSelectMember(e.target.value)
-
-      const Ssubject = e.target.value     
-
-      setMember([])
-      setSubjectid([])
-
-      if(Ssubject == '')
-      {        
-        setMember([])
-
-      }
-      else if(Ssubject == 1)
-      { 
-        let val = []
-        for(let i=0;i<subject.length;i++)
-        {          
-          val.push(subject[i]._id)           
-        }
-
-        setMember(val)
-        setSubjectid(val)
-
-      }
-      else if(Ssubject == 2)
-      {      
-        
-      }
-      else if(Ssubject == 3)
-      {
-        setMember([])       
-
-      }
-
-   }
 
 
    const handleSubject = async (e) =>{     
     
-    const id = e.target.value
-    
-    console.log(id)
-    
+    const id = e.target.value 
     
     if(e.target.value == '')
     {    
-      setMstatus(true)      
-
+      setMstatus(true)
     }
     else 
-    {
-      if(groupidd.status === 1)
-      {
-        const user = await axios.get('/user-group',{params:{id_1:id,id_2:auth}}) 
-        setMstatus(false)  
-        setMembers(user.data.rsp)
-
-      }
-      else
-      {
-        if(hsubject == false)
-        {
-          const user = await axios.get('/user-group',{params:{id_1:id,id_2:auth}}) 
-          setMstatus(false)  
-          setMembers(user.data.rsp)
-        }
-        else
-        {
+    {             
           const user = await axios.get('/user-group-institute',{params:{id_1:id,id_2:auth}}) 
           setMstatus(false)        
           setSubjectid(user.data.resp._id) 
           setMembers(user.data.rsp)
-
-        }
-
-
-       
-      }
-
-     
-
     }
    } 
 
