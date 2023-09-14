@@ -34,7 +34,8 @@ const Question = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');  
   const [title, setTitle] =useState('')
-  const [smdid, setSmdid] = useState('')
+  const [smdid, setSmdid] = useState('') 
+  const [Imember, setImember] = useState('')
   const [subject, setSubject] = useState([])
   const [subjectid, setSubjectid] = useState([])
   const [smd, setSmd] = useState('')
@@ -132,10 +133,8 @@ const Question = () => {
           )
 
     }, [])    
-   
 
-  console.log(members)
-
+  
    const handleFileChange = (event) => {
               
     const files = event.target.files[0];
@@ -179,6 +178,11 @@ const Question = () => {
     data.append('division',smdid)
   
     console.log('Member:'+member)
+    console.log('smdid:'+smdid)   
+
+    console.log('Imember'+Imember)
+
+    console.log('smdid'+smdid)
     
     // if(!title || !body)
     //   {       
@@ -285,7 +289,6 @@ const Question = () => {
    } 
 
    const handleMemberForPrincipelSci = (e,members,removeOption) =>{
-
     
     let membersEmail = []
     members.filter(function name(obj) {
@@ -304,7 +307,7 @@ const Question = () => {
    
   const val = e.map((resp)=>(resp._id)) 
    setSubjectid(val)
-   setMember(val)  
+   setImember(val)  
    }    
      
    const Select_Member = (e)=>{
@@ -314,11 +317,13 @@ const Question = () => {
       const Ssubject = e.target.value        
 
       setMember([])
+      setImember([])
       setSubjectid([])
 
       if(Ssubject == '')
       {        
         setMember([])
+        setImember([])
 
       }
       else if(Ssubject == 1)
@@ -330,7 +335,7 @@ const Question = () => {
           val.push(subject[i]._id)           
         }
 
-        setMember(val)
+        setImember(val)
         setSubjectid(val)
 
       }
@@ -340,7 +345,8 @@ const Question = () => {
       }
       else if(Ssubject == 3)
       {
-        setMember([])       
+        setMember([])
+        setImember([])       
 
       }
 
@@ -384,7 +390,7 @@ const Question = () => {
           const user = await axios.get('/user-group-institute',{params:{id_1:id,id_2:auth}}) 
           setMstatus(false)        
           setSubjectid(user.data.resp._id) 
-          setMembers(user.data.rsp)
+          setImember(user.data.rsp)
     }
    } 
 
@@ -562,7 +568,7 @@ const Question = () => {
     <select name="division" onChange={(e)=>Select_Member(e)} id="smd">
     <option value=''>--Select Institute--</option> 
     <option value='1'>All SMD Institute</option>                                                        
-    <option value='2'>Multiple Institute</option>
+    <option value='2'>Multiple Instituteember</option>
     <option value='3'>Specific Institute Member</option>   
     </select>
 </div>   
