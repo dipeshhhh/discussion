@@ -35,6 +35,8 @@ router.post('/Question', upload, async (req, res) => {
 
   const member = Members.split(',')
 
+  console.log(req.body)
+
   /* for upload the file     
      upload(req,res, function(err)
      {
@@ -49,48 +51,48 @@ router.post('/Question', upload, async (req, res) => {
      This code for Check file uploaded or not
      */
 
-  if (req.file) {
-    const file = req.file.path
+  // if (req.file) {
+  //   const file = req.file.path
 
-    try {
-      const data = new Question({ auth, title, body, file, created_at, updated_at, member, division });
-      const result = await data.save()
+  //   try {
+  //     const data = new Question({ auth, title, body, file, created_at, updated_at, member, division });
+  //     const result = await data.save()
 
-      if (result) {
+  //     if (result) {
 
-        res.status(200).json({ message: 'inserted' })
-      }
-      else {
-        console.log('error')
-        return res.status(402).json({ err: 'not inserted' })
-      }
-    }
-    catch (err) {
-      console.log(err);
-    }
+  //       res.status(200).json({ message: 'inserted' })
+  //     }
+  //     else {
+  //       console.log('error')
+  //       return res.status(402).json({ err: 'not inserted' })
+  //     }
+  //   }
+  //   catch (err) {
+  //     console.log(err);
+  //   }
 
-  }
+  // }
 
-  else {
+  // else {
 
-    try {
-      const data = new Question({ auth, title, body,created_at, updated_at, member, division });
-      const result = await data.save()
+  //   try {
+  //     const data = new Question({ auth, title, body,created_at, updated_at, member, division });
+  //     const result = await data.save()
 
-      if (result) {
+  //     if (result) {
 
-        res.status(200).json({ message: 'inserted' })
-      }
-      else {
-        console.log('error')
-        return res.status(402).json({ err: 'not inserted' })
-      }
-    }
-    catch (err) {
-      console.log(err);
-    }
+  //       res.status(200).json({ message: 'inserted' })
+  //     }
+  //     else {
+  //       console.log('error')
+  //       return res.status(402).json({ err: 'not inserted' })
+  //     }
+  //   }
+  //   catch (err) {
+  //     console.log(err);
+  //   }
 
-  }
+  // }
 
 
 })

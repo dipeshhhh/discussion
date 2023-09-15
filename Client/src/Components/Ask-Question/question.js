@@ -34,7 +34,9 @@ const Question = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');  
   const [title, setTitle] =useState('')
-  const [smdid, setSmdid] = useState('') 
+  const [smdid, setSmdid] = useState('')
+  const [tempsmdid, setTempsmdid] = useState('') 
+  const [institute, setInstitute]= useState([])
   const [Imember, setImember] = useState('')
   const [subject, setSubject] = useState([])
   const [subjectid, setSubjectid] = useState([])
@@ -108,11 +110,9 @@ const Question = () => {
 
             }
             else if(value.status === 2)
-            {    
-              
+            {                  
               const M_Data = await axios.get('/user-group',{params:{id_1:value.Divisionid,id_2:auth}})            
-              setGroupidd(value)
-              setSubjectid(value.Divisionid)                          
+              setGroupidd(value)                                                   
               setMembers(M_Data.data.rsp)
               setUser(M_Data.data.resp.name)              
 
@@ -120,9 +120,7 @@ const Question = () => {
                
                 setSubject(response.data.rsp)
                 setSmd(response.data.resp)                
-                setSmdid(response.data.resp._id)              
-              
-
+                setTempsmdid(response.data.resp._id) 
             }
       
             },
@@ -173,75 +171,128 @@ const Question = () => {
     data.append('title',title)
     data.append('body',body)
     data.append('auth',auth)
-    // data.append('subjects',subjectid)
+    data.append('institute',institute)
+    data.append('subjectid',subjectid)
+    data.append('Imember',Imember)
     data.append('Members', member)
-    data.append('division',smdid)
+    data.append('smdid',smdid)
   
-    console.log('Member:'+member)
-    console.log('smdid:'+smdid)   
+    // console.log('Member:'+member)
+    // console.log('smdid:'+smdid)   
 
-    console.log('Imember'+Imember)
+    // console.log('Imember:'+Imember)
 
-    console.log('smdid'+smdid)
+    // console.log('subject id:'+subjectid)
     
-    // if(!title || !body)
-    //   {       
-    //     setError("Something missing");
-    //     setLoading(false);
-    //   }
-    //   else if (filter.isProfane(title) == true)
-    //   {
-    //     setError('You Should Remove bad words from Title');
-    //     setLoading(false);
-    //   }
-    //   else if (filter.isProfane(body) == true)
-    //   {
-    //     setError('You Should Remove bad words from body');
-    //     setLoading(false);
-    //   }      
-    //   else if (t_clearList.length > 25)
-    //   {      
-    //   setError("You Should write only 25 Word in Title");
-    //   setLoading(false);
-    //   }
-    //   else if(clearList.length >150)
-    //   {
-    //     setError("You Should write only 150 Word in Body");
-    //   setLoading(false);
-    //   }       
-    //   else if(member.length<1)
-    //   {
-    //     setError("Please Select the Group Member");
-    //     setLoading(false);
-    //   }                      
+    if(!title || !body)
+      {       
+        setError("Something missing");
+        setLoading(false);
+      }
+      else if (filter.isProfane(title) == true)
+      {
+        setError('You Should Remove bad words from Title');
+        setLoading(false);
+      }
+      else if (filter.isProfane(body) == true)
+      {
+        setError('You Should Remove bad words from body');
+        setLoading(false);
+      }      
+      else if (t_clearList.length > 25)
+      {      
+      setError("You Should write only 25 Word in Title");
+      setLoading(false);
+      }
+      else if(clearList.length >150)
+      {
+        setError("You Should write only 150 Word in Body");
+      setLoading(false);
+      } 
+                          
      
-    //   else
-    //   {   
-    //     if(window.confirm('Please confirm for Post'))
-    //     {
-
-        
-    //       try {
-    //         axios.post("/Question",data).then(res => {
+      else
+      {
+        if(hsubject == false)
+        {
+           if(member.length<1)
+        {
+          setError("Please Select the Group Member");
+          setLoading(false);
+        } 
+        else
+        {               
+        if(window.confirm('Please confirm for Post'))
+        {       
+          try {
+            axios.post("/Question",data).then(res => {
   
                 
-    //               toast.success('Post uploaded sucessfully')
-    //               navigate('/')
-    //               setLoading(false)
+                  toast.success('Post uploaded sucessfully')
+                  navigate('/')
+                  setLoading(false)
   
-    //             })
-    //       }
-    //       catch (err) {
-    //         console.log(err)
-    //         setLoading(false);
-    //       }
+                })
+          }
+          catch (err) {
+            console.log(err)
+            setLoading(false);
+          }
           
-    //     }
-    //     else 
-    //     {
-    //       setLoading(false);
-    //     }    
-    //   }
+        }
+        else 
+        {
+          setLoading(false);
+        }
+        }
+
+
+        }
+        else if(hinstitute == false)
+        {
+          if(!institute)
+          {
+            setError("Please Select the Institute");
+          setLoading(false);
+          }
+          else if(!Imember)
+          {
+            setError("Please Select the Member");
+            setLoading(false);
+          }
+          else
+          {
+            if(window.confirm('Please confirm for Post'))
+        {       
+          try {
+            axios.post("/Question",data).then(res => {
+  
+                
+                  toast.success('Post uploaded sucessfully')
+                  navigate('/')
+                  setLoading(false)
+  
+                })
+          }
+          catch (err) {
+            console.log(err)
+            setLoading(false);
+          }
+          
+        }
+        else 
+        {
+          setLoading(false);
+        }
+
+
+          }
+          
+        }
+        
+       
+   
+      }
     } 
     
 
@@ -256,8 +307,7 @@ const Question = () => {
           setMember([])          
         }
         else if(val == 0)
-        {
-         
+        {         
           setError(" ");            
           setGStatus(true)
           setMember([])          
@@ -270,25 +320,19 @@ const Question = () => {
           setGStatus(false)
         }
        
+  }
+ 
+  const handleMember = (e,members,removeOption) =>{   
+    let membersEmail = []
+    members.filter(function name(obj) {
+      membersEmail.push(obj.email);
+    })
+    setImember(membersEmail)    
    }
 
-   const handleMember = (e) =>{
 
-    setError(" "); 
-    const {name, checked} =e.target
-    console.log(`${name} is ${checked}`)
 
-    if(checked)
-    {      
-      setMember([...member,name])
-      
-    }
-    else{
-      setMember(member.filter((e)=> e!=name))
-    }
-   } 
-
-   const handleMemberForPrincipelSci = (e,members,removeOption) =>{
+   const handleMemberForPrincipelSci = (e,members,removeOption) =>{   
     
     let membersEmail = []
     members.filter(function name(obj) {
@@ -306,7 +350,7 @@ const Question = () => {
    const get_subject = (e)=>{
    
   const val = e.map((resp)=>(resp._id)) 
-   setSubjectid(val)
+  setInstitute(val)
    setImember(val)  
    }    
      
@@ -318,7 +362,7 @@ const Question = () => {
 
       setMember([])
       setImember([])
-      setSubjectid([])
+      setInstitute([])
 
       if(Ssubject == '')
       {        
@@ -333,10 +377,9 @@ const Question = () => {
         for(let i=0;i<subject.length;i++)
         {          
           val.push(subject[i]._id)           
-        }
-
-        setImember(val)
-        setSubjectid(val)
+        }        
+        setImember(val)        
+        setInstitute(val)
 
       }
       else if(Ssubject == 2)
@@ -345,7 +388,7 @@ const Question = () => {
       }
       else if(Ssubject == 3)
       {
-        setMember([])
+        setSmdid('')       
         setImember([])       
 
       }
@@ -354,24 +397,29 @@ const Question = () => {
 
    const [hsubject, setHsubject] = useState(true)
    const [hinstitute, setHInstitute] = useState(true)
-
-   const Select_Type = (e)=>{
+   const Select_Type = (e)=>{  
+    
+    
     
     if(e.target.value == 1)
     {
       setHsubject(false)
       setHInstitute(true)
-      
+      setSubjectid(groupidd.Divisionid)      
     }
     else if(e.target.value == 2)
     {
+      setSmdid(tempsmdid)
       setHInstitute(false)
       setHsubject(true)
+      setSubjectid('')
     }
     else
     {
       setHInstitute(true)
       setHsubject(true)
+      setSmdid('')
+      setSubjectid('')
     }
 
    }
@@ -389,11 +437,13 @@ const Question = () => {
     {             
           const user = await axios.get('/user-group-institute',{params:{id_1:id,id_2:auth}}) 
           setMstatus(false)        
-          setSubjectid(user.data.resp._id) 
+          setInstitute(user.data.resp._id) 
           setImember(user.data.rsp)
     }
    } 
 
+
+   console.log(member)
   return (
    
     <div className='add-question'>
@@ -447,7 +497,9 @@ const Question = () => {
     
              
           </div>
-        </div>      
+        </div> 
+
+         
 
 {
   groupidd.status === 1?
@@ -610,6 +662,7 @@ const Question = () => {
       multiple      
       id="checkboxes-tags-demo"      
       options={members}
+      onChange={handleMember}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}
       renderOption={(props, option, { selected }) => (
@@ -619,8 +672,7 @@ const Question = () => {
             icon={icon}           
             checkedIcon={checkedIcon}
             style={{ marginRight: 8 }}
-            checked={selected}
-            onChange={handleMember}
+            checked={selected}           
             name={option.email}
           />                  
           {option.name}
