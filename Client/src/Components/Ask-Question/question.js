@@ -171,11 +171,10 @@ const Question = () => {
     data.append('title',title)
     data.append('body',body)
     data.append('auth',auth)
-    data.append('institute',institute)
-    data.append('subjectid',subjectid)
-    data.append('Imember',Imember)
+    data.append('institutes',institute)   
+    data.append('Imembers',Imember)
     data.append('Members', member)
-    data.append('smdid',smdid)
+    data.append('smdids',smdid)
   
     // console.log('Member:'+member)
     // console.log('smdid:'+smdid)   
@@ -213,7 +212,7 @@ const Question = () => {
      
       else
       {
-        if(hsubject == false)
+        if(hsubject == false || groupidd.status == 1)
         {
            if(member.length<1)
         {
@@ -225,8 +224,7 @@ const Question = () => {
         if(window.confirm('Please confirm for Post'))
         {       
           try {
-            axios.post("/Question",data).then(res => {
-  
+            axios.post("/Question",data).then(res => {  
                 
                   toast.success('Post uploaded sucessfully')
                   navigate('/')

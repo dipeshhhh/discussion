@@ -3,7 +3,7 @@ const QuestionSchema = new mongoose.Schema({
     title:String,
     body:String,
     auth:String,
-    division:String,    
+    smdid:[],        
     member:[String],
     institute:[String],
     Imember:[String],
