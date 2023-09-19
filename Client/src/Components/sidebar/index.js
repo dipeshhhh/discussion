@@ -65,7 +65,9 @@ const Index = () => {
             }
             else
             {
-              console.log('Sabar kare apke liye data bad m ayega')
+              const M_Data = await axios.get('/all_question')          
+              setQuestions(M_Data.data)
+              setStatus(value.status)
             }
          
         }      

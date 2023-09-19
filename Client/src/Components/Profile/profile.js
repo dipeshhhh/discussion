@@ -31,6 +31,7 @@ const Profile = () => {
   const [group, setGroup] = useState('');
   const [smd, setSmd] = useState('')
   const [mainG, setMainG]= useState('');
+  const [institute, setInstitute] = useState('')
   const currentUserEmailFromCookies = Cookies.get('auth')?.split(',')[0] || '';
 
   // const location = useLocation();
@@ -46,23 +47,35 @@ const Profile = () => {
         setUserDetails(userResponse.data);
         setCurrentUserDetails(currentUserResponse.data)
 
-        if(userResponse.data.status == 1)
+        if(userResponse.data.Hqrs ==1)
         {
           const Smd = await axios.get(`/SmdName/${userResponse.data.Smdid}`);
-        const Intrested = await axios.get(`/group/${currentUserEmailFromCookies}`)
-        const Main = await axios.get(`/MainGroup/${currentUserEmailFromCookies}`)
-
-        setGroup(Intrested.data)
-        setMainG(Main.data)
-        setSmd(Smd.data)  
-
+          const Inst = await axios.get(`/InstituteName/${userResponse.data.institute}`)
+          setSmd(Smd.data)
+          setInstitute(Inst.data)
         }
-        else if(userResponse.data.status == 2)
+        else if (userResponse.data.Hqrs == 2)
         {
-          const Msmd = await axios.get('smd-group',{params:{id_1:userResponse.data.Smdid}})
-          setSmd(Msmd.data.resp)
-          setGroup(Msmd.data.rsp)
-        }       
+          const Smd = await axios.get(`/SmdName/${userResponse.data.Smdid}`);
+          setSmd(Smd.data)
+        }
+        // if(userResponse.data.status == 1)
+        // {
+        //   const Smd = await axios.get(`/SmdName/${userResponse.data.Smdid}`);
+        // const Intrested = await axios.get(`/group/${currentUserEmailFromCookies}`)
+        // const Main = await axios.get(`/MainGroup/${currentUserEmailFromCookies}`)
+
+        // setGroup(Intrested.data)
+        // setMainG(Main.data)
+        // setSmd(Smd.data)  
+
+        // }
+        // else if(userResponse.data.status == 2)
+        // {
+        //   const Msmd = await axios.get('smd-group',{params:{id_1:userResponse.data.Smdid}})
+        //   setSmd(Msmd.data.resp)
+        //   setGroup(Msmd.data.rsp)
+        // }       
        
 
       } catch (error) {
@@ -94,7 +107,7 @@ const Profile = () => {
               <div className='profile-picture-container'>
                 <Avatar />
               </div>
-              {userDetails.status == 1 ?
+              {userDetails.Hqrs == 1 ?
               <>
               <div className='basic-info-container'>
                   <section className='basic-info-container-section'>
@@ -102,20 +115,23 @@ const Profile = () => {
                     <p id='profile-user-email'>{userDetails.email}</p>
                   </section>
                   <fieldset className='basic-info-container-section'>
-                    <legend>Smd And Main Subject</legend>
-                    <p id='profile-user-smdid'>{capitalize(smd.name)}</p>
-                    <p id='profile-user-divisionid'>{capitalize(mainG.name)}</p>
+                    <legend>Your SMD</legend>
+                    <p id='profile-user-smdid'>{capitalize(smd.name)}</p>                  
                   </fieldset>
                   <fieldset className='basic-info-container-section'>
+                    <legend>Your Institute</legend>                
+                    <p id='profile-user-divisionid'>{capitalize(institute.name)}</p>
+                  </fieldset>
+                  {/* <fieldset className='basic-info-container-section'>
                     <legend>Interested Groups</legend>
                     <div className='basic-info-interested-tag-container'>
                       {group.map(interestedSubject => <InterestedTag data={interestedSubject.name} />)}
                     </div>
-                  </fieldset>
+                  </fieldset> */}
                 </div>
               </>
               :
-              userDetails.status == 2  ?
+              userDetails.Hqrs == 2  ?
               <>
               <div className='basic-info-container'>
                   <section className='basic-info-container-section'>
@@ -126,12 +142,12 @@ const Profile = () => {
                     <legend>Your SMD</legend>
                     <p id='profile-user-smdid'>{capitalize(smd.name)}</p>                    
                   </fieldset>
-                  <fieldset className='basic-info-container-section'>
+                  {/* <fieldset className='basic-info-container-section'>
                     <legend>Subjects</legend>
                     <div className='basic-info-interested-tag-container'>
                       {group.map(interestedSubject => <InterestedTag data={interestedSubject.name}/>)}
                     </div>
-                  </fieldset>
+                  </fieldset> */}
                 </div>
               </>
               :
@@ -186,13 +202,13 @@ const Profile = () => {
     </div>
   )
 }
-function InterestedTag({ data }) {
-  return(
-    <div className='interested-tag'>
-      <p>{data}</p>
-    </div>
-  )
-}
+// function InterestedTag({ data }) {
+//   return(
+//     <div className='interested-tag'>
+//       <p>{data}</p>
+//     </div>
+//   )
+// }
 
 function ActivitiesMenu({ userDetails, currentUserDetails }) {
   const [selectedActivity, setSelectedActivity] = useState('questions');

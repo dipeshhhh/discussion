@@ -38,6 +38,7 @@ const Question = () => {
   const [tempsmdid, setTempsmdid] = useState('') 
   const [institute, setInstitute]= useState([])
   const [Imember, setImember] = useState('')
+  const [Imembers, setImembers] = useState('')
   const [subject, setSubject] = useState([])
   const [subjectid, setSubjectid] = useState([])
   const [smd, setSmd] = useState('')
@@ -247,13 +248,14 @@ const Question = () => {
 
         }
         else if(hinstitute == false)
-        {
-          if(!institute)
+        { 
+          
+          if(institute.length<1)
           {
             setError("Please Select the Institute");
           setLoading(false);
           }
-          else if(!Imember)
+          else if(Imember.length<1)
           {
             setError("Please Select the Member");
             setLoading(false);
@@ -287,14 +289,16 @@ const Question = () => {
           }
           
         }
+        else
+        {
+          setError("Please Select the Option");
+          setLoading(false);          
+        }
         
        
    
       }
-    } 
-    
-
-
+    }    
    /**************Handle user Regarding the Subjects **************/ 
      
    const groupMember= (e)=>{
@@ -369,8 +373,7 @@ const Question = () => {
 
       }
       else if(Ssubject == 1)
-      { 
-        console.log(subject)
+      {         
         let val = []
         for(let i=0;i<subject.length;i++)
         {          
@@ -386,9 +389,8 @@ const Question = () => {
       }
       else if(Ssubject == 3)
       {
-        setSmdid('')       
-        setImember([])       
-
+        setImember([])  
+        setSmdid('')   
       }
 
    }
@@ -418,10 +420,11 @@ const Question = () => {
       setHsubject(true)
       setSmdid('')
       setSubjectid('')
+      setImember([])
+      setInstitute([])
     }
 
    }
-
 
    const handleSubject = async (e) =>{     
     
@@ -436,12 +439,9 @@ const Question = () => {
           const user = await axios.get('/user-group-institute',{params:{id_1:id,id_2:auth}}) 
           setMstatus(false)        
           setInstitute(user.data.resp._id) 
-          setImember(user.data.rsp)
+          setImembers(user.data.rsp)
     }
-   } 
-
-
-   console.log(member)
+   }   
   return (
    
     <div className='add-question'>
@@ -659,7 +659,7 @@ const Question = () => {
       hidden={mStatus}     
       multiple      
       id="checkboxes-tags-demo"      
-      options={members}
+      options={Imembers}
       onChange={handleMember}
       disableCloseOnSelect
       getOptionLabel={(option) => option.name}

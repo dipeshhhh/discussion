@@ -10,40 +10,13 @@ const main = ({questions,status}) => {
  
   return (
     <div className='main'>
-      <div className='main-container'>
-        {
-          status === 1 ?
-          <>
+      <div className='main-container'> 
            <div className='main-top'>
         <h2>All Questions</h2>
         <NavLink to="/add-question">
           <button>New Question</button>
           </NavLink>
-        </div>
-
-          </>
-          :
-          status === 2 ?
-          <>
-           <div className='main-top'>
-        <h2>All Questions</h2>
-        <NavLink to="/add-question">
-          <button>New Question</button>
-          </NavLink>
-        </div>
-          </>
-          :
-          <>
-           <div className='main-top'>
-        <h2>All Questions</h2>
-        <NavLink>
-          
-          </NavLink>
-        </div>
-          </>
-          
-        }       
-       
+        </div>    
 
         <div className='questions'>
          

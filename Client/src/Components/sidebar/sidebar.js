@@ -17,6 +17,7 @@ const sidebar = () => {
   }
 
   const [ssmd, setSsmd] = useState([])
+  const [institute, setInstitute] = useState('')
   const [group, setGroup] = useState('');
   const [mainG, setMainG]= useState('');
   const [detail, setDetail] = useState('')
@@ -35,14 +36,7 @@ const sidebar = () => {
     userDetails.then(
       
       async function(value)
-      {    
-        if(value.status == 1 || value.status == 2)
-        {
-          const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`)        
-           setDetail(value)   
-
-        setSmd(Smd_Name.data)
-       
+      {
         async function getGroup() {
           await axios.get(`/group/${auth}`)
             .then(res => setGroup(res))
@@ -55,14 +49,28 @@ const sidebar = () => {
         }   
           getGroup();
           getMain(); 
+          setDetail(value)  
 
-        }        
-        else if(value.status == 3)
+        if(value.Hqrs == 1)
         {
-          const Smd_Name = await axios.get('/Group')          
-          setSsmd(Smd_Name.data)          
-        }            
-         
+          if(value.status == 1)
+        {
+          const Inst_Name = await axios.get(`/InstituteName/${value.institute}`)      
+          setInstitute(Inst_Name.data)      
+        }
+        else if(value.status == 2 || value.status == 3)
+        {
+          const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`)         
+          setSmd(Smd_Name.data)
+
+        } 
+             }
+        else if(value.Hqrs == 2)
+        {      
+          const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`)         
+          setSmd(Smd_Name.data)
+
+        }       
 
       },
       function(error)
@@ -130,11 +138,77 @@ const sidebar = () => {
             <p>Home</p>
           </NavLink>
         </div>
-
-            {
-              detail.status ==1 ?
+        {
+          detail.Hqrs == 1 && 
+                      
+          (
+            detail.status ==1 ?
               <>
+              <div className='sidebar-option-category-container'>
+                <small className="sidebar-option-category">Your Institute</small>
+                <NavLink className='sidebar-option'>
+                  <PeopleIcon />
+                  <p>{institute.name}</p>
+                </NavLink>
+              </div>
                <div className='sidebar-option-category-container'>
+                <small className="sidebar-option-category">Your Subject</small>
+                <NavLink to='/index' className='sidebar-option'>
+                  <PeopleIcon />
+                  <p>{mainG.name}</p>
+                </NavLink>
+              </div>
+                  <div className='sidebar-option-category-container'>
+                  <small className="sidebar-option-category">Your favourite subject</small>
+                  {group.data?.map((resp) =>
+                    <NavLink className='sidebar-option'>
+                      <PeopleIcon />
+                      <p>{resp.name}</p>
+                    </NavLink>
+                  )}
+                </div>
+              </>
+              :              
+              <>              
+              <div className='sidebar-option-category-container'>
+                <small className="sidebar-option-category">Your SMD</small>
+                <NavLink className='sidebar-option'>
+                  <PeopleIcon />
+                  <p>{smd.name}</p>
+                </NavLink>
+              </div>
+              <div className='sidebar-option-category-container'>
+                <small className="sidebar-option-category">Your Subject</small>
+                <NavLink to='/index' className='sidebar-option'>
+                  <PeopleIcon />
+                  <p>{mainG.name}</p>
+                </NavLink>
+              </div>
+                           <div className='sidebar-option-category-container'>
+                  <small className="sidebar-option-category">Your favourite subject</small>
+                  {group.data?.map((resp) =>
+                    <NavLink className='sidebar-option'>
+                      <PeopleIcon />
+                      <p>{resp.name}</p>
+                    </NavLink>
+                  )}
+                </div>
+              </>             
+             )
+              
+        }
+        {          
+          detail.Hqrs == 2 &&
+          (        
+           <>
+           <div className='sidebar-option-category-container'>
+                <small className="sidebar-option-category">Your SMD</small>
+                <NavLink className='sidebar-option'>
+                  <PeopleIcon />
+                  <p>{smd.name}</p>
+                </NavLink>
+              </div>
+              <div className='sidebar-option-category-container'>
                 <small className="sidebar-option-category">Your Subject</small>
                 <NavLink to='/index' className='sidebar-option'>
                   <PeopleIcon />
@@ -151,34 +225,10 @@ const sidebar = () => {
                     </NavLink>
                   )}
                 </div>
+           </>
 
-              </>
-              :
-
-              detail.status ==2 ?
-              <>              
-              <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your SMD</small>
-                <NavLink className='sidebar-option'>
-                  <PeopleIcon />
-                  <p>{smd.name}</p>
-                </NavLink>
-              </div>
-
-              </>
-              :
-              <>   
-               <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">SMD's</small>
-                {ssmd.map((resp)=>
-                <NavLink className='sidebar-option'>
-                <PeopleIcon />
-                <p>{resp.name}</p>
-                </NavLink>
-                )}        
-              </div>
-               </>
-            }      
+          )
+        }                
       </div>
     </div>
   )

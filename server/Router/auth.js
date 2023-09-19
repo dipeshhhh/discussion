@@ -237,7 +237,7 @@ router.post('/SignAdmin', async (req, res) => {
 //User Details fetch 
 router.get('/user-detail/:id',(req,res)=>{
 
-    Users.findOne({email:req.params.id},{status:1, starred:1,Smdid:1,Divisionid:1,intrested:1}).then((resp)=>{
+    Users.findOne({email:req.params.id},{status:1, starred:1,Smdid:1,Divisionid:1,institute:1,intrested:1,Hqrs:1}).then((resp)=>{
         res.status(200).send(resp)
     }).catch((e)=>{
        res.status(400).send(e)
