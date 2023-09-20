@@ -117,11 +117,19 @@ const Question = () => {
               setMembers(M_Data.data.rsp)
               setUser(M_Data.data.resp.name)              
 
-                const response =  await axios.get('/smd-group',{params:{id_1:value.Smdid}})              
-               
+                const response =  await axios.get('/smd-group',{params:{id_1:value.Smdid}})            
                 setSubject(response.data.rsp)
                 setSmd(response.data.resp)                
                 setTempsmdid(response.data.resp._id) 
+            }
+            else
+            {
+              const M_Data = await axios.get('/user-group',{params:{id_1:value.Divisionid,id_2:auth}})            
+              setGroupidd(value)                                                   
+              setMembers(M_Data.data.rsp)
+              setUser(M_Data.data.resp.name)
+              const Smd_data = await axios.get('/smddetail')
+              setSmd(Smd_data.data)
             }
       
             },
@@ -177,127 +185,132 @@ const Question = () => {
     data.append('Members', member)
     data.append('smdids',smdid)
   
+    console.log(institute)
+
+    console.log(smdid)
+
+
     // console.log('Member:'+member)
     // console.log('smdid:'+smdid)   
 
     // console.log('Imember:'+Imember)
 
     // console.log('subject id:'+subjectid)
-    
-    if(!title || !body)
-      {       
-        setError("Something missing");
-        setLoading(false);
-      }
-      else if (filter.isProfane(title) == true)
-      {
-        setError('You Should Remove bad words from Title');
-        setLoading(false);
-      }
-      else if (filter.isProfane(body) == true)
-      {
-        setError('You Should Remove bad words from body');
-        setLoading(false);
-      }      
-      else if (t_clearList.length > 25)
-      {      
-      setError("You Should write only 25 Word in Title");
-      setLoading(false);
-      }
-      else if(clearList.length >150)
-      {
-        setError("You Should write only 150 Word in Body");
-      setLoading(false);
-      } 
+     
+    // if(!title || !body)
+    //   {       
+    //     setError("Something missing");
+    //     setLoading(false);
+    //   }
+    //   else if (filter.isProfane(title) == true)
+    //   {
+    //     setError('You Should Remove bad words from Title');
+    //     setLoading(false);
+    //   }
+    //   else if (filter.isProfane(body) == true)
+    //   {
+    //     setError('You Should Remove bad words from body');
+    //     setLoading(false);
+    //   }      
+    //   else if (t_clearList.length > 25)
+    //   {      
+    //   setError("You Should write only 25 Word in Title");
+    //   setLoading(false);
+    //   }
+    //   else if(clearList.length >150)
+    //   {
+    //     setError("You Should write only 150 Word in Body");
+    //   setLoading(false);
+    //   } 
                           
      
-      else
-      {
-        if(hsubject == false || groupidd.status == 1)
-        {
-           if(member.length<1)
-        {
-          setError("Please Select the Group Member");
-          setLoading(false);
-        } 
-        else
-        {               
-        if(window.confirm('Please confirm for Post'))
-        {       
-          try {
-            axios.post("/Question",data).then(res => {  
+    //   else
+    //   {
+    //     if(hsubject == false || groupidd.status == 1)
+    //     {
+    //        if(member.length<1)
+    //     {
+    //       setError("Please Select the Group Member");
+    //       setLoading(false);
+    //     } 
+    //     else
+    //     {               
+    //     if(window.confirm('Please confirm for Post'))
+    //     {       
+    //       try {
+    //         axios.post("/Question",data).then(res => {  
                 
-                  toast.success('Post uploaded sucessfully')
-                  navigate('/')
-                  setLoading(false)
+    //               toast.success('Post uploaded sucessfully')
+    //               navigate('/')
+    //               setLoading(false)
   
-                })
-          }
-          catch (err) {
-            console.log(err)
-            setLoading(false);
-          }
+    //             })
+    //       }
+    //       catch (err) {
+    //         console.log(err)
+    //         setLoading(false);
+    //       }
           
-        }
-        else 
-        {
-          setLoading(false);
-        }
-        }
+    //     }
+    //     else 
+    //     {
+    //       setLoading(false);
+    //     }
+    //     }
 
 
-        }
-        else if(hinstitute == false)
-        { 
+    //     }
+    //     else if(hinstitute == false)
+    //     { 
           
-          if(institute.length<1)
-          {
-            setError("Please Select the Institute");
-          setLoading(false);
-          }
-          else if(Imember.length<1)
-          {
-            setError("Please Select the Member");
-            setLoading(false);
-          }
-          else
-          {
-            if(window.confirm('Please confirm for Post'))
-        {       
-          try {
-            axios.post("/Question",data).then(res => {
+    //       if(institute.length<1)
+    //       {
+    //         setError("Please Select the Institute");
+    //       setLoading(false);
+    //       }
+    //       else if(Imember.length<1)
+    //       {
+    //         setError("Please Select the Member");
+    //         setLoading(false);
+    //       }
+    //       else
+    //       {
+    //         if(window.confirm('Please confirm for Post'))
+    //     {       
+    //       try {
+    //         axios.post("/Question",data).then(res => {
   
                 
-                  toast.success('Post uploaded sucessfully')
-                  navigate('/')
-                  setLoading(false)
+    //               toast.success('Post uploaded sucessfully')
+    //               navigate('/')
+    //               setLoading(false)
   
-                })
-          }
-          catch (err) {
-            console.log(err)
-            setLoading(false);
-          }
+    //             })
+    //       }
+    //       catch (err) {
+    //         console.log(err)
+    //         setLoading(false);
+    //       }
           
-        }
-        else 
-        {
-          setLoading(false);
-        }
+    //     }
+    //     else 
+    //     {
+    //       setLoading(false);
+    //     }
 
 
-          }
+    //       }
           
-        }
-        else
-        {
-          setError("Please Select the Option");
-          setLoading(false);          
-        }
+    //     }
+    //     else
+    //     {
+    //       setError("Please Select the Option");
+    //       setLoading(false);          
+    //     }
         
        
    
-      }
+    //   }
     }    
    /**************Handle user Regarding the Subjects **************/ 
      
@@ -349,8 +362,7 @@ const Question = () => {
    const [selectMember , setSelectMember] = useState('')
  
 
-   const get_subject = (e)=>{
-   
+   const get_Instsitute = (e)=>{   
   const val = e.map((resp)=>(resp._id)) 
   setInstitute(val)
    setImember(val)  
@@ -397,10 +409,8 @@ const Question = () => {
 
    const [hsubject, setHsubject] = useState(true)
    const [hinstitute, setHInstitute] = useState(true)
-   const Select_Type = (e)=>{  
-    
-    
-    
+   const [hsmd, setHSmd] = useState(true)
+   const Select_Type = (e)=>{   
     if(e.target.value == 1)
     {
       setHsubject(false)
@@ -441,7 +451,134 @@ const Question = () => {
           setInstitute(user.data.resp._id) 
           setImembers(user.data.rsp)
     }
+   }  
+  
+  /*************SMD's and Subject selection for Special Rights****************/ 
+ 
+ const Select_Type1 = (e)=>{
+    
+  if(e.target.value == 1)
+  {
+    setHsubject(false)
+    setHInstitute(true)
+    setHSmd(true)
+    setSubjectid(groupidd.Divisionid)
+    setSmdid('')  
+    setImember([])
+    setInstitute([])    
+  }
+  else if(e.target.value == 2)
+  {    
+    setHSmd(false)
+    setHInstitute(true)
+    setHsubject(true)
+    setSubjectid('')
+  }
+  else
+  {
+    setHInstitute(true)
+    setHsubject(true)
+    setHSmd(true)
+    setSmdid('')
+    setSubjectid('')
+    setImember([])
+    setInstitute([])
+  }
+
+ }
+
+ const [selectSmd, setSelectSmd] = useState('')
+ const Select_SMD = async(e)=>{    
+  setSelectSmd(e.target.value)
+    if(e.target.value == 1)
+    {
+      const inst_data = await axios.get('/institute')
+      let smdData = []
+      let instData = []
+      for(let i=0;i<smd.length;i++)
+      {
+        smdData.push(smd[i]._id)
+      }
+    setSmdid(smdData)
+     
+      for(let i=0;i<inst_data.data.length;i++)
+      {
+        instData.push(inst_data.data[i]._id)
+      }
+    setInstitute(instData)
+    setImember(instData)      
+      
+      
+    }  
+    else if(e.target.value == 2)
+    {
+      console.log('Multiple SMD Selection')
+    }
+    else if(e.target.value == 3)
+    {
+      console.log('Specific SMD Selection')
+    }
+    else
+    {
+    setSmdid('')
+    setSubjectid('')
+    setImember([])
+    setInstitute([])
+    }
+
+ }
+
+ const get_Smd = async(e)=>{   
+  const val = e.map((resp)=>(resp._id))
+  let inst =[]
+  if(val.length>0)
+  {
+    
+    const int_data = await axios.get(`/Smdid/${val}`)
+
+    for(let i=0;i<int_data.data.length;i++)
+    {
+      let len = int_data.data[i].division
+      
+      for(let j=0;j<len.length;j++)
+      {
+        inst.push(len[j]) 
+      }
+
+    }
+    setSmdid(val)
+    setInstitute(inst)
+    setImember(inst)
+
+    }
+
+    else
+    {
+      setSmdid()
+      setInstitute([])
+      setImember([])
+
+    }
+  
+
+ 
+  //     if(int_data)
+  //     {
+  //       console.log(int_data.message)
+  //     }
+  //     else
+  //     {
+  //         console.log('kuch nahi hai')
+  //     }
    }   
+
+//  console.log('SMD:'+smdid)
+
+//  console.log('Institute:'+institute)
+
+//  console.log('Imember:'+Imember)
+  /*****************************************************************************/
+   
   return (
    
     <div className='add-question'>
@@ -485,19 +622,22 @@ const Question = () => {
               </h3>           
 
             </>
-            :  
+            :
+            groupidd.status === 1 ?  
             <>
                 <h3>
                  Your SMD is : {smd.name}
                 </h3>
             </>
-          }
-    
-             
+            :
+            <>            
+            <h3>
+            Your SMD are: You have rights for all SMD's
+                </h3>
+            </>
+          }             
           </div>
-        </div> 
-
-         
+        </div>   
 
 {
   groupidd.status === 1?
@@ -544,12 +684,9 @@ const Question = () => {
         <TextField {...params} label="Search Group Member Name" placeholder="Favorites" />
       )}
     />
-
-
-
-
   </>
   :
+  groupidd.status === 2 ?
   <>
   <div className='input-field'>    
     <select name="division" onChange={(e)=>Select_Type(e)} id="smd">
@@ -557,8 +694,7 @@ const Question = () => {
     <option value='1'>Subject</option>                                                        
     <option value='2'>SMD</option>       
     </select>
-</div>  
-
+</div>
  {
   hsubject == false && 
   <>
@@ -610,10 +746,8 @@ const Question = () => {
 
 
 {
-  hinstitute == false && 
-
-  <>
-  
+  hinstitute == false &&
+  <>  
   <div className='input-field'>    
     <select name="division" onChange={(e)=>Select_Member(e)} id="smd">
     <option value=''>--Select Institute--</option> 
@@ -633,7 +767,7 @@ const Question = () => {
       labelField='name'
       valueField='name'                           
        multi                                                                                                                      
-      onChange={value =>get_subject(value)                              
+      onChange={value =>get_Instsitute(value)                              
         }
       />
         </div> }
@@ -687,20 +821,97 @@ const Question = () => {
 
 }
         </>
-    }    
-
-  
+    }
   </>
+  :
+  <>
+  <div className='input-field'>    
+    <select name="division" onChange={(e)=>Select_Type1(e)} id="smd">
+    <option value=''>--Select options--</option> 
+    <option value='1'>Subject</option>                                                        
+    <option value='2'>SMD</option>       
+    </select>
+  </div>
+  {
+  hsubject == false && 
+  <>
+  <div className='question-option'>
+          <div className='group'>
+            <h3>Member</h3>
+           
+               <small>Please Select the Member</small>              
+             <select onChange={(e)=>{groupMember(e)}}>
+           <option value=''>--Select Group--</option>             
+              <option value='0'>To All Member Subject</option>
+              <option value='1'>To Specific Member Subject</option>       
+              </select>          
+          </div>
+        </div>   
+    
+      <Autocomplete      
+            hidden={gStatus}
+            multiple      
+            id="checkboxes-tags-demo"      
+            options={members}
+            disableCloseOnSelect
+            onChange={handleMemberForPrincipelSci}
+            getOptionLabel={(option) => option.name}
+            renderOption={(props, option, { selected }) => (
+                
+              <li {...props}>
+                <Checkbox                        
+                  icon={icon}           
+                  checkedIcon={checkedIcon}
+                  style={{ marginRight: 8 }}
+                  checked={selected}
+                  name={option.email}
+                />                  
+                {option.name}
+              </li>
+            )}
+            style={{ width: 500 }}
+            renderInput={(params) => (
+              <TextField {...params} label="Search Group Member Name" placeholder="Favorites" />
+            )}
+          />
+        </>
 
-}
+    }
+    {
+        hsmd == false &&
+        <>        
+        <div className='input-field'>    
+          <select name="division" onChange={(e)=>Select_SMD(e)} id="smd">
+          <option value=''>--Select --</option> 
+          <option value='1'>All SMD</option>                                                        
+          <option value='2'>Multiple SMD</option>
+          <option value='3'>Specific SMD Institute </option>   
+          </select>
+      </div> 
+
+            {selectSmd == 2 &&
+
+        <div className='input-field'>
+            <p>Select SMD</p>                           
+            <Select        
+          name='select'
+          options={smd}
+          labelField='name'
+          valueField='name'                           
+          multi                                                                                                                      
+          onChange={value =>get_Smd(value)                              
+            }
+          />
+            </div> }
 
 
-
-                   
-
+      </>  
         
 
+    }
+        </>      
 
+}
         <div className='question-option'>
           <div className='attachment'>
             <h3>Attach file (only PDF with 5 MB)</h3>

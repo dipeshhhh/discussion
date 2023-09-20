@@ -144,6 +144,23 @@ router.get('/SmdName/:id', (req, res) => {
   })
 })
 
+
+router.get('/Smdid/:id', (req, res) => {
+
+const id = req.params.id
+
+const idd = id.split(',')
+
+  SmdDivision.find({_id:idd},{_id:0,name:1,division:1}).then((resp) => {
+    res.status(200).send(resp)
+  }).catch((e) => {
+    res.status(400).send(e)
+  })
+})
+
+
+
+
 router.get('/InstituteName/:id', (req, res) => { 
   const id = new ObjectId(req.params.id)
   Institute.findOne({_id:id},{_id:0,name:1}).then((resp) => {
