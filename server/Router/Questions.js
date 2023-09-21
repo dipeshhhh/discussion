@@ -351,39 +351,57 @@ router.get('/Q_download/:id', (req, resp) => {
 
 
 /************************Delete Question Thread After 30 days if no activity in Post************************************/
-// crone.schedule('1 * * * *', ()=>{
-
-// })
-
 const getdata = async () => {
-
-
-
-  Question.find({}, { created_at: 1, file: 1 }).then((resp) => {
+  Question.find({}, {updated_at: 1, file: 1 }).then((resp) => {
 
     const time = new Date()
-
+    
     let time_diff = []
     let day_diff = []
     let day_id = []
-    let file = []
+    let file = []  
 
     for (i = 0; i < resp.length; i++) {
-      time_diff = time.getTime() - resp[i].created_at.getTime()
+      time_diff = time.getTime() - resp[i].updated_at.getTime()
 
       day_diff.push(Math.ceil(time_diff / (1000 * 60 * 60 * 24)))
 
-      if (day_diff[i] > 5) {
+      if (day_diff[i] > 30) {
         day_id.push(resp[i]._id)
 
         file.push(resp[i].file)
       }
-    }
-
+    }  
     for (z = 0; z < day_id.length; z++) {
-      if (file[z]) {
+      if (file[z]) { 
+        
+        Answer.find({question_id:day_id[z]}).then((resp)=>{
+          for(let i=0;i<resp.length;i++)
+          {
+            
+            if(resp[i].file)
+            {
+              fs.unlinkSync(resp[i].file)
+              Answer.deleteMany({question_id:resp[i].question_id}).then(() => {
+                console.log('file has been deleted')
+              })
+                .catch((e) => {
+                  console.log(e)
+                })
+            }
+            else
+            {
+              Answer.deleteMany({question_id:resp[i].question_id}).then(() => {
+                console.log('file has been deleted')
+              })
+                .catch((e) => {
+                  console.log(e)
+                })
+            }                   
+          }
+         
+      })
         fs.unlinkSync(file[z])
-
         Question.deleteMany({ _id: day_id[z] }).then(() => {
           console.log('file has been deleted')
         })
@@ -391,36 +409,44 @@ const getdata = async () => {
             console.log(e)
           })
       }
-
       else {
+
+        Answer.find({question_id:day_id[z]}).then((resp)=>{
+          for(let i=0;i<resp.length;i++)
+          {
+            
+            if(resp[i].file)
+            {
+              fs.unlinkSync(resp[i].file)
+              Answer.deleteMany({question_id:resp[i].question_id}).then(() => {
+                console.log('file has been deleted')
+              })
+                .catch((e) => {
+                  console.log(e)
+                })
+            }
+            else
+            {
+              Answer.deleteMany({question_id:resp[i].question_id}).then(() => {
+                console.log('file has been deleted')
+              })
+                .catch((e) => {
+                  console.log(e)
+                })
+            }                   
+          }         
+      })         
         Question.deleteMany({ _id: day_id[z] }).then(() => {
           console.log('file has been deleted')
         })
           .catch((e) => {
             console.log(e)
           })
-
-      }
-    }
-
-  })
-
-
-
-}
+      }}
+  })}
 
 getdata()
 
 /*************************************************************************/
-
-
-
-
-
-
-
-
-
-
 module.exports = router;
 

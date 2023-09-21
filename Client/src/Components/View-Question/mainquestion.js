@@ -49,16 +49,6 @@ const Mainquestion = (details) => {
 
   /**********************Answer Attachment download******************************/
 
-  const downloadanswer = (e) => {
-    Axios({
-      url: `/A_download/${e}`,
-      method: 'GET',
-      responseType: 'blob',
-    }).then((resp) => {
-      FileDownload(resp.data, 'file.pdf');
-    });
-  };
-
   const userData = Cookies.get('auth')
   let auth = ''
   if (userData) {
@@ -75,6 +65,15 @@ const Mainquestion = (details) => {
     setBody(value);
   };
 
+  const downloadanswer = (e) => {
+    Axios({
+      url: `/A_download/${e}`,
+      method: 'GET',
+      responseType: 'blob',
+    }).then((resp) => {
+      FileDownload(resp.data, 'file.pdf');
+    });
+  };
   /*************code Handle the file uploading file*******************/
   const handleFileChange = (event) => {
     event.preventDefault();
@@ -160,8 +159,7 @@ const Mainquestion = (details) => {
 
             {
               detail.file ?
-
-                <a onClick={(e) => download(detail._id)}>
+                              <a onClick={(e) => download(detail._id)}>
                   <FileDownloadIcon />
                 </a>
                 :
@@ -231,9 +229,9 @@ const Mainquestion = (details) => {
         <div className="all-questions">
           <p>Number of Comments: {answerdata?.length}</p>
           <div className="comments-container">
-            {answerdata?.map((resp) => (
-              <Comment key={resp._id} data={resp} />
-            ))}
+            {answerdata?.map((resp) => (              
+              <Comment key={resp._id} data={resp} />              
+            ))}            
           </div>
         </div>
       </div>
@@ -336,11 +334,12 @@ function Comment(props) {
     // NOTE: you might want to convert this to js FormData()
     const data = {
       replied_to: [resp._id],
+      question_id:resp.question_id,
       body: bodyReply,
       auth: currentUserEmail,
       created_at: new Date(),
       replies: []
-    }
+    }    
 
     if (!bodyReply) {
       setErrorReply('Please fill in the Body Part');
@@ -457,6 +456,7 @@ function Comment(props) {
                 <Reply
                   key={reply._id}
                   id={reply._id}
+                  question_id={resp.question_id}
                   replied_to={reply.replied_to}
                   body={reply.body}
                   auth={reply.auth}

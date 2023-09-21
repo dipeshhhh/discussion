@@ -95,7 +95,7 @@ router.get('/Answer-detail/:id', (req, res) => {
 /*****************************************************************************/
 
 /****************Patch Answer from Answer collection for replies************************/
-router.patch('/Answer-reply/:id', (req, res) => {
+router.patch('/Answer-reply/:id', async(req, res) => {
 
     const id = new ObjectId(req.params.id)
 
@@ -107,8 +107,8 @@ router.patch('/Answer-reply/:id', (req, res) => {
         created_at: req.body.created_at,
     }
 
+    const postdata = await Question.updateOne({ _id:req.body.question_id},{$set:{updated_at:req.body.created_at}}); 
     const newReply = new Reply(replyData);
-
     Answer.findOneAndUpdate(
         { _id: id },
         { $push: { comments: newReply } },
@@ -129,8 +129,9 @@ router.patch('/Reply-reply/:id', async (req, res) => {
         replies: req.body.replies,
         created_at: req.body.created_at,
     };
+   const newReply = new Reply(replyData);
 
-    const newReply = new Reply(replyData);
+
 
     try {
         let answer = await Answer.findById(id);
@@ -153,8 +154,9 @@ router.patch('/Reply-reply/:id', async (req, res) => {
         targetReply.push(newReply);
 
         //   answer = await answer.save(); // This did not worked
-
+        await Question.updateOne({ _id:req.body.question_id},{$set:{updated_at:req.body.created_at}}); 
         await Answer.updateOne({ _id: id }, answer);
+
 
         res.status(200).send('Reply added successfully');
     } catch (error) {

@@ -12,7 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 
-function Reply({ id, replied_to, body, auth, replies, created_at }) {
+function Reply({ id, replied_to, question_id, body, auth, replies, created_at }) {
   const [expanded, setExpanded] = useState(false);
 
   const [loadingReply, setLoadingReply] = useState(false);
@@ -75,6 +75,7 @@ function Reply({ id, replied_to, body, auth, replies, created_at }) {
     const data = {
       replied_to: newRepliedToArray,
       body: bodyReply,
+      question_id:question_id,   
       auth: currentUserEmail,
       created_at: new Date(),
       replies: []
@@ -86,7 +87,7 @@ function Reply({ id, replied_to, body, auth, replies, created_at }) {
       setErrorReply('Please fill in the Body Part');
       setLoadingReply(false);
     } else {
-      if (window.confirm('Please click to confirm Reply')) {
+      if (window.confirm('Please click to confirm Reply')) {        
         Axios.patch(`/Reply-reply/${data.replied_to[0]}`, data).then((res) => {
           if (res) {
             toast.success('Reply Successful');
