@@ -72,17 +72,16 @@ router.get('/smddetail', (req, res) => {
     res.status(400).send(e)
   })
 })
+
+router.get('/smddetail1', (req, res) => {
+  SmdDivision.find({division:{$ne:[]}}, { name: 1 }).then((resp) => {
+    res.status(200).send(resp)
+  }).catch((e) => {
+    res.status(400).send(e)
+  })
+})
 //Dvision details fetch
 router.get('/smddetail/:id', (req, res) => {
-
-  // SmdDivision.find({ name: req.params.name }).then((resp) => {
-
-  //   console.log(resp)
-  //   res.status(200).send(resp)
-
-  // })
-
-
   SmdDivision.find({ name: req.params.name }, { _id: 0, division: 1 }).limit(1).then((resp) => {
 
     res.status(200).send(resp)

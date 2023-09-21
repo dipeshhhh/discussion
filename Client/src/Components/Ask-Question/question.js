@@ -42,6 +42,7 @@ const Question = () => {
   const [subject, setSubject] = useState([])
   const [subjectid, setSubjectid] = useState([])
   const [smd, setSmd] = useState('')
+  const [smd1,setSmd1] = useState('')
   const [groupidd,setGroupidd] = useState('')
   const [body, setBody] = useState('')
   const [file,setFile] = useState('')
@@ -117,10 +118,14 @@ const Question = () => {
               setMembers(M_Data.data.rsp)
               setUser(M_Data.data.resp.name)              
 
-                const response =  await axios.get('/smd-group',{params:{id_1:value.Smdid}})            
-                setSubject(response.data.rsp)
-                setSmd(response.data.resp)                
-                setTempsmdid(response.data.resp._id) 
+              const response =  await axios.get('/smd-group',{params:{id_1:value.Smdid}})            
+              setSubject(response.data.rsp)
+              setSmd(response.data.resp)                
+              setTempsmdid(response.data.resp._id)              
+              if(response.data.resp.division.length == 0)
+              {
+                setHSmd(false)
+              }                
             }
             else
             {
@@ -130,6 +135,10 @@ const Question = () => {
               setUser(M_Data.data.resp.name)
               const Smd_data = await axios.get('/smddetail')
               setSmd(Smd_data.data)
+
+              const Smd_data1 = await axios.get('/smddetail1')
+              setSmd1(Smd_data1.data)
+
             }
       
             },
@@ -184,133 +193,165 @@ const Question = () => {
     data.append('Imembers',Imember)
     data.append('Members', member)
     data.append('smdids',smdid)
-  
-    console.log(institute)
+    console.log('Member:'+member)
+    console.log('smdid:'+smdid)   
 
-    console.log(smdid)
+    console.log('Imember:'+Imember)
 
-
-    // console.log('Member:'+member)
-    // console.log('smdid:'+smdid)   
-
-    // console.log('Imember:'+Imember)
-
-    // console.log('subject id:'+subjectid)
+    console.log('subject id:'+subjectid)
      
-    // if(!title || !body)
-    //   {       
-    //     setError("Something missing");
-    //     setLoading(false);
-    //   }
-    //   else if (filter.isProfane(title) == true)
-    //   {
-    //     setError('You Should Remove bad words from Title');
-    //     setLoading(false);
-    //   }
-    //   else if (filter.isProfane(body) == true)
-    //   {
-    //     setError('You Should Remove bad words from body');
-    //     setLoading(false);
-    //   }      
-    //   else if (t_clearList.length > 25)
-    //   {      
-    //   setError("You Should write only 25 Word in Title");
-    //   setLoading(false);
-    //   }
-    //   else if(clearList.length >150)
-    //   {
-    //     setError("You Should write only 150 Word in Body");
-    //   setLoading(false);
-    //   } 
+    if(!title || !body)
+      {       
+        setError("Something missing");
+        setLoading(false);
+      }
+      else if (filter.isProfane(title) == true)
+      {
+        setError('You Should Remove bad words from Title');
+        setLoading(false);
+      }
+      else if (filter.isProfane(body) == true)
+      {
+        setError('You Should Remove bad words from body');
+        setLoading(false);
+      }      
+      else if (t_clearList.length > 25)
+      {      
+      setError("You Should write only 25 Word in Title");
+      setLoading(false);
+      }
+      else if(clearList.length >150)
+      {
+        setError("You Should write only 150 Word in Body");
+      setLoading(false);
+      } 
                           
      
-    //   else
-    //   {
-    //     if(hsubject == false || groupidd.status == 1)
-    //     {
-    //        if(member.length<1)
-    //     {
-    //       setError("Please Select the Group Member");
-    //       setLoading(false);
-    //     } 
-    //     else
-    //     {               
-    //     if(window.confirm('Please confirm for Post'))
-    //     {       
-    //       try {
-    //         axios.post("/Question",data).then(res => {  
+      else
+      {
+        if(hsubject == false || groupidd.status == 1)
+        {
+           if(member.length<1)
+        {
+          setError("Please Select the Group Member");
+          setLoading(false);
+        } 
+        else
+        {               
+        if(window.confirm('Please confirm for Post'))
+        {       
+          try {
+            axios.post("/Question",data).then(res => {  
                 
-    //               toast.success('Post uploaded sucessfully')
-    //               navigate('/')
-    //               setLoading(false)
+                  toast.success('Post uploaded sucessfully')
+                  navigate('/')
+                  setLoading(false)
   
-    //             })
-    //       }
-    //       catch (err) {
-    //         console.log(err)
-    //         setLoading(false);
-    //       }
+                })
+          }
+          catch (err) {
+            console.log(err)
+            setLoading(false);
+          }
           
-    //     }
-    //     else 
-    //     {
-    //       setLoading(false);
-    //     }
-    //     }
+        }
+        else 
+        {
+          setLoading(false);
+        }
+        }
 
 
-    //     }
-    //     else if(hinstitute == false)
-    //     { 
-          
-    //       if(institute.length<1)
-    //       {
-    //         setError("Please Select the Institute");
-    //       setLoading(false);
-    //       }
-    //       else if(Imember.length<1)
-    //       {
-    //         setError("Please Select the Member");
-    //         setLoading(false);
-    //       }
-    //       else
-    //       {
-    //         if(window.confirm('Please confirm for Post'))
-    //     {       
-    //       try {
-    //         axios.post("/Question",data).then(res => {
+        }
+        else if(hinstitute == false)
+        {          
+          if(institute.length<1)
+          {
+            setError("Please Select the Institute");
+          setLoading(false);
+          }
+          else if(Imember.length<1)
+          {
+            setError("Please Select the Member");
+            setLoading(false);
+          }
+          else
+          {
+            if(window.confirm('Please confirm for Post'))
+        {       
+          try {
+            axios.post("/Question",data).then(res => {
   
                 
-    //               toast.success('Post uploaded sucessfully')
-    //               navigate('/')
-    //               setLoading(false)
+                  toast.success('Post uploaded sucessfully')
+                  navigate('/')
+                  setLoading(false)
   
-    //             })
-    //       }
-    //       catch (err) {
-    //         console.log(err)
-    //         setLoading(false);
-    //       }
+                })
+          }
+          catch (err) {
+            console.log(err)
+            setLoading(false);
+          }
           
-    //     }
-    //     else 
-    //     {
-    //       setLoading(false);
-    //     }
+        }
+        else 
+        {
+          setLoading(false);
+        }
 
 
-    //       }
+          }
           
-    //     }
-    //     else
-    //     {
-    //       setError("Please Select the Option");
-    //       setLoading(false);          
-    //     }
+        }
+        else if (hsmd == false)
+        {
+       
+          if(!smdid)
+          {
+            setError("Please Select the SMD");
+            setLoading(false);
+          }     
+          else
+          {
+            setError('')
+            if(window.confirm('Please confirm for Post'))
+        {       
+          try {
+            axios.post("/Question",data).then(res => {  
+                
+                  toast.success('Post uploaded sucessfully')
+                  navigate('/')
+                  setLoading(false)
+  
+                })
+          }
+          catch (err) {
+            console.log(err)
+            setLoading(false);
+          }
+          
+        }
+        else 
+        {
+          setLoading(false);
+        }
+
+
+          }
+
+
+          
+        }
+        else
+        {
+          setError("Please Select the Option");
+          setLoading(false);          
+        }
         
        
    
-    //   }
+      }
     }    
    /**************Handle user Regarding the Subjects **************/ 
      
@@ -372,8 +413,7 @@ const Question = () => {
 
       setSelectMember(e.target.value)
 
-      const Ssubject = e.target.value        
-
+      const Ssubject = e.target.value
       setMember([])
       setImember([])
       setInstitute([])
@@ -385,7 +425,8 @@ const Question = () => {
 
       }
       else if(Ssubject == 1)
-      {         
+      {      
+
         let val = []
         for(let i=0;i<subject.length;i++)
         {          
@@ -410,7 +451,10 @@ const Question = () => {
    const [hsubject, setHsubject] = useState(true)
    const [hinstitute, setHInstitute] = useState(true)
    const [hsmd, setHSmd] = useState(true)
-   const Select_Type = (e)=>{   
+   const Select_Type = (e)=>{
+    
+
+    
     if(e.target.value == 1)
     {
       setHsubject(false)
@@ -418,11 +462,22 @@ const Question = () => {
       setSubjectid(groupidd.Divisionid)      
     }
     else if(e.target.value == 2)
-    {
+    { 
+      if(hsmd == false)
+      {
       setSmdid(tempsmdid)
-      setHInstitute(false)
+      setHInstitute(true)
       setHsubject(true)
       setSubjectid('')
+      }
+      else
+      {
+        setSmdid(tempsmdid)
+        setHInstitute(false)
+        setHsubject(true)
+        setSubjectid('')
+      }
+     
     }
     else
     {
@@ -488,7 +543,13 @@ const Question = () => {
  }
 
  const [selectSmd, setSelectSmd] = useState('')
- const Select_SMD = async(e)=>{    
+ const Select_SMD = async(e)=>{ 
+
+    setSmdid('')
+    setSubjectid('')
+    setImember([])
+    setInstitute([])
+    setHInstitute(true)    
   setSelectSmd(e.target.value)
     if(e.target.value == 1)
     {
@@ -559,18 +620,30 @@ const Question = () => {
       setImember([])
 
     }
-  
+   }
+   
+ const handleSmd = async(e)=>{
 
- 
-  //     if(int_data)
-  //     {
-  //       console.log(int_data.message)
-  //     }
-  //     else
-  //     {
-  //         console.log('kuch nahi hai')
-  //     }
-   }   
+  setInstitute([])
+  setImember([])
+  setHInstitute(true)
+  setSelectMember('')
+  
+  if(!e.target.value)
+  {
+    setHInstitute(true)
+  }
+  else
+  {    
+    const response =  await axios.get('/smd-group',{params:{id_1:e.target.value}})            
+                setSubject(response.data.rsp)
+                setSmdid(e.target.value)                
+                setTempsmdid(response.data.resp._id)   
+                setHInstitute(false)
+
+  }
+
+ }  
 
 //  console.log('SMD:'+smdid)
 
@@ -623,7 +696,7 @@ const Question = () => {
 
             </>
             :
-            groupidd.status === 1 ?  
+            groupidd.status === 2 ?  
             <>
                 <h3>
                  Your SMD is : {smd.name}
@@ -746,13 +819,13 @@ const Question = () => {
 
 
 {
-  hinstitute == false &&
+  hinstitute == false && hsmd == true &&
   <>  
   <div className='input-field'>    
     <select name="division" onChange={(e)=>Select_Member(e)} id="smd">
     <option value=''>--Select Institute--</option> 
     <option value='1'>All SMD Institute</option>                                                        
-    <option value='2'>Multiple Instituteember</option>
+    <option value='2'>Multiple Institute </option>
     <option value='3'>Specific Institute Member</option>   
     </select>
 </div>   
@@ -903,6 +976,102 @@ const Question = () => {
             }
           />
             </div> }
+
+          {selectSmd == 3 &&
+          
+          <>
+          <div className='input-field'>
+          <p>Select SMD</p>
+          <select name="division" onChange={(e)=>handleSmd(e)} id="smd">
+          <option value=''>--Select SMD--</option> 
+          {
+            smd1.map((data)=>             
+                <option value={data._id}>{data.name}</option>
+            )
+          }                                                      
+         
+          </select>
+            </div>
+            {
+  hinstitute == false &&
+  <>  
+  <div className='input-field'>    
+    <select name="division" onChange={(e)=>Select_Member(e)} id="smd">
+    <option value=''>--Select Institute--</option> 
+    <option value='1'>All SMD Institute</option>                                                        
+    <option value='2'>Multiple Institute</option>
+    <option value='3'>Specific Institute Member</option>   
+    </select>
+</div>   
+
+  {  selectMember == 2 &&
+
+  <div className='input-field'>
+        <p>Select Institute</p>                           
+        <Select        
+      name='select'
+      options={subject}
+      labelField='name'
+      valueField='name'                           
+       multi                                                                                                                      
+      onChange={value =>get_Instsitute(value)                              
+        }
+      />
+        </div> }
+
+    {
+       selectMember == 3 &&
+        <>
+          <div className='input-field'>
+         <p>Select Institute</p>
+         <select name="division" onChange={(e)=>handleSubject(e)} id="smd">
+         <option value=''>--Select Institute--</option> 
+         {
+           subject.map((data)=>             
+               <option value={data._id}>{data.name}</option>
+           )
+         }                                                      
+        
+         </select>
+           </div>
+
+           <div className='input-field'>     
+      <Autocomplete
+      hidden={mStatus}     
+      multiple      
+      id="checkboxes-tags-demo"      
+      options={Imembers}
+      onChange={handleMember}
+      disableCloseOnSelect
+      getOptionLabel={(option) => option.name}
+      renderOption={(props, option, { selected }) => (
+           
+        <li {...props}>
+          <Checkbox                        
+            icon={icon}           
+            checkedIcon={checkedIcon}
+            style={{ marginRight: 8 }}
+            checked={selected}           
+            name={option.email}
+          />                  
+          {option.name}
+        </li>
+      )}
+      style={{ width: 500 }}
+      renderInput={(params) => (
+        <TextField {...params} label="Search Group Member Name" placeholder="Favorites" />
+      )}
+    />
+    </div>
+
+  </>
+
+}
+        </>
+    }
+
+          </>  
+          }  
 
 
       </>  
