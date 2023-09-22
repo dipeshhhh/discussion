@@ -22,6 +22,8 @@ import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CancelIcon from '@mui/icons-material/Cancel';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import Cookies from 'js-cookie';
+import Filter from 'bad-words'
+const words = require('../Ask-Question/extra-words.json')
 
 const Mainquestion = (details) => {
   const navigate = useNavigate();
@@ -91,11 +93,16 @@ const Mainquestion = (details) => {
   };
 
   /***********************************************/
+/***********Bad Words****************/
+
+const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
+    filter.addWords(...words)
+/************************************/
 
   /* Handle the answer button for Comment */
   const answer = async (e) => {
     e.preventDefault();
-    setLoading(true);
+    setLoading(true);   
 
     const data = new FormData();
 
@@ -105,9 +112,15 @@ const Mainquestion = (details) => {
     data.append('question_id', question_id);
 
     if (!body) {
-      setError('Please fill in the Body Part');
+      setError('Please fill in the Comment Box');
       setLoading(false);
-    } else {
+    }
+    else if (filter.isProfane(body) == true)
+      {
+        setError('You Should Remove bad words from comment box');
+        setLoading(false);
+      } 
+    else {
       if (window.confirm('Please click to confirm Comment')) {
         Axios.post('/Answer', data).then((res) => {
           if (res) {
@@ -339,12 +352,20 @@ function Comment(props) {
       auth: currentUserEmail,
       created_at: new Date(),
       replies: []
-    }    
+    } 
+    const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
+    filter.addWords(...words)     
 
     if (!bodyReply) {
-      setErrorReply('Please fill in the Body Part');
+      setErrorReply('Please fill in the Comment Box');
       setLoadingReply(false);
-    } else {
+    }
+    else if (filter.isProfane(bodyReply) == true)
+      {
+        setErrorReply('You Should Remove bad words from Comment Box');
+        setLoadingReply(false);
+      } 
+     else {
       if (window.confirm('Please click to confirm Reply')) {
         Axios.patch(`/Answer-reply/${resp._id}`, data).then((res) => {
           if (res) {

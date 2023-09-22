@@ -303,4 +303,43 @@ router.get('/main_G/:id',(req,res)=>{
 })
 
 
+/***********************Delete OTP After 1 day***********************/
+const getOtpData = async () => {
+
+    Otp.find({}, {expireIn:1}).then((resp) => {
+    
+        const time = new Date()
+        let time_diff = []
+        let day_diff = []
+        let day_id = []
+
+        for(i=0;i<resp.length;i++)
+        {
+            time_diff = time.getTime() - resp[i].expireIn
+
+            day_diff.push(Math.ceil(time_diff / (1000 * 60 * 60 * 24)))
+
+            
+            if (day_diff[i] > 0) {
+            day_id.push(resp[i]._id)
+       
+                }
+        } 
+
+        if(day_id.length>0)
+        {
+            Otp.deleteMany({_id:day_id}).then(() => {
+            
+            })
+              .catch((e) => {
+                console.log(e)
+              })       
+        }      
+    })
+
+    }   
+getOtpData()
+
+/******************************************/
+
 module.exports = router;

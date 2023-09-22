@@ -11,6 +11,8 @@ import "./index.css";
 import { ToastContainer, toast } from 'react-toastify';
 import Axios from 'axios';
 import Cookies from 'js-cookie';
+import Filter from 'bad-words'
+const words = require('../Ask-Question/extra-words.json')
 
 function Reply({ id, replied_to, question_id, body, auth, replies, created_at }) {
   const [expanded, setExpanded] = useState(false);
@@ -83,10 +85,24 @@ function Reply({ id, replied_to, question_id, body, auth, replies, created_at })
 
     // const commentId = data.replied_to[0];
 
+    /*****************BAD words API********************/
+
+    const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
+    filter.addWords(...words)
+
+    /**************************************************/
+
+
     if (!bodyReply) {
       setErrorReply('Please fill in the Body Part');
       setLoadingReply(false);
-    } else {
+    }
+    else if (filter.isProfane(bodyReply) == true)
+      {
+        setErrorReply('You Should Remove bad words from Comment Box');
+        setLoadingReply(false);
+      } 
+     else {
       if (window.confirm('Please click to confirm Reply')) {        
         Axios.patch(`/Reply-reply/${data.replied_to[0]}`, data).then((res) => {
           if (res) {
