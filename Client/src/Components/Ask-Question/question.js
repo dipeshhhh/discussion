@@ -668,22 +668,22 @@ const Question = () => {
           <input type="text" value={title} onChange={(e)=> setTitle(e.target.value)}
            
               placeholder='Add the question title' />
-          </div>
           <p>
               <span dangerouslySetInnerHTML={{__html:t_char}}>
-                </span> &nbsp;  words
+                </span>&nbsp;words
              </p>
+          </div>
         </div>
           <div className='question-option'>
           <div className='body'>
             <h3>Body</h3>
             <small>Include all the information someone would need to answer your question</small>
              <ReactQuill value={body} id='textbox' onChange={handleQuill} className='react-quill'theme='snow'/>
-             </div>
              <p>
               <span dangerouslySetInnerHTML={{__html:char}}>
-                </span> &nbsp;  words
+                </span>&nbsp;words
              </p>
+             </div>
         </div>
         <div className='question-option'>
           <div className='group'>
