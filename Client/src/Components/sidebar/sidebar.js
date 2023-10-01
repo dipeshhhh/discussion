@@ -16,75 +16,73 @@ const sidebar = () => {
     auth = data[0];
   }
 
-  const [ssmd, setSsmd] = useState([])
-  const [institute, setInstitute] = useState('')
+  const [ssmd, setSsmd] = useState([]);
+  const [institute, setInstitute] = useState('');
   const [group, setGroup] = useState('');
-  const [mainG, setMainG]= useState('');
-  const [detail, setDetail] = useState('')
-  const [smd, setSmd] = useState('')
-
-
+  const [mainG, setMainG] = useState('');
+  const [detail, setDetail] = useState('');
+  const [smd, setSmd] = useState('');
 
   useEffect(() => {
-
-
-    let userDetails = new Promise (async(resolve,reject)=>{
-      const response =  await axios.get(`/user-detail/${auth}`)  
-      resolve(response.data)
-    })
+    let userDetails = new Promise(async (resolve, reject) => {
+      const response = await axios.get(`/user-detail/${auth}`);
+      resolve(response.data);
+    });
 
     userDetails.then(
-      
-      async function(value)
-      {
+      async function (value) {
         async function getGroup() {
-          await axios.get(`/group/${auth}`)
-            .then(res => setGroup(res))
-            .catch(err => console.log(err));
+          await axios
+            .get(`/group/${auth}`)
+            .then(res => {
+              // console.log('Group: ',res.data);
+              setGroup(res)
+            })
+            .catch(err => console.error(err));
         }
-        async function getMain(){
-          await axios.get(`/MainGroup/${auth}`)
-          .then(res => setMainG(res.data))
-            .catch(err => console.log(err));
-        }   
-          getGroup();
-          getMain(); 
-          setDetail(value)  
-
-        if(value.Hqrs == 1)
-        {
-          if(value.status == 1)
-        {
-          const Inst_Name = await axios.get(`/InstituteName/${value.institute}`)      
-          setInstitute(Inst_Name.data)      
+        async function getMain() {
+          await axios
+            .get(`/MainGroup/${auth}`)
+            .then(res => {
+              // console.log('MainG: ',res.data);
+              setMainG(res.data)
+            })
+            .catch(err => console.error(err));
         }
-        else if(value.status == 2 || value.status == 3)
-        {
-          const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`)         
-          setSmd(Smd_Name.data)
+        getGroup();
+        getMain();
+        setDetail(value);
 
-        } 
-             }
-        else if(value.Hqrs == 2)
-        {      
-          const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`)         
-          setSmd(Smd_Name.data)
+        if (value.Hqrs == 1) {
+          if (value.status == 1) {
+            const Inst_Name = await axios.get(`/InstituteName/${value.institute}`);
+            // console.log('Institute: ',Inst_Name);
+            setInstitute(Inst_Name.data);
+          }
+          else if (value.status == 2 || value.status == 3) {
+            const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`);
+            // console.log('Smd1 : ',Smd_Name.data);
+            setSmd(Smd_Name.data);
 
-        }       
-
+          }
+        }
+        else if (value.Hqrs == 2) {
+          const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`);
+          // console.log('Smd2 : ',Smd_Name.data);
+          setSmd(Smd_Name.data);
+        }
       },
-      function(error)
-      {
-        console.log(error)
+      function (error) {
+        console.error(error);
       }
-    ) 
-  }, [])
+    );
+  }, []);
 
   return (
     <div className='sidebar-container'>
       <div className='sidebar-options'>
 
-      {/*
+        {/*
       
       "sidebar-options" structure: 
       ---------------------------------<=="sidebar-options"
@@ -133,104 +131,89 @@ const sidebar = () => {
       */}
 
         <div className='sidebar-option-category-container'>
-          <NavLink to="/index" className='sidebar-option'>
-            <HomeIcon />
-            <p>Home</p>
-          </NavLink>
+          <SidebarOption title='Home' icon={<HomeIcon />} />
         </div>
+
         {
-          detail.Hqrs == 1 && 
-                      
+          detail.Hqrs == 1 &&
+
           (
-            detail.status ==1 ?
+            detail.status == 1 ?
               <>
-              <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your Institute</small>
-                <NavLink className='sidebar-option'>
-                  <PeopleIcon />
-                  <p>{institute.name}</p>
-                </NavLink>
-              </div>
-               <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your Subject</small>
-                <NavLink to='/index' className='sidebar-option'>
-                  <PeopleIcon />
-                  <p>{mainG.name}</p>
-                </NavLink>
-              </div>
-                  <div className='sidebar-option-category-container'>
+                <div className='sidebar-option-category-container'>
+                  <small className="sidebar-option-category">Your Institute</small>
+                  <SidebarOption title={institute.name} icon={<PeopleIcon />} />
+                </div>
+
+                <div className='sidebar-option-category-container'>
+                  <small className="sidebar-option-category">Your Subject</small>
+                  <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
+                </div>
+
+                <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Your favourite subject</small>
                   {group.data?.map((resp) =>
-                    <NavLink className='sidebar-option'>
-                      <PeopleIcon />
-                      <p>{resp.name}</p>
-                    </NavLink>
+                    <SidebarOption title={resp.name} icon={<PeopleIcon />} key={resp.name} />
                   )}
                 </div>
               </>
-              :              
-              <>              
-              <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your SMD</small>
-                <NavLink className='sidebar-option'>
-                  <PeopleIcon />
-                  <p>{smd.name}</p>
-                </NavLink>
-              </div>
-              <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your Subject</small>
-                <NavLink to='/index' className='sidebar-option'>
-                  <PeopleIcon />
-                  <p>{mainG.name}</p>
-                </NavLink>
-              </div>
-                           <div className='sidebar-option-category-container'>
+              :
+              <>
+                <div className='sidebar-option-category-container'>
+                  <small className="sidebar-option-category">Your SMD</small>
+                  <SidebarOption title={smd.name} icon={<PeopleIcon />} />
+                </div>
+
+                <div className='sidebar-option-category-container'>
+                  <small className="sidebar-option-category">Your Subject</small>
+                  <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
+                </div>
+
+                <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Your favourite subject</small>
                   {group.data?.map((resp) =>
-                    <NavLink className='sidebar-option'>
-                      <PeopleIcon />
-                      <p>{resp.name}</p>
-                    </NavLink>
+                    <SidebarOption title={resp.name} icon={<PeopleIcon />} key={resp.name} />
                   )}
                 </div>
-              </>             
-             )
-              
+              </>
+          )
+
         }
-        {          
+        {
           detail.Hqrs == 2 &&
-          (        
-           <>
-           <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your SMD</small>
-                <NavLink className='sidebar-option'>
-                  <PeopleIcon />
-                  <p>{smd.name}</p>
-                </NavLink>
-              </div>
+          (
+            <>
               <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your Subject</small>
-                <NavLink to='/index' className='sidebar-option'>
-                  <PeopleIcon />
-                  <p>{mainG.name}</p>
-                </NavLink>
+                <small className="sidebar-option-category">Your SMD</small>
+                <SidebarOption title={smd.name} icon={<PeopleIcon />} />
               </div>
 
-                           <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Your favourite subject</small>
-                  {group.data?.map((resp) =>
-                    <NavLink className='sidebar-option'>
-                      <PeopleIcon />
-                      <p>{resp.name}</p>
-                    </NavLink>
-                  )}
-                </div>
-           </>
+              <div className='sidebar-option-category-container'>
+                <small className="sidebar-option-category">Your Subject</small>
+                <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
+              </div>
+
+              <div className='sidebar-option-category-container'>
+                <small className="sidebar-option-category">Your favourite subject</small>
+                {group.data?.map((resp) =>
+                  <SidebarOption title={resp.name} icon={<PeopleIcon />} key={resp.name} />
+                )}
+              </div>
+            </>
 
           )
-        }                
+        }
       </div>
     </div>
+  )
+}
+
+function SidebarOption({ title, icon }) {
+  return (
+    <NavLink to={`/index?subject=${encodeURI(title)}`} className='sidebar-option'>
+      {icon}
+      <p>{title}</p>
+    </NavLink>
   )
 }
 

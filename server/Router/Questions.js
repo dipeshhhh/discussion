@@ -28,7 +28,7 @@ router.post('/Question', upload, async (req, res) => {
 
   // console.log(req.body,req.file)
 
-  const { title, body, auth, Imembers,Members, smdids,institutes} = req.body;
+  const { title, body, auth, Imembers, Members, smdids, institutes } = req.body;
 
   const created_at = new Date();
   const updated_at = new Date();
@@ -37,7 +37,7 @@ router.post('/Question', upload, async (req, res) => {
   const Imember = Imembers.split(',')
   const smdid = smdids.split(',')
   const institute = institutes.split(',')
-  
+
   /* for upload the file     
      upload(req,res, function(err)
      {
@@ -56,7 +56,7 @@ router.post('/Question', upload, async (req, res) => {
     const file = req.file.path
 
     try {
-      const data = new Question({auth, title, body, file, created_at, updated_at, member,Imember,smdid,institute});
+      const data = new Question({ auth, title, body, file, created_at, updated_at, member, Imember, smdid, institute });
       const result = await data.save()
 
       if (result) {
@@ -77,7 +77,7 @@ router.post('/Question', upload, async (req, res) => {
   else {
 
     try {
-      const data = new Question({auth, title, body,created_at, updated_at, member,Imember,smdid,institute});
+      const data = new Question({ auth, title, body, created_at, updated_at, member, Imember, smdid, institute });
       const result = await data.save()
 
       if (result) {
@@ -101,30 +101,30 @@ router.post('/Question', upload, async (req, res) => {
 router.get('/selected-questions-division/:divisionName/:id', async (req, res) => {
   const divName = decodeURIComponent(req.params.divisionName)
   if ((divName.toLowerCase() == 'all') || (divName.toLowerCase() == '')) {
-  //   User.findOne({ email: req.params.id }, { Smdid: 1, Divisionid: 1, intrested: 1, status: 1 })
-  //     .then(userDetails => {
-  //       if (userDetails.status == 1) {
-  //         Division.find({ _id: { $in: [userDetails.Divisionid, ...(userDetails.intrested)] } })
-  //           .then(resp => res.status(200).send(resp))
-  //           .catch(err => res.status(400).send(err))
-  //       }
-  //       else if (userDetails.status == 2) {
-  //         SmdDivision.findOne({ _id: userDetails.Smdid }).then(resp => {
-  //           Division.find({ name: { $in: resp.division } })
-  //             .then(resp => res.status(200).send(resp))
-  //             .catch(err => res.status(400).send(err))
-  //         }
-  //         )
-  //       }
-  //       else if (userDetails.status == 3) {
-  //         SmdDivision.find({})
-  //           .then((resp) => { res.status(200).send(resp) })
-  //           .catch((e) => { res.status(400).send(e) })
-  //       }
-  //     }
-  //     )
+    //   User.findOne({ email: req.params.id }, { Smdid: 1, Divisionid: 1, intrested: 1, status: 1 })
+    //     .then(userDetails => {
+    //       if (userDetails.status == 1) {
+    //         Division.find({ _id: { $in: [userDetails.Divisionid, ...(userDetails.intrested)] } })
+    //           .then(resp => res.status(200).send(resp))
+    //           .catch(err => res.status(400).send(err))
+    //       }
+    //       else if (userDetails.status == 2) {
+    //         SmdDivision.findOne({ _id: userDetails.Smdid }).then(resp => {
+    //           Division.find({ name: { $in: resp.division } })
+    //             .then(resp => res.status(200).send(resp))
+    //             .catch(err => res.status(400).send(err))
+    //         }
+    //         )
+    //       }
+    //       else if (userDetails.status == 3) {
+    //         SmdDivision.find({})
+    //           .then((resp) => { res.status(200).send(resp) })
+    //           .catch((e) => { res.status(400).send(e) })
+    //       }
+    //     }
+    //     )
   }
-  else {    
+  else {
     Division.findOne({ name: divName }).then(div => {
       Question.find({ subject: div._id })
         .then(resp => {
@@ -212,17 +212,89 @@ router.get('/all_question', (req, res) => {
 
 })
 
+router.get(`/questions_for_index_page`, async (req, res) => {
+  try {
+    //* Maybe sanitize these values first?
+    const userEmailReq = req.query.userEmail;
+    const subjectReq = decodeURI(req.query.subject) || 'index';
+
+    const userDetails = await User.findOne({ email: userEmailReq }, { starred: 0, password: 0 });
+
+    const result = {
+      userStatus: userDetails.status,
+      questions: [],
+    };
+
+    let orConditions = [];    
+    if ((userDetails.status == 1) && (userDetails.Hqrs == 1)) {
+      orConditions = [
+        { member: userDetails.Divisionid },
+        { member: userDetails.email },
+        { auth: userDetails.email },
+        { Imember: userDetails.institute },
+        { Imember: userDetails.email },
+      ];
+    }
+    else if ((userDetails.status == 2) || (userDetails.Hqrs == 2) || (userDetails.status == 1) || (userDetails.Hqrs == 1)) {
+      orConditions = [
+        { member: userDetails.Divisionid },
+        { member: userDetails.email },
+        { auth: userDetails.email },
+        { smdid: userDetails.Smdid },
+      ];
+    }
+
+    if (((subjectReq.toLowerCase() == 'index') || (subjectReq.toLowerCase() == 'all') || (subjectReq.toLowerCase() == 'home')) && (orConditions.length > 0)) {
+      const questionsFromDB = await Question.find({
+        $or: orConditions,
+      });
+      result.questions = questionsFromDB;
+    }
+    else if (orConditions.length > 0) {
+      const idArray = [];
+      const smd = await SmdDivision.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
+      const div = await Division.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
+      //! When pusing data in 'idArray', the datatype must be string. Since smdid and memberid are stored as strings in question object.
+      if (smd) idArray.push(`${smd._id}`);
+      if (div) idArray.push(`${div._id}`);
+
+      const questionsFromDB = await Question.find({
+        $and: [
+          {
+            $or: [
+              { smdid: { $in: idArray } },
+              { member: { $in: idArray } },
+            ],
+          },
+          {
+            $or: orConditions,
+          },
+        ],
+      });
+      result.questions = questionsFromDB;
+    }
+    else {
+      const questionsFromDB = await Question.find().sort({ created_at: -1 });
+      result.questions = questionsFromDB;
+    }
+
+    res.status(200).send(result);
+  } catch (err) {
+    res.status(500).send({'error': 'Internal Server Error'});
+  }
+});
 
 router.get('/subject_question', (req, res) => {
-
-  Question.find({ $or: [{ member: req.query.id_1 },{ member: req.query.id_2 }, { auth: req.query.id_2 },{Imember:req.query.id_3},{Imember:req.query.id_2}] }).then((resp) => {
+  // id1: divisionid, id2: email, id3: institute
+  Question.find({ $or: [{ member: req.query.id_1 }, { member: req.query.id_2 }, { auth: req.query.id_2 }, { Imember: req.query.id_3 }, { Imember: req.query.id_2 }] }).then((resp) => {
     return res.status(200).send(resp)
   })
 
 })
 
 router.get('/subject_question_institute', (req, res) => {
-  Question.find({ $or: [{ member: req.query.id_1 },{ member: req.query.id_2 },{ auth: req.query.id_2 },{smdid:req.query.id_3}] }).then((resp) => {
+  // id1: divisionid, id2: email, id3: smd
+  Question.find({ $or: [{ member: req.query.id_1 }, { member: req.query.id_2 }, { auth: req.query.id_2 }, { smdid: req.query.id_3 }] }).then((resp) => {
     return res.status(200).send(resp)
   })
 
@@ -352,14 +424,14 @@ router.get('/Q_download/:id', (req, resp) => {
 
 /************************Delete Question Thread After 30 days if no activity in Post************************************/
 const getdata = async () => {
-  Question.find({}, {updated_at: 1, file: 1 }).then((resp) => {
+  Question.find({}, { updated_at: 1, file: 1 }).then((resp) => {
 
     const time = new Date()
-    
+
     let time_diff = []
     let day_diff = []
     let day_id = []
-    let file = []  
+    let file = []
 
     for (i = 0; i < resp.length; i++) {
       time_diff = time.getTime() - resp[i].updated_at.getTime()
@@ -371,36 +443,33 @@ const getdata = async () => {
 
         file.push(resp[i].file)
       }
-    }  
+    }
     for (z = 0; z < day_id.length; z++) {
-      if (file[z]) { 
-        
-        Answer.find({question_id:day_id[z]}).then((resp)=>{
-          for(let i=0;i<resp.length;i++)
-          {
-            
-            if(resp[i].file)
-            {
+      if (file[z]) {
+
+        Answer.find({ question_id: day_id[z] }).then((resp) => {
+          for (let i = 0; i < resp.length; i++) {
+
+            if (resp[i].file) {
               fs.unlinkSync(resp[i].file)
-              Answer.deleteMany({question_id:resp[i].question_id}).then(() => {
+              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {
                 console.log('file has been deleted')
               })
                 .catch((e) => {
                   console.log(e)
                 })
             }
-            else
-            {
-              Answer.deleteMany({question_id:resp[i].question_id}).then(() => {
+            else {
+              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {
                 console.log('file has been deleted')
               })
                 .catch((e) => {
                   console.log(e)
                 })
-            }                   
+            }
           }
-         
-      })
+
+        })
         fs.unlinkSync(file[z])
         Question.deleteMany({ _id: day_id[z] }).then(() => {
           console.log('file has been deleted')
@@ -411,39 +480,38 @@ const getdata = async () => {
       }
       else {
 
-        Answer.find({question_id:day_id[z]}).then((resp)=>{
-          for(let i=0;i<resp.length;i++)
-          {
-            
-            if(resp[i].file)
-            {
+        Answer.find({ question_id: day_id[z] }).then((resp) => {
+          for (let i = 0; i < resp.length; i++) {
+
+            if (resp[i].file) {
               fs.unlinkSync(resp[i].file)
-              Answer.deleteMany({question_id:resp[i].question_id}).then(() => {
+              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {
                 console.log('file has been deleted')
               })
                 .catch((e) => {
                   console.log(e)
                 })
             }
-            else
-            {
-              Answer.deleteMany({question_id:resp[i].question_id}).then(() => {
+            else {
+              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {
                 console.log('file has been deleted')
               })
                 .catch((e) => {
                   console.log(e)
                 })
-            }                   
-          }         
-      })         
+            }
+          }
+        })
         Question.deleteMany({ _id: day_id[z] }).then(() => {
           console.log('file has been deleted')
         })
           .catch((e) => {
             console.log(e)
           })
-      }}
-  })}
+      }
+    }
+  })
+}
 
 getdata()
 

@@ -6,13 +6,13 @@ import AllQuestions from './AllQuestions';
 import './css/main.css'
 
 
-const main = ({questions,status}) => { 
+const main = ({questions,status,pageTitle}) => { 
  
   return (
     <div className='main'>
       <div className='main-container'> 
            <div className='main-top'>
-        <h2>All Questions</h2>
+        <h2>{pageTitle}</h2>
         <NavLink to="/add-question">
           <button>New Question</button>
           </NavLink>
