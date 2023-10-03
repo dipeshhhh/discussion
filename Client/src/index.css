@@ -29,6 +29,10 @@
   /* border: 2px solid black; */
 }
 
+*, *::after, *::before{
+  box-sizing: border-box;
+}
+
 /* Scrollbar */
 ::-webkit-scrollbar {
   width: 5px;

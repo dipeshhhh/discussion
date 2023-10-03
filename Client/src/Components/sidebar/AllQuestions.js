@@ -20,11 +20,12 @@ const AllQuestions = ({ question }) => {
   const [search, setSearch] = useState('');
   // Initially kept null to prevent rendering data before it is fetched from DB
   const [currentUserDetailsFromDB, setCurrentUserDetailsFromDB] = useState(null);
-  const currentUserEmailFromCookies = Cookies.get('auth')?.split(',')[0] || '';
+  const authCookie = Cookies.get('auth');
+  const currentUserEmailFromCookies = authCookie.split(',')[0];
 
   useEffect(() => {
     async function getUser() {
-      await axios.get(`/user-detail/${currentUserEmailFromCookies}`)
+      await axios.get(`/user-details/${currentUserEmailFromCookies}`)
         .then((res) => {
           setCurrentUserDetailsFromDB(res.data)
         })

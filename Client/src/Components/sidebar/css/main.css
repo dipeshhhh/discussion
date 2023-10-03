@@ -24,7 +24,11 @@
 
 .main-top {
   display: flex;
-  flex-direction: column;
+  flex-direction: row;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
 
 .main-top-one {

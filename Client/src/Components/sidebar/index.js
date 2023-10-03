@@ -1,10 +1,17 @@
 import React, { useState, useEffect } from 'react'
+import { useLocation } from 'react-router-dom';
 import './css/index.css'
 import Sidebar from './sidebar'
 import Main from './main'
 import axios from 'axios'
 import Cookies from 'js-cookie';
 
+const capitalize = (str) => (
+  str
+    .split(' ')
+    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+    .join(' ')
+)
 
 const Index = () => {
   // ============================================== //
@@ -21,70 +28,32 @@ const Index = () => {
   }
   // ============================================== //
 
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const currentSubject = (queryParams.get('subject') || 'index');
+
+  const decodedSubject = decodeURI(currentSubject);
+  const pageTitle = capitalize(
+    ((decodedSubject.toLowerCase() == 'index') || (decodedSubject.toLowerCase() == 'all') || (decodedSubject.toLowerCase() == 'home')) ? 'All Questions' : decodedSubject
+  );
+
   let [questions, setQuestions] = useState([]);
   let [status, setStatus] = useState('')
-
   useEffect(() => {
-
-    let userDetails = new Promise (async(resolve,reject)=>{
-      const response =  await axios.get(`/main_G/${auth}`)
-      resolve(response.data)
-    })
-    userDetails.then(
-      async function(value)
-      {  
-        if(value.Hqrs === 1)
-        {
-          if(value.status ===1 )
-          {
-            const M_Data = await axios.get('/subject_question',{params:{id_1:value.Divisionid,id_2:auth,id_3:value.institute}})           
-            setQuestions(M_Data.data)
-            setStatus(value.status)
-          }
-          else if (value.status === 2)
-          {
-                  const M_Data = await axios.get('/subject_question_institute',{params:{id_1:value.Divisionid,id_2:auth,id_3:value.Smdid}})  
-           
-                  setQuestions(M_Data.data)
-                  setStatus(value.status)
-          }
-          else
-          {
-            const M_Data = await axios.get('/all_question')          
-                  setQuestions(M_Data.data)
-                  setStatus(value.status)
-          } 
-        }
-        else if(value.Hqrs == 2)
-        {
-            if(value.status == 1 || value.status == 2)
-            {
-              const M_Data = await axios.get('/subject_question_institute',{params:{id_1:value.Divisionid,id_2:auth,id_3:value.Smdid}})           
-              setQuestions(M_Data.data)
-              setStatus(value.status)
-            }
-            else
-            {
-              const M_Data = await axios.get('/all_question')          
-              setQuestions(M_Data.data)
-              setStatus(value.status)
-            }
-         
-        }      
-
-      },
-      function(error)
-      {
-        console.log(error)
-      }
-    )
-  }, [])
+    async function getQuestionsForIndexPage() {
+      const question_data = await axios.get(`/questions_for_index_page`,
+        { params: { userEmail: auth, subject: currentSubject } })
+      setQuestions(question_data.data.questions);
+      setStatus(question_data.data.userStatus);
+    }
+    getQuestionsForIndexPage();    
+  }, [location])
 
   return (
     <div className='stack-index'>
       <div className='stack-index-content'>
         <Sidebar />
-        <Main questions={questions} status={status} />
+        <Main questions={questions} status={status} pageTitle={pageTitle} />
       </div>
     </div>
   )
