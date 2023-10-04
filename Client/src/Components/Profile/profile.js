@@ -111,7 +111,7 @@ const Profile = () => {
               <>
               <div className='basic-info-container'>
                   <section className='basic-info-container-section'>
-                    <p id='profile-user-name'>{capitalize(userDetails.name)}</p>
+                    <p id='profile-user-name'>{capitalize(userDetails.name)}({userDetails.designation})</p>
                     <p id='profile-user-email'>{userDetails.email}</p>
                   </section>
                   <fieldset className='basic-info-container-section'>

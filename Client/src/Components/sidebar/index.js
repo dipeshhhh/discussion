@@ -55,7 +55,7 @@ const Index = () => {
         <Sidebar />
         <Main questions={questions} status={status} pageTitle={pageTitle} />
       </div>
-    </div>
+    </div> 
   )
 }
 

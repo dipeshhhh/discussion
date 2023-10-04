@@ -101,7 +101,7 @@ router.post('/VerifyOtp', async(req,res)=>{
 /************************Signup API*************************/
 router.post('/Signup', async (req,res)=>{
 
-    let {name, email, Divisionid, Smdid, password,status, intrested,institute,Hqrs} = req.body;  
+    let {name, email, Divisionid, Smdid, password,status, intrested,institute,Hqrs,designation} = req.body;  
    
     try{
        
@@ -109,7 +109,7 @@ router.post('/Signup', async (req,res)=>{
      if(!userExist)
      {        
 
-        const fetch = new Users({name, email, Divisionid, Smdid, password,status, intrested,Hqrs,institute});
+        const fetch = new Users({name, email, Divisionid, Smdid, designation,password,status, intrested,Hqrs,institute});
         const result = await fetch.save()
         Division.updateMany({$or:[{_id:intrested},{_id:Divisionid}]},{$push:{member:email}}).then((resp)=>{
 

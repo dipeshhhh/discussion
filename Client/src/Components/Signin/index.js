@@ -54,27 +54,32 @@ const Index = () => {
 
 
  /****************Handle Designation and Status********************************/     
-    const [designation, setDesignation]= useState('')
+    const [designation, setDesignation]= useState('') 
     const [status, setStatus] = useState('')
 
     const  handldesignation = (e)=>{
     
-        setDesignation(e.target.value)
+        
         if(e.target.value == 'DG')
         {
             setStatus(2)
+            setDesignation(e.target.value)
+            
         } 
         else if(e.target.value == 'DDG')
         {
             setStatus(2)
+            setDesignation(e.target.value)
         }
         else if(e.target.value == 'ADG')
         {
             setStatus(2)
+            setDesignation(e.target.value)
         }
         else if(e.target.value == 'Scientist')
         {
             setStatus(1)
+            setDesignation(e.target.value)
         }
         else
         {
@@ -122,6 +127,7 @@ const Index = () => {
                     password,
                     status,
                     intrested,
+                    designation,
                     Hqrs
                     
                 }).then((resp)=>{

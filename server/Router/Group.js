@@ -12,7 +12,7 @@ const Institutes = require('../DB/Institutes');
 
 
 router.get('/user-details/:id', (req, res) => {
-  User.findOne({ email: req.params.id }, { _id: 0, name: 1, email: 1, Smdid: 1, Divisionid: 1, Group: 1, status: 1,institute:1, Hqrs:1, intrested: 1, starred: 1 })
+  User.findOne({ email: req.params.id }, { _id: 0, name: 1, designation:1, email: 1, Smdid: 1, Divisionid: 1, Group: 1, status: 1,institute:1, Hqrs:1, intrested: 1, starred: 1 })
     .then(resp => res.status(200).send(resp))
     .catch(e => res.status(400).send(e));
 })
@@ -91,7 +91,6 @@ router.get('/smddetail/:id', (req, res) => {
 })
 
 router.get('/Group', (req,res)=>{
-
     Group.find({},{name:1,_id:1}).then((resp)=>{
         res.status(200).send(resp)
     }).catch((e)=>{
@@ -136,7 +135,7 @@ router.get('/institute', (req, res) => {
 
 router.get('/SmdName/:id', (req, res) => { 
   const id = new ObjectId(req.params.id)
-  SmdDivision.findOne({_id:id},{_id:0,name:1}).then((resp) => {
+  SmdDivision.findOne({_id:id},{name:1}).then((resp) => {
     res.status(200).send(resp)
   }).catch((e) => {
     res.status(400).send(e)
@@ -162,7 +161,7 @@ const idd = id.split(',')
 
 router.get('/InstituteName/:id', (req, res) => { 
   const id = new ObjectId(req.params.id)
-  Institute.findOne({_id:id},{_id:0,name:1}).then((resp) => {
+  Institute.findOne({_id:id},{name:1}).then((resp) => {
     res.status(200).send(resp)
   }).catch((e) => {
     res.status(400).send(e)

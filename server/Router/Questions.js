@@ -5,6 +5,7 @@ const Question = require('../DB/Questions')
 const Answer = require('../DB/Answers')
 const User = require('../DB/module')
 const Division = require('../DB/Division')
+const Institute = require('../DB/Institutes')
 const SmdDivision = require('../DB/SMDDivision')
 const multer = require('multer');
 const { default: mongoose } = require('mongoose');
@@ -28,7 +29,7 @@ router.post('/Question', upload, async (req, res) => {
 
   // console.log(req.body,req.file)
 
-  const { title, body, auth, Imembers, Members, smdids, institutes } = req.body;
+  const { title, body, auth, Imembers, Members, smdids, institutes,subject } = req.body;
 
   const created_at = new Date();
   const updated_at = new Date();
@@ -56,7 +57,7 @@ router.post('/Question', upload, async (req, res) => {
     const file = req.file.path
 
     try {
-      const data = new Question({ auth, title, body, file, created_at, updated_at, member, Imember, smdid, institute });
+      const data = new Question({ auth, title, body, file, created_at, updated_at, subject, member, Imember, smdid, institute });
       const result = await data.save()
 
       if (result) {
@@ -77,7 +78,7 @@ router.post('/Question', upload, async (req, res) => {
   else {
 
     try {
-      const data = new Question({ auth, title, body, created_at, updated_at, member, Imember, smdid, institute });
+      const data = new Question({ auth, title, body, created_at, updated_at, subject, member, Imember, smdid, institute });
       const result = await data.save()
 
       if (result) {
@@ -216,7 +217,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
   try {
     //* Maybe sanitize these values first?
     const userEmailReq = req.query.userEmail;
-    const subjectReq = decodeURI(req.query.subject) || 'index';
+    const subjectReq = decodeURI(req.query.subject) || 'index';    
 
     const userDetails = await User.findOne({ email: userEmailReq }, { starred: 0, password: 0 });
 
@@ -251,31 +252,60 @@ router.get(`/questions_for_index_page`, async (req, res) => {
       result.questions = questionsFromDB;
     }
     else if (orConditions.length > 0) {
-      const idArray = [];
+      const idArray = [];      
+
       const smd = await SmdDivision.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
       const div = await Division.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
+      const inst = await Institute.findOne({name: { $regex: new RegExp(subjectReq, 'i') }});
+      
       //! When pusing data in 'idArray', the datatype must be string. Since smdid and memberid are stored as strings in question object.
-      if (smd) idArray.push(`${smd._id}`);
-      if (div) idArray.push(`${div._id}`);
-
-      const questionsFromDB = await Question.find({
+      if (smd)
+      {
+        const questionsFromDB = await Question.find({
         $and: [
           {
-            $or: [
-              { smdid: { $in: idArray } },
-              { member: { $in: idArray } },
-            ],
+            $or:[{smdid:`${smd._id}`},{$and:[{smdid:`${smd._id}`},{auth:userEmailReq}]}]
+          },
+          {
+            $or:orConditions,
+          },
+        ],
+      });
+      result.questions = questionsFromDB;     
+      } 
+      if(div)
+      {
+        
+      const questionsFromDB = await Question.find({
+        $and: [
+          {                        
+               $or:[{member:`${div._id}`},{$and:[{member:userEmailReq},{subject:`${div._id}`}]},{$and:[{subject:`${div._id}`},{auth:userEmailReq}]}]            
           },
           {
             $or: orConditions,
           },
         ],
       });
+      result.questions = questionsFromDB;      
+      }
+      if(inst)
+      {
+           const questionsFromDB = await Question.find({
+            $and: [
+              {                        
+                   $or: [{Imember:`${inst._id}`},{Imember:userEmailReq},{auth:userEmailReq},{$and:[{Imember:`${inst._id}`},{auth:userEmailReq}]}]            
+              },
+              {
+                $or: orConditions,
+              },
+            ],
+      });
       result.questions = questionsFromDB;
+      }
     }
-    else {
+    else {      
       const questionsFromDB = await Question.find().sort({ created_at: -1 });
-      result.questions = questionsFromDB;
+      result.questions = questionsFromDB;     
     }
 
     res.status(200).send(result);

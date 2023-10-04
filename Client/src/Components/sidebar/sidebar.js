@@ -76,7 +76,7 @@ const sidebar = () => {
         console.error(error);
       }
     );
-  }, []);
+  }, []); 
 
   return (
     <div className='sidebar-container'>

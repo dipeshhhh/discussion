@@ -23,7 +23,8 @@ const Userschema = new mongoose.Schema({
     password:{
         type:String,
         required:true
-    },    
+    },
+    designation:String,    
     status:{
         type:Number,
         required:true

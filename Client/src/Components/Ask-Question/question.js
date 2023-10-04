@@ -39,6 +39,7 @@ const Question = () => {
   const [institute, setInstitute]= useState([])
   const [Imember, setImember] = useState('')
   const [Imembers, setImembers] = useState('')
+  const [sub, setSub] = useState('')
   const [subject, setSubject] = useState([])
   const [subjectid, setSubjectid] = useState([])
   const [smd, setSmd] = useState('')
@@ -193,13 +194,10 @@ const Question = () => {
     data.append('Imembers',Imember)
     data.append('Members', member)
     data.append('smdids',smdid)
+    data.append('subject',sub)
     console.log('Member:'+member)
-    console.log('smdid:'+smdid)   
-
-    console.log('Imember:'+Imember)
-
-    console.log('subject id:'+subjectid)
-     
+    console.log('smdid:'+smdid)
+    
     if(!title || !body)
       {       
         setError("Something missing");
@@ -336,20 +334,13 @@ const Question = () => {
         {
           setLoading(false);
         }
-
-
-          }
-
-
-          
+          }          
         }
         else
         {
           setError("Please Select the Option");
           setLoading(false);          
-        }
-        
-       
+        }     
    
       }
     }    
@@ -366,11 +357,13 @@ const Question = () => {
         {         
           setError(" ");            
           setGStatus(true)
+          setSub('')
           setMember([])          
           setMember(subjectid)      
         }
         else if(val == 1)
         {
+          setSub(subjectid)
           setError(" "); 
           setMember([])
           setGStatus(false)
