@@ -36,12 +36,13 @@ export const Tooltip = ({text,children})=>{
             
             <p>Name: {userDetails.name}</p>
             <p>Email: {userDetails.email}</p>
+            <p>Designation: {userDetails.designation}</p>
             {userDetails.Hqrs ==1 ?
             <p>Location: Outside ICAR HQRS</p>
             :
             <p>Location: ICAR HQRS</p>
             }
-            {             
+            {/* {             
             userDetails.status == 1 ?            
             <>
              <p>Institute: {institute.name}</p>
@@ -49,7 +50,7 @@ export const Tooltip = ({text,children})=>{
             </>           
             :
             <p>SMD: {smd.name}</p>
-            }
+            } */}
 
             </div>} 
            

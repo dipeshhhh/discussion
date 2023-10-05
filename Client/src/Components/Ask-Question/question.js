@@ -450,6 +450,7 @@ const Question = () => {
     
     if(e.target.value == 1)
     {
+      setSmdid('')  
       setHsubject(false)
       setHInstitute(true)
       setSubjectid(groupidd.Divisionid)      
@@ -1056,18 +1057,14 @@ const Question = () => {
       )}
     />
     </div>
-
   </>
-
 }
         </>
     }
 
           </>  
-          }  
-
-
-      </>  
+          }
+                     </>  
         
 
     }

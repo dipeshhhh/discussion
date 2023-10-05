@@ -230,6 +230,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
     if ((userDetails.status == 1) && (userDetails.Hqrs == 1)) {
       orConditions = [
         { member: userDetails.Divisionid },
+        { member:{$in:userDetails.intrested}},
         { member: userDetails.email },
         { auth: userDetails.email },
         { Imember: userDetails.institute },
@@ -239,6 +240,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
     else if ((userDetails.status == 2) || (userDetails.Hqrs == 2) || (userDetails.status == 1) || (userDetails.Hqrs == 1)) {
       orConditions = [
         { member: userDetails.Divisionid },
+        { member:{$in:userDetails.intrested}},
         { member: userDetails.email },
         { auth: userDetails.email },
         { smdid: userDetails.Smdid },
