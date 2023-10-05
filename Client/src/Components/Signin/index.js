@@ -27,9 +27,8 @@ const Index = () => {
                 }               
                 
             }
-                )  
-  
-
+                )   
+   
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState("");
     const [register, setRegister] = useState(false)
@@ -43,7 +42,23 @@ const Index = () => {
         value =e.target.value
 
         setUSer({...user, [name]:value})
+
+        if(user.name)
+        {
+            if(/^[A-Za-z\s]*$/.test(user.name) == false)
+            {
+                setError("Please Enter Name only in Alphabats Format");             
+            }
+            else
+            {
+                setError("");        
+            }
+        }
+            
+      
     }
+
+    
 
     function validateEmail(email) {
         const reg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
@@ -58,34 +73,19 @@ const Index = () => {
     const [status, setStatus] = useState('')
 
     const  handldesignation = (e)=>{
-    
-        
-        if(e.target.value == 'DG')
-        {
-            setStatus(2)
-            setDesignation(e.target.value)
-            
-        } 
-        else if(e.target.value == 'DDG')
-        {
-            setStatus(2)
-            setDesignation(e.target.value)
-        }
-        else if(e.target.value == 'ADG')
-        {
-            setStatus(2)
-            setDesignation(e.target.value)
-        }
-        else if(e.target.value == 'Scientist')
-        {
-            setStatus(1)
-            setDesignation(e.target.value)
-        }
-        else
+
+        if(!e.target.value)
         {
             setStatus('')
             setDesignation('')
-        }       
+        }
+        else
+        {
+            const val = e.target.value.split(',')            
+            setStatus(val[0])
+            setDesignation(val[1])
+        }   
+            
      }
 /***************************************************/
 
@@ -94,28 +94,54 @@ const Index = () => {
        const handleRegister= async (e)=>{      
         e.preventDefault()
         setLoading(true)
-        const {name, email,password, cpassword} = user       
-        if(!name || !email || !Divisionid || !password || !cpassword || !Smdid || !Hqrs )
+        const {name, email,password, cpassword} = user      
+        
+        if(!name)
         {
-            setError("Please Fill All Field");
+            setError("Please Enter Your Name");
             setLoading(false);
         }
-        else if (!validateEmail(email))
+        else if(/^[A-Za-z\s]*$/.test(name) == false)
         {
-            setError("Email is not in valid formate");
+            setError("Please Enter Name only in Alphabats Format");
+            setLoading(false);             
+        }
+        else if(!Divisionid)
+        {
+            setError("Please Select Main Subject");
             setLoading(false);
         }
+        else if(!password || !cpassword)
+        {
+            setError("Please Enter Password and Confirm Password");
+            setLoading(false);
+        }
+        else if(!Hqrs)
+        {
+            setError("Please Select Location");
+            setLoading(false);
+        }
+        else if(!designation)
+        {
+            setError("Please Select Your Designation");
+            setLoading(false);
+        }
+        else if(!Smdid)
+        {
+            setError("Please Select Institute/SMD");
+            setLoading(false);
+        }      
         else if(!(password === cpassword))
-        {
-            
-            setError("Password is not Matched");
-            
+        {            
+            setError("Password is not Matched");            
             setLoading(false);
         }      
         else{     
             
            // console.log(institute,Smdid,Hqrs,intrested,Divisionid)
 
+           if(window.confirm('Please confirm for Register'))
+           { 
             try{
                 const resp =await axios.post('/Signup',
                 {
@@ -140,7 +166,12 @@ const Index = () => {
             {
                 toast.error(err.response.data.err)
                 setLoading(false);
-            }          
+            } 
+           }
+           else
+           {
+            setLoading(false);
+           }                   
            
         }
                 
@@ -210,7 +241,9 @@ const handleLogin= async (e)=>{
       const [Smd , setSmd] = useState([])
       const [Smdid, setSmdid] = useState('')
       const [subject, setSubject] = useState([])
+      const [location, setLocation] = useState([])
       const [institutes, setInstitutes] = useState([])
+      const [desig, setDesig] = useState([])
       const [Division, setDivision]= useState([])
       const [Divisionid, setDivisionid]= useState('')
       const [enable, setEnable] = useState(true)
@@ -244,6 +277,15 @@ const handleLogin= async (e)=>{
               console.log(err)
             })
           }
+          async function getLocation()
+          {
+            await axios.get('/location').then((res)=>{              
+                 setLocation(res.data)
+            }).catch((err)=>{
+              console.log(err)
+            })
+          }
+          getLocation()
           getSmd()
           getInstitute()
           getSubject()     
@@ -267,12 +309,17 @@ const handleDivision = (e)=>{
 const [hideI, setHideI]= useState(true)
 const [hideSmd, setHideSmd] = useState(true)
 const [Hqrs, setHqrs] = useState('')
-const handleLocation = (e)=>{
-    
-    setHqrs(e.target.value)
+const handleLocation = (e)=>{    
+       setHqrs(e.target.value)       
+       setStatus('')
+       setDesignation('')    
 
     if(e.target.value == 1)
     {
+        location.filter((dsg)=>dsg.id.includes(e.target.value)).map((data, index)=>{
+            setDesig(data.designation)
+           })        
+        setEnable(false)
         setHideI(false)
         setHideSmd(true)
         setSmdid('')
@@ -281,15 +328,19 @@ const handleLocation = (e)=>{
     }
     else if(e.target.value == 2)
     {
+        location.filter((dsg)=>dsg.id.includes(e.target.value)).map((data, index)=>{
+            setDesig(data.designation)
+           })        
+        setEnable(false)
         setHideSmd(false)
         setHideI(true)
         setSmdid('')
-        setInstitute('')
-      
-       
+        setInstitute('')       
     }
     else 
     {
+        setEnable(true)
+        setDesig([])
         setHideSmd(true)
         setHideI(true)
         setSmdid('')
@@ -488,50 +539,35 @@ const [demail, setDemail] = useState(false)
                                   onChange={handleInput}
                                   placeholder='Enter your full name' />
                               </div>
-
-                            <div className='input-field'>
-                                  <p>Select Your Designation</p>
-                                  <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
-                                  <option value=''>--Select Designation--</option> 
-                                  <option value='DG'>DG</option>                                                        
-                                  <option value='DDG'>DDG</option>
-                                  <option value='ADG'>ADG</option>
-                                  <option value='Scientist'>Scientist</option>
-                                  </select>
-                              </div>   
-                              <div className='input-field'>
-                                  <p>Select Main Subject</p>
-                                  <select onChange={(e)=>{handleDivision(e)}} id="division">
-                                  <option value=''>--Select Subject--</option>
-                                  {
-                                      subject.map((resp)=>
-                                      <option value={resp._id}>{resp.name}</option>
-                                     )
-                                  }
-                                 
-                                  </select>
-                              </div>                                 
-                              <div className='input-field'>
-                              <p>Select Intrested Subject(optional)</p>                           
-                              <Select
-                            name='select'
-                            options={values.length>3 ? values : subject}
-                            labelField='name'
-                            valueField='name'                           
-                            multi                                                                                                                      
-                            onChange={values =>
-                              setValues(values)                              
-                              }
-                            />
-                              </div>
                               <div className='input-field'>
                                   <p>Select Location</p>
                                   <select name="division" onChange={(e)=>handleLocation(e)} id="smd">
                                   <option value=''>--Select Location--</option> 
-                                  <option value='1'>Outside ICAR HQRS</option>                                                        
-                                  <option value='2'>ICAR HQRS</option>                                  
+                                 {
+                                    location.map((res)=>
+                                    <option value={res.id}>{res.name}</option> 
+                                    )
+                                 }                          
                                   </select>
                               </div>
+                              {
+                                enable == false && 
+                                (
+                                    <div className='input-field'>
+                                    <p>Select Your Designation</p>
+                                    <select name="division" onChange={(e)=>handldesignation(e)} id="smd">
+                                    <option value=''>--Select Designation--</option> 
+                                  {
+                                    desig.map((resp)=>
+                                    <option value={[resp.id,resp.name]}>{resp.name}</option>
+                                    )
+                                  }
+                                    </select>
+                                </div>
+                                    
+                                )
+                              }
+                               
                               {
                                hideI == false &&
                                (
@@ -568,8 +604,32 @@ const [demail, setDemail] = useState(false)
     
                                 )                            
                                
-                              } 
-                                                  
+                              }                            
+                              <div className='input-field'>
+                                  <p>Select Main Subject</p>
+                                  <select onChange={(e)=>{handleDivision(e)}} id="division">
+                                  <option value=''>--Select Subject--</option>
+                                  {
+                                      subject.map((resp)=>
+                                      <option value={resp._id}>{resp.name}</option>
+                                     )
+                                  }
+                                 
+                                  </select>
+                              </div>                                 
+                              <div className='input-field'>
+                              <p>Select Intrested Subject(optional)</p>                           
+                              <Select
+                            name='select'
+                            options={values.length>3 ? values : subject}
+                            labelField='name'
+                            valueField='name'                           
+                            multi                                                                                                                      
+                            onChange={values =>
+                              setValues(values)                              
+                              }
+                            />
+                              </div>                                          
                                                            
                               <div className='input-field'>
                                   <p>Password</p>

@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 require('../DB/conn');
 const SmdDivision = require('../DB/SMDDivision')
+const Designation = require('../DB/Location')
 const Group = require('../DB/Group')
 const Division = require('../DB/Division')
 const Institute = require('../DB/Institutes')

@@ -11,6 +11,7 @@ import axios from 'axios';
 import SearchIcon from '@mui/icons-material/Search';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
+import {Tooltip} from './Tooltip'
 
 function truncate(str, n) {
   return str.length > n ? str.substr(0, n - 1) + '...' : str;
@@ -158,10 +159,13 @@ function Question({ data, currentUser, isAlreadyStarred }) {
             <Avatar />
             <p>{String(data?.auth).split('@')[0]}</p>
           </NavLink> */}
-          <NavLink className='author-details'>
-            <Avatar />
-            <p>{String(data?.auth).split('@')[0]}</p>
-          </NavLink>
+          {/* <NavLink className='author-details'>
+        
+          </NavLink> */}
+          <Tooltip text={data?.auth}>
+          <Avatar />
+            <p className='material-symbols-outlined'>{String(data?.auth).split('@')[0]}</p>
+          </Tooltip>
           <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
           {currentUser.status > 1 ? (
             <DeleteIcon className='react-button' onClick={(e) => { handleDelete(data._id) }} />

@@ -3,6 +3,7 @@ const router = express.Router();
 require('../DB/conn');
 const bcyrpt = require('bcryptjs');
 const Users = require('../DB/module');
+const Location = require('../DB/Location')
 const Otp = require('../DB/Otp')
 const Division = require('../DB/Division')
 const Institute = require('../DB/Institutes')
@@ -97,6 +98,16 @@ router.post('/VerifyOtp', async(req,res)=>{
 
     }
 })
+
+router.get('/location', (req,res)=>{
+    
+    Location.find().then((resp)=>{
+        res.status(200).send(resp)
+    })
+
+})
+
+
 
 /************************Signup API*************************/
 router.post('/Signup', async (req,res)=>{

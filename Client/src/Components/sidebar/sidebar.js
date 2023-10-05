@@ -148,8 +148,7 @@ const sidebar = () => {
                 <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Your Subject</small>
                   <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
-                </div>
-
+                </div>           
                 <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Your favourite subject</small>
                   {group.data?.map((resp) =>
@@ -200,8 +199,7 @@ const sidebar = () => {
                 )}
               </div>
             </>
-
-          )
+                      )
         }
       </div>
     </div>
@@ -210,7 +208,7 @@ const sidebar = () => {
 
 function SidebarOption({ title, icon }) {
   return (
-    <NavLink to={`/index?subject=${encodeURI(title)}`} className='sidebar-option'>
+    <NavLink to={`/?subject=${encodeURI(title)}`} className='sidebar-option'>
       {icon}
       <p>{title}</p>
     </NavLink>

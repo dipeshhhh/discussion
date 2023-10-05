@@ -156,4 +156,21 @@
     border: 1px solid gray;
     cursor: pointer;
 }
+.tooltip-container
+{
+    position: relative;
+    display: inline-block;
+}
 
+.tooltip
+{    position: absolute;
+    top:calc(-80% -20%);
+    transform: translateX(-20%);
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+    padding: 15px;
+    text-justify: newspaper;  
+    border-radius: 4px;
+    z-index: 1;
+    min-width: 250px;
+}
