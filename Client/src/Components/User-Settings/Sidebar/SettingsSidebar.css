@@ -1,0 +1,45 @@
+.settings-sidebar-section {
+  border-bottom: 1px solid rgb(0, 0, 0, 15%);
+  padding-bottom: 5px;
+  width: 250px;
+}
+
+.settings-sidebar,
+.settings-sidebar-section,
+.settings-sidebar-section-items {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-sidebar-section-title,
+.settings-sidebar-section-item {
+  display: flex;
+  flex-direction: row;
+  justify-content: start;
+  align-items: center;
+  gap: 0.5ch;
+}
+
+.settings-sidebar-section-title {
+  color: rgb(0, 0, 0, 50%);
+  font-size: small;
+  font-weight: 500;
+  padding: 10px 5px;
+}
+
+.settings-sidebar-section-item {
+  padding: 5px;
+  color: var(--secondary-color);
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.settings-sidebar-section-item:hover {
+  background-color: var(--primary-faded-color);
+  transition: background-color 0.1s ease-in-out
+}
+
+.settings-sidebar-section-item>* {
+  font-size: medium;
+  font-weight: 400;
+}
