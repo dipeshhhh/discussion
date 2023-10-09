@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import parse from 'html-react-parser';
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../SearchBar/SearchBar.jsx";
@@ -32,6 +32,8 @@ import axios from 'axios'
 //   },
 // ]
 function Question(props) {
+  const mainBodyRef = useRef(null);
+  
   function handleDelete() {
     // Handle question deletion here
   }
@@ -42,7 +44,7 @@ function Question(props) {
     return str.length > n ? str.substr(0, n - 1) + '...' : str;
   }
   return (
-    <div className="main-question-answer-body" key={props._id}>
+    <div className="main-question-answer-body" key={props._id} ref={mainBodyRef}>
       <div className='question-answer'>
         <span to={`/view-question?id=${props._id}`}>{props.title}</span>
         <div style={{ width: '90%', marginBottom: '16px' }}>
@@ -60,16 +62,16 @@ function Question(props) {
         <EditIcon
           className="admin-button edit-button"
           onClick={() => { handleEdit() }}
-          onMouseEnter={(event) => { event.target.parentElement.parentElement.style.backgroundColor = "var(--orange-peel-faded)"; }}
-          onMouseLeave={(event) => { event.target.parentElement.parentElement.style.backgroundColor = "white"; }}
+          onMouseEnter={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'var(--orange-peel-faded)'; }}
+          onMouseLeave={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'white'; }}
         />
         <div className="flex-grow">
         </div>
         <DeleteIcon
           className="admin-button reject-button"
           onClick={() => { handleDelete() }}
-          onMouseEnter={(event) => { event.target.parentElement.parentElement.style.backgroundColor = "var(--red-crayola-bright-faded)"; }}
-          onMouseLeave={(event) => { event.target.parentElement.parentElement.style.backgroundColor = "white"; }}
+          onMouseEnter={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'var(--red-crayola-bright-faded)'; }}
+          onMouseLeave={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'white'; }}
         />
       </div>
     </div>

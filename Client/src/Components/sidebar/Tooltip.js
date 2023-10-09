@@ -27,14 +27,15 @@ export const Tooltip = ({text,children})=>{
 
     const [isVisible, setIsVisible] = useState(false)
     return(
-        <div className='tooltip-container'        
+        <div className='tooltip-container author-details'        
         onMouseEnter={()=>getUser(text)}
         onMouseLeave={()=>setIsVisible(false)}
         >
         {children}
         {isVisible &&  <div className='tooltip'>
             
-            <p>Name: {userDetails.name}</p>
+            <p className='tooltip-username'>{userDetails.name}</p>
+            <span class='tooltip-rounded-edge'> </span>
             <p>Email: {userDetails.email}</p>
             <p>Designation: {userDetails.designation}</p>
             {userDetails.Hqrs ==1 ?

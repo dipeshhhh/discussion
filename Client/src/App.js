@@ -12,6 +12,7 @@ import GroupQuestion from './Components/Group-Question/index';
 import ViewQuestion from './Components/View-Question/index';
 import Auth from './Components/Signin/index';
 import Errorpage from './Components/Error/errorpage';
+// import UserSettings from './Components/User-Settings/user-settings';
 import PrivateComponent from './Components/PrivateComponent';
 
 function App() {
@@ -31,6 +32,7 @@ function App() {
             <Route exact path='/view-question' element={<ViewQuestion />}></Route>
             <Route exact path='/comment' element={<Comment />}></Route>
             <Route exact path='/group-question' element={<GroupQuestion />}></Route>
+            {/* <Route exact path='/settings' element={<UserSettings />}></Route> */}
             <Route exact path='*' element={<Errorpage />}></Route>
           </Route>
 
