@@ -1,4 +1,4 @@
-import React, {useEffect,useState} from "react";
+import React, {useEffect,useState,useRef} from "react";
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../SearchBar/SearchBar.jsx";
 import { Avatar } from '@mui/material';
@@ -30,6 +30,7 @@ const users = [ // ( Find users with 'status == 1' )?
 ]
 
 function User(props){
+  const mainBodyRef = useRef(null);
   function handleDelete(){
     // Handle user deletion here
   }
@@ -37,7 +38,7 @@ function User(props){
     // Handle user timeout (temporary ban) here
   }
   return(
-    <div className="user-container" key={props.id}>
+    <div className="user-container" key={props.id} ref={mainBodyRef}>
       <div className="user-profile-picture-container">
         {/* must be 120px X 120px */}
         { props.profilePicture ? <img src={props.profilePicture} className="user-profile-picture" /> : <Avatar className="user-profile-picture" /> }
@@ -60,15 +61,15 @@ function User(props){
         <EditIcon
           className="admin-button edit-button"
           onClick={()=>{handleEdit()}}
-          onMouseEnter={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "var(--orange-peel-faded)";}}
-          onMouseLeave={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "white";}}
+          onMouseEnter={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'var(--orange-peel-faded)'; }}
+          onMouseLeave={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'white'; }}
         />
         <div className="flex-grow"></div>
         <DeleteIcon 
           className="admin-button reject-button"
           onClick={()=>{handleDelete()}}
-          onMouseEnter={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "var(--red-crayola-bright-faded)";}}
-          onMouseLeave={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "white";}}
+          onMouseEnter={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'var(--red-crayola-bright-faded)'; }}
+          onMouseLeave={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'white'; }}
         />
       </div>
     </div>

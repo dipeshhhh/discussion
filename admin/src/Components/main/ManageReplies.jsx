@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useRef} from 'react';
 import parse from 'html-react-parser';
 import Sidebar from "../Sidebar/Sidebar";
 import SearchBar from "../SearchBar/SearchBar.jsx";
@@ -37,6 +37,8 @@ const replies = [
 ];
 
 function Reply(props){
+  const mainBodyRef = useRef(null);
+
   function handleDelete(){
     // Handle user deletion here
   }
@@ -47,7 +49,7 @@ function Reply(props){
     return str.length > n ? str.substr(0, n - 1) + '...' : str;
   }
   return(
-    <div className="main-question-answer-body" key={props._id}>
+    <div className="main-question-answer-body" key={props._id} ref={mainBodyRef}>
       <div className='question-answer'>
         <div style={{ width: '90%', marginBottom: '16px' }}>
           <div>{parse(truncate(props.body, 200))}</div>
@@ -64,16 +66,16 @@ function Reply(props){
         <EditIcon
           className="admin-button edit-button"
           onClick={()=>{handleEdit()}}
-          onMouseEnter={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "var(--orange-peel-faded)";}}
-          onMouseLeave={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "white";}}
+          onMouseEnter={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'var(--orange-peel-faded)'; }}
+          onMouseLeave={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'white'; }}
         />
         <div className="flex-grow">
         </div>
         <DeleteIcon 
           className="admin-button reject-button"
           onClick={()=>{handleDelete()}}
-          onMouseEnter={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "var(--red-crayola-bright-faded)";}}
-          onMouseLeave={(event)=>{event.target.parentElement.parentElement.style.backgroundColor = "white";}}
+          onMouseEnter={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'var(--red-crayola-bright-faded)'; }}
+          onMouseLeave={(event) => { if(mainBodyRef) mainBodyRef.current.style.backgroundColor = 'white'; }}
         />
       </div>
     </div>

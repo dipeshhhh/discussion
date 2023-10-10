@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './css/header.css';
 import logo from '../images/logo.png';
 import { Link, NavLink } from 'react-router-dom';
@@ -7,7 +7,38 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 
+import { Avatar } from '@mui/material';
+import PersonIcon from '@mui/icons-material/Person';
+import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
+import SettingsIcon from '@mui/icons-material/Settings';
+import LogoutIcon from '@mui/icons-material/Logout';
+
 const Header = () => {
+  const [isDropdownVisible, setDropdownVisible] = useState(false);
+  const dropdownRef = useRef(null);
+  const profileIconRef = useRef(null);
+
+  const toggleDropdown = () => {
+    setDropdownVisible(!isDropdownVisible);
+  }
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if ((dropdownRef.current && profileIconRef.current) && (!dropdownRef.current.contains(event.target) && !profileIconRef.current.contains(event.target)) ) {
+        // Click occurred outside the dropdown, so close it
+        setDropdownVisible(false);
+      }
+    };
+
+    // Add the event listener when the component mounts
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Remove the event listener when the component unmounts
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
   const navigate = useNavigate()
 
   let auth
@@ -19,10 +50,11 @@ const Header = () => {
   }
 
   const logout = () => {
+    toggleDropdown();
     const singout = new Promise(async (res, rej) => {
       res(Cookies.remove('auth'))
     })
-    singout.then((out) => {     
+    singout.then((out) => {
       toast.success('Logout Sucessfully')
       navigate('/auth')
     })
@@ -61,25 +93,39 @@ const Header = () => {
         {
           auth ?
             <div className='header-right'>
-
-              <NavLink
-                to={{
-                  pathname:'/profile',                 
-                }}
+              <div className='header-profile-icon' onClick={toggleDropdown} ref={profileIconRef}>
+                <Avatar />
+              </div>
+              <div className={`header-dropdown ${isDropdownVisible && 'active'}`} ref={dropdownRef}>
+                <NavLink
+                  to={{
+                    pathname: '/profile',
+                  }}
+                  className='header-dropdown-item'
+                  onClick={toggleDropdown}
                 // to={`/profile?id=${auth[0]}`}
                 // onClick={(e) => {
                 //   e.preventDefault();
                 //   navigate(`/profile?id=${auth[0]}`);
                 // }}
-              ><h4>{auth[1].toUpperCase()}</h4></NavLink>
-              {/* <h4>User Name</h4> */}
-
-              <div className='header-right-container'>
-                <p href="#" onClick={logout} >
-                  <i className="fa-solid fa-right-from-bracket"></i>  Log out
-                </p>
+                >
+                  {/* <h4>{auth[1].toUpperCase()}</h4> */}
+                  <PersonIcon />
+                  Profile
+                </NavLink>
+                <NavLink
+                  to={{
+                    pathname: '/settings',
+                  }}
+                  className='header-dropdown-item' onClick={toggleDropdown}>
+                  <SettingsIcon />
+                  Settings
+                </NavLink>
+                <div className='header-dropdown-item' onClick={logout}>
+                  <LogoutIcon />
+                  Log out
+                </div>
               </div>
-
             </div>
             :
             <p></p>

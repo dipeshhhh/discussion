@@ -1,0 +1,27 @@
+.user-settings-main-container {
+  display: flex;
+  flex-direction: row;
+  gap: 32px;
+  padding: 16px;
+  margin: 0px 32px;
+}
+
+.user-settings-main {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+  width: 100%;
+}
+
+.us-main-section,
+.us-main-section-body {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.us-main-section-title {
+  font-size: x-large;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgb(0, 0, 0, 15%);
+}
