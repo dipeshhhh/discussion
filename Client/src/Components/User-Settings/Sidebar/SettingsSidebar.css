@@ -36,7 +36,7 @@
 
 .settings-sidebar-section-item:hover {
   background-color: var(--primary-faded-color);
-  transition: background-color 0.1s ease-in-out
+  transition: background-color 0.1s ease-in-out;
 }
 
 .settings-sidebar-section-item>* {

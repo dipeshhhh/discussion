@@ -6,6 +6,7 @@ import SettingsSidebar from './Sidebar/SettingsSidebar';
 
 import Errorpage from '../Error/errorpage';
 import PasswordSettings from './Settings/Password-Settings/PasswordSettings';
+import SubjectSettings from './Settings/Subject-Settings/SubjectSettings';
 
 function UserSettings() {
   return (
@@ -16,6 +17,7 @@ function UserSettings() {
         <Route exact path='/' element={<PasswordSettings />} />
         <Route exact path='*' element={<Errorpage />} />
         <Route exact path='/password' element={<PasswordSettings />} />
+        <Route exact path='/subject' element={<SubjectSettings />} />
         {/* Add more pages here */}
       </Routes>
     </div>
