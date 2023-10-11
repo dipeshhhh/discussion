@@ -1,0 +1,54 @@
+[{
+  "_id": {
+    "$oid": "651da0ec373b1f4ad994b5a6"
+  },
+  "id": "1",
+  "name": "Outside ICAR HQRS",
+  "designation": [
+    {
+      "id": "2",
+      "name": "Director"
+    },
+    {
+      "id": "1",
+      "name": "Senior Scientist"
+    },
+    {
+      "id": "1",
+      "name": "Principal Scientist"
+    }
+  ]
+},
+{
+  "_id": {
+    "$oid": "651da0fb373b1f4ad994b5a7"
+  },
+  "id": "2",
+  "name": "ICAR HQRS",
+  "designation": [
+    {
+      "id": "2",
+      "name": "DG"
+    },
+    {
+      "id": "2",
+      "name": "DDG"
+    },
+    {
+      "id": "2",
+      "name": "ADG"
+    },
+    {
+      "id": "1",
+      "name": "Scientist"
+    },
+    {
+      "id": "1",
+      "name": "Senior Scientist"
+    },
+    {
+      "id": "1",
+      "name": "Principal Scientist"
+    }
+  ]
+}]

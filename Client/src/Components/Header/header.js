@@ -88,13 +88,12 @@ const Header = () => {
           <h1 className='header-title'><font style={{ color: '#006633' }}>Discussion Forum</font></h1>
           <h2 className='header-title2'><font style={{ color: '#006633' }}>ICAR (Indian Council Of Agricultural Research)</font></h2>
         </div>
-
-
         {
           auth ?
             <div className='header-right'>
               <div className='header-profile-icon' onClick={toggleDropdown} ref={profileIconRef}>
                 <Avatar />
+                <h4>{auth[1].toUpperCase()}</h4>
               </div>
               <div className={`header-dropdown ${isDropdownVisible && 'active'}`} ref={dropdownRef}>
                 <NavLink
