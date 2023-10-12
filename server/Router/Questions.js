@@ -256,13 +256,16 @@ router.get(`/questions_for_index_page`, async (req, res) => {
     else if (orConditions.length > 0) {
       const idArray = [];      
 
+      
       const smd = await SmdDivision.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
       const div = await Division.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
       const inst = await Institute.findOne({name: { $regex: new RegExp(subjectReq, 'i') }});
       
+    
       //! When pusing data in 'idArray', the datatype must be string. Since smdid and memberid are stored as strings in question object.
       if (smd)
       {
+
         const questionsFromDB = await Question.find({
         $and: [
           {

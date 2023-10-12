@@ -185,41 +185,41 @@
   "_id": {
     "$oid": "65284de161f573639a614e44"
   },
-  "name": "Information and Computer Technology (ICT)",
+  "name": "INFORMATION AND COMPUTER TECHNOLOGY",
   "member": []
 },
 {
   "_id": {
     "$oid": "65284de161f573639a614e45"
   },
-  "name": "Technical Cordination",
+  "name": "TECHNICAL CORDINATION",
   "member": []
 },
 {
   "_id": {
     "$oid": "65284de161f573639a614e46"
   },
-  "name": "International Relations",
+  "name": "INTERNATIONAL RELATIONS",
   "member": []
 },
 {
   "_id": {
     "$oid": "65284e7061f573639a614e47"
   },
-  "name": "Plant Implementation & Monitoring Unit (PIM)",
+  "name": "PLANT IMPLEMENTATION AND MONITORING UNIT",
   "member": []
 },
 {
   "_id": {
     "$oid": "65284e7061f573639a614e48"
   },
-  "name": "Intelectual Property & Technology Managment (IPTM)",
+  "name": "INTELECTUAL PROPERY AND TECHNOLOGY MANAGMENT",
   "member": []
 },
 {
   "_id": {
     "$oid": "65284e7061f573639a614e49"
   },
-  "name": "National Agriculture Science Fund (NAFS)",
+  "name": "NATIONAL AGRICULTURE SICENCE FUNDS",
   "member": []
 }]
