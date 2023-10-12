@@ -74,6 +74,23 @@ router.get('/smddetail', (req, res) => {
   })
 })
 
+//SMD Updation
+router.post('/updateSMD',(req,res)=>{
+
+  const p_id = new ObjectId(req.body.smd1._id)
+  const n_id = new ObjectId(req.body.smd)  
+
+  SmdDivision.updateOne({_id:p_id},{$pull:{member:req.body.auth}}).then((resp)=>{       
+    SmdDivision.updateOne({_id:n_id},{$push:{member:req.body.auth}}).then((respo)=>{
+        User.updateOne({email:req.body.auth},{$set:{Smdid:req.body.smd}}).then((response)=>{
+          res.status(200).send(response)
+        })
+    })
+  })
+})
+
+
+
 router.get('/smddetail1', (req, res) => {
   SmdDivision.find({division:{$ne:[]}}, { name: 1 }).then((resp) => {
     res.status(200).send(resp)
@@ -132,6 +149,19 @@ router.get('/institute', (req, res) => {
     res.status(400).send(e)
   })
 })
+/****************Institute Updation API*****************/
+router.post('/updateInstitute',(req,res)=>{
+  const p_id = new ObjectId(req.body.inst1._id)
+  const n_id = new ObjectId(req.body.inst)  
+
+  Institute.updateOne({_id:p_id},{$pull:{member:req.body.auth}}).then((resp)=>{       
+    Institute.updateOne({_id:n_id},{$push:{member:req.body.auth}}).then((respo)=>{
+        User.updateOne({email:req.body.auth},{$set:{institute:req.body.inst,Smdid:req.body.smd}}).then((response)=>{
+          res.status(200).send(response)
+        })
+    })
+  })  
+})
 /******************************************/
 
 router.get('/SmdName/:id', (req, res) => { 
@@ -156,9 +186,6 @@ const idd = id.split(',')
     res.status(400).send(e)
   })
 })
-
-
-
 
 router.get('/InstituteName/:id', (req, res) => { 
   const id = new ObjectId(req.params.id)
@@ -193,8 +220,19 @@ router.get('/group/:id', (req, res) => {
     })
 })
 
-router.get('/MainGroup/:id', (req, res) => {
+/******************Intrested Subject Updation*****************/
+router.post('/updateSubject',(req,res)=>{ 
+     Division.updateMany({_id:req.body.subject2},{$pull:{member:req.body.auth}}).then((resp)=>{
+        Division.updateMany({_id:req.body.subject},{$push:{member:req.body.auth}}).then((respo)=>{
+              User.updateMany({email:req.body.auth},{$set:{intrested:req.body.subject}}).then((response)=>{
+                res.status(200).send(response)              
+              })
+        })
+     })
+})
+/*************************************************************/
 
+router.get('/MainGroup/:id', (req, res) => {
   User.findOne({ email: req.params.id }, {_id:0,Divisionid: 1})
     .then((resp) => {     
      Division.findOne({_id:resp.Divisionid}).then((rsp)=>{

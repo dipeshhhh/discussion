@@ -106,6 +106,16 @@ const Index = () => {
             setError("Please Enter Name only in Alphabats Format");
             setLoading(false);             
         }
+        else if(intrested.length>4)
+        {
+            setError("Maximum 4 Intrested Subject Allowed");
+            setLoading(false);   
+        }
+        else if(intrested.includes(Divisionid))
+        {            
+            setError("You should Select different Intrested subject from main Subject");
+            setLoading(false);   
+        }
         else if(!Divisionid)
         {
             setError("Please Select Main Subject");
@@ -231,12 +241,9 @@ const handleLogin= async (e)=>{
             toast.error(err.response.data.err)
 
             setLoading(false);
-        }
-    
+        }    
     }
-        }
-        
-    
+        }  
 
       const [Smd , setSmd] = useState([])
       const [Smdid, setSmdid] = useState('')
