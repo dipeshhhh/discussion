@@ -3,7 +3,10 @@
     "$oid": "6487539f30cc72e9c608aaef"
   },
   "name": "CROP SCIENCES",
-  "member": [],
+  "member": [
+    "sachin@icar.gov.in",
+    "singh@icar.gov.in"
+  ],
   "division": [
     "64f7098ee512f41f96ba9526",
     "64f7098ee512f41f96ba9527",
@@ -186,7 +189,10 @@
     "$oid": "65284de161f573639a614e44"
   },
   "name": "INFORMATION AND COMPUTER TECHNOLOGY",
-  "member": []
+  "member": [
+    "sharma@icar.gov.in",
+    "mishra@icar.gov.in"
+  ]
 },
 {
   "_id": {

@@ -3,7 +3,7 @@
     "$oid": "651da0ec373b1f4ad994b5a6"
   },
   "id": "1",
-  "name": "Outside ICAR HQRS",
+  "name": "ICAR Institute",
   "designation": [
     {
       "id": "2",
@@ -11,11 +11,27 @@
     },
     {
       "id": "1",
-      "name": "Senior Scientist"
+      "name": "Joint Director"
+    },
+    {
+      "id": "1",
+      "name": "Head Of Division"
     },
     {
       "id": "1",
       "name": "Principal Scientist"
+    },
+    {
+      "id": "1",
+      "name": "Senior Scientist"
+    },
+    {
+      "id": "1",
+      "name": "Scientist (Selection Grade)"
+    },
+    {
+      "id": "1",
+      "name": "Scientist"
     }
   ]
 },
@@ -39,8 +55,12 @@
       "name": "ADG"
     },
     {
+      "id": "2",
+      "name": "Project Director"
+    },
+    {
       "id": "1",
-      "name": "Scientist"
+      "name": "Principal Scientist"
     },
     {
       "id": "1",
@@ -48,7 +68,7 @@
     },
     {
       "id": "1",
-      "name": "Principal Scientist"
+      "name": "Scientist"
     }
   ]
 }]
