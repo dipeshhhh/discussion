@@ -29,7 +29,7 @@ router.post('/Question', upload, async (req, res) => {
 
   // console.log(req.body,req.file)
 
-  const { title, body, auth, Imembers, Members, smdids, institutes,subject } = req.body;
+  const { title, body, auth, Imembers, Members, smdids, institutes, subject } = req.body;
 
   const created_at = new Date();
   const updated_at = new Date();
@@ -217,20 +217,22 @@ router.get(`/questions_for_index_page`, async (req, res) => {
   try {
     //* Maybe sanitize these values first?
     const userEmailReq = req.query.userEmail;
-    const subjectReq = decodeURI(req.query.subject) || 'index';    
+    const subjectReq = req.query.subject || 'index';
+    // const subjectReq = decodeURI(req.query.subject) || 'index';
 
     const userDetails = await User.findOne({ email: userEmailReq }, { starred: 0, password: 0 });
 
     const result = {
       userStatus: userDetails.status,
+      subject: '',
       questions: [],
     };
 
-    let orConditions = [];    
+    let orConditions = [];
     if ((userDetails.status == 1) && (userDetails.Hqrs == 1)) {
       orConditions = [
         { member: userDetails.Divisionid },
-        { member:{$in:userDetails.intrested}},
+        { member: { $in: userDetails.intrested } },
         { member: userDetails.email },
         { auth: userDetails.email },
         { Imember: userDetails.institute },
@@ -240,84 +242,85 @@ router.get(`/questions_for_index_page`, async (req, res) => {
     else if ((userDetails.status == 2) || (userDetails.Hqrs == 2) || (userDetails.status == 1) || (userDetails.Hqrs == 1)) {
       orConditions = [
         { member: userDetails.Divisionid },
-        { member:{$in:userDetails.intrested}},
+        { member: { $in: userDetails.intrested } },
         { member: userDetails.email },
         { auth: userDetails.email },
         { smdid: userDetails.Smdid },
       ];
     }
 
-    if (((subjectReq.toLowerCase() == 'index') || (subjectReq.toLowerCase() == 'all') || (subjectReq.toLowerCase() == 'home')) && (orConditions.length > 0)) {
-      const questionsFromDB = await Question.find({
-        $or: orConditions,
-      }).sort({updated_at:1});
+    if ((['index', 'all', 'home'].includes(subjectReq.toLowerCase())) && (orConditions.length > 0)) {
+      const questionsFromDB = await Question.find({ $or: orConditions }).sort({ updated_at: 1 });
       result.questions = questionsFromDB;
+      result.subject = 'index';
     }
     else if (orConditions.length > 0) {
-      const idArray = [];      
+      const idArray = [];
 
-      
-      const smd = await SmdDivision.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
-      const div = await Division.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
-      const inst = await Institute.findOne({name: { $regex: new RegExp(subjectReq, 'i') }});
-      
-    
+      // const smd = await SmdDivision.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
+      // const div = await Division.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
+      // const inst = await Institute.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
+      const smd = await SmdDivision.findOne({ _id: subjectReq });
+      const div = await Division.findOne({ _id: subjectReq });
+      const inst = await Institute.findOne({ _id: subjectReq });
+
       //! When pusing data in 'idArray', the datatype must be string. Since smdid and memberid are stored as strings in question object.
-      if (smd)
-      {
+      if (smd) {
 
         const questionsFromDB = await Question.find({
-        $and: [
-          {
-            $or:[{smdid:`${smd._id}`},{$and:[{smdid:`${smd._id}`},{auth:userEmailReq}]}]
-          },
-          {
-            $or:orConditions,
-          },
+          $and: [
+            {
+              $or: [{ smdid: `${smd._id}` }, { $and: [{ smdid: `${smd._id}` }, { auth: userEmailReq }] }]
+            },
+            {
+              $or: orConditions,
+            },
 
-        ],
-      }).sort({updated_at:1});  
+          ],
+        }).sort({ updated_at: 1 });
 
-      result.questions = questionsFromDB;     
-      } 
-      if(div)
-      {
-        
-      const questionsFromDB = await Question.find({
-        $and: [
-          {                        
-               $or:[{member:`${div._id}`},{$and:[{member:userEmailReq},{subject:`${div._id}`}]},{$and:[{subject:`${div._id}`},{auth:userEmailReq}]}]            
-          },
-          {
-            $or: orConditions,
-          },
-        ],
-      }).sort({updated_at:1});
-      result.questions = questionsFromDB;      
+        result.questions = questionsFromDB;
+        result.subject = smd.name;
       }
-      if(inst)
-      {
-           const questionsFromDB = await Question.find({
-            $and: [
-              {                        
-                   $or: [{Imember:`${inst._id}`},{Imember:userEmailReq},{$and:[{Imember:`${inst._id}`},{auth:userEmailReq}]}]            
-              },
-              {
-                $or: orConditions,
-              },
-            ],
-      }).sort({updated_at:1});
-      result.questions = questionsFromDB;
+      if (div) {
+
+        const questionsFromDB = await Question.find({
+          $and: [
+            {
+              $or: [{ member: `${div._id}` }, { $and: [{ member: userEmailReq }, { subject: `${div._id}` }] }, { $and: [{ subject: `${div._id}` }, { auth: userEmailReq }] }]
+            },
+            {
+              $or: orConditions,
+            },
+          ],
+        }).sort({ updated_at: 1 });
+        result.questions = questionsFromDB;
+        result.subject = div.name;
+      }
+      if (inst) {
+        const questionsFromDB = await Question.find({
+          $and: [
+            {
+              $or: [{ Imember: `${inst._id}` }, { Imember: userEmailReq }, { $and: [{ Imember: `${inst._id}` }, { auth: userEmailReq }] }]
+            },
+            {
+              $or: orConditions,
+            },
+          ],
+        }).sort({ updated_at: 1 });
+        result.questions = questionsFromDB;
+        result.subject = inst.name;
       }
     }
-    else {      
-      const questionsFromDB = await Question.find().sort({updated_at:1});
-      result.questions = questionsFromDB;     
+    else {
+      const questionsFromDB = await Question.find().sort({ updated_at: 1 });
+      result.questions = questionsFromDB;
+      result.subject = 'all';
     }
 
     res.status(200).send(result);
   } catch (err) {
-    res.status(500).send({'error': 'Internal Server Error'});
+    res.status(500).send({ 'error': 'Internal Server Error' });
   }
 });
 
