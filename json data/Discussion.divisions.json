@@ -78,13 +78,6 @@
   },
   {
     "_id": {
-      "$oid": "64ddf1b8c1ec30b466adef0e"
-    },
-    "name": "Plant Pathology",
-    "member": []
-  },
-  {
-    "_id": {
       "$oid": "64ddf1c4c1ec30b466adef0f"
     },
     "name": "Seed Technology",

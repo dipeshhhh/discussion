@@ -250,7 +250,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
     if (((subjectReq.toLowerCase() == 'index') || (subjectReq.toLowerCase() == 'all') || (subjectReq.toLowerCase() == 'home')) && (orConditions.length > 0)) {
       const questionsFromDB = await Question.find({
         $or: orConditions,
-      });
+      }).sort({updated_at:1});
       result.questions = questionsFromDB;
     }
     else if (orConditions.length > 0) {
@@ -271,8 +271,10 @@ router.get(`/questions_for_index_page`, async (req, res) => {
           {
             $or:orConditions,
           },
+
         ],
-      });
+      }).sort({updated_at:1});  
+
       result.questions = questionsFromDB;     
       } 
       if(div)
@@ -287,7 +289,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
             $or: orConditions,
           },
         ],
-      });
+      }).sort({updated_at:1});
       result.questions = questionsFromDB;      
       }
       if(inst)
@@ -301,12 +303,12 @@ router.get(`/questions_for_index_page`, async (req, res) => {
                 $or: orConditions,
               },
             ],
-      });
+      }).sort({updated_at:1});
       result.questions = questionsFromDB;
       }
     }
     else {      
-      const questionsFromDB = await Question.find().sort({ created_at: -1 });
+      const questionsFromDB = await Question.find().sort({updated_at:1});
       result.questions = questionsFromDB;     
     }
 

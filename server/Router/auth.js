@@ -147,7 +147,7 @@ router.post('/Signup', async (req,res)=>{
          
      }
      else{
-         return res.status(422).json({err:'Email already Exist'})
+         return res.status(422).json({err:'This Email is already in use'})
      }
        
      }

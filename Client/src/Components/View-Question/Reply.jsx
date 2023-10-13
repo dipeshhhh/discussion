@@ -12,6 +12,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import Axios from 'axios';
 import Cookies from 'js-cookie';
 import Filter from 'bad-words'
+import {Tooltip} from '../sidebar/Tooltip'
 const words = require('../Ask-Question/extra-words.json')
 
 function Reply({ id, replied_to, question_id, body, auth, replies, created_at }) {
@@ -141,8 +142,10 @@ function Reply({ id, replied_to, question_id, body, auth, replies, created_at })
             <div className='author reply-author'>
               <small>on {new Date(created_at).toLocaleString().replace(/,/g, ' at ')}</small>
               <div className='author-details'>
+              <Tooltip text={auth}>
                 <Avatar />
-                <p>{String(auth).split('@')[0]}</p>
+                  <p className='material-symbols-outlined'>{String(auth).split('@')[0]}</p>
+                </Tooltip>              
               </div>
             </div>
           </div>

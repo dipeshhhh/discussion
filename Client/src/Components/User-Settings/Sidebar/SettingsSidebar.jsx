@@ -25,7 +25,7 @@ function SettingsSidebar() {
         </div>
         <div className='settings-sidebar-section-items'>
           <SettingsSidebarItem link='password' icon={<GppMaybeIcon />} title='Password' />
-          <SettingsSidebarItem link='subject' icon={<CategoryIcon />} title='Subject' />
+          <SettingsSidebarItem link='subject' icon={<CategoryIcon />} title='Groups' />
           {/* Add more pages here */}
         </div>
       </div>

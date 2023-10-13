@@ -10,6 +10,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
 import Select from 'react-dropdown-select'
+import Select_S from 'react-select'
 
 const Index = () => {
     const navigate = useNavigate()      
@@ -307,7 +308,8 @@ const handleSmd = (e)=>{
 /***************handle Subject which is as Division****************/
 
 const handleDivision = (e)=>{
-      setDivisionid(e.target.value)
+      setDivisionid(e._id)
+      console.log(e._id)
 }
 
 /*******************************************************************/
@@ -362,14 +364,14 @@ const [institute, setInstitute] = useState('')
 
 const handleInstitute = (e)=>{
     const INST = new Promise((res,rej)=>{
-        res(e.target.value)
+        res(e._id)      
     })
     INST.then(
         async function(value)
         {
             const data = await axios.get(`/SMD/${value}`)
             setSmdid(data.data._id)
-            setInstitute(e.target.value) 
+            setInstitute(e._id) 
         }   
     )
     
@@ -580,14 +582,18 @@ const [demail, setDemail] = useState(false)
                                (
                                 <div className='input-field'>
                                 <p>Select Institute</p>
-                                <select name="division" onChange={(e)=>handleInstitute(e)} id="smd">
-                                    <option value="">---- Select Institute ----</option>
-                                {                                    
-                                    institutes.map((resp)=>
-                                       <option value={resp._id}>{resp.name}</option>
-                                    )
-                                }                                                            
-                                </select>
+
+                                <Select_S
+                                placeholder="Select Institute" 
+                                onChange={handleInstitute}
+                                getOptionLabel={option => {
+                                return option.name;
+                                }}
+                                getOptionValue={option => {
+                                return option._id;
+                                }}
+                                options={institutes}                        
+                                />                              
                             </div>
                              
                         
@@ -604,25 +610,24 @@ const [demail, setDemail] = useState(false)
                                         Smd.map((resp)=>
                                         <option value={resp._id}>{resp.name}</option>
                                        )
-                                    }
-                                   
+                                    }                                   
                                     </select>
-                                </div> 
-    
-                                )                            
-                               
+                                </div>   
+                                )                           
                               }                            
                               <div className='input-field'>
                                   <p>Select Main Subject</p>
-                                  <select onChange={(e)=>{handleDivision(e)}} id="division">
-                                  <option value=''>--Select Subject--</option>
-                                  {
-                                      subject.map((resp)=>
-                                      <option value={resp._id}>{resp.name}</option>
-                                     )
-                                  }
-                                 
-                                  </select>
+                                <Select_S
+                                placeholder="Select Main Subject" 
+                                onChange={handleDivision}
+                                getOptionLabel={option => {
+                                return option.name;
+                                }}
+                                getOptionValue={option => {
+                                return option._id;
+                                }}
+                                options={subject}                        
+                                />                          
                               </div>                                 
                               <div className='input-field'>
                               <p>Select Intrested Subject(optional)</p>                           
@@ -655,10 +660,8 @@ const [demail, setDemail] = useState(false)
                                 <button style={{ marginTop: "20px" }} onClick={handleRegister}>
                               {loading ? "Registering..." : "Register"}
                               </button>                            
-                                </>
-                              
-                              }               
-                             
+                                </>                              
+                              }                            
                               
                                 </>
                                 ) : (

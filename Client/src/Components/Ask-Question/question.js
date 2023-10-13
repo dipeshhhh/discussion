@@ -73,7 +73,7 @@ const Question = () => {
 
     if(char>150)
     {
-      char = 'You should write only 150 word'
+      char = 'You should write only 150'
     }
 
     var t_text = title.trim()
@@ -86,7 +86,7 @@ const Question = () => {
 
     if(t_char>25)
     {
-      t_char= 'you should write only 25 word'
+      t_char= 'you should write only 25'
       
     }
     /***************************************/    
@@ -657,8 +657,8 @@ const Question = () => {
         <div className='question-options'>
          <div className='question-option'>
           <div className='title'>
-            <h3>Title</h3>
-            <small>Be specific and imagine you're asking a question to Group Member</small>            
+            <h3>Title&nbsp;(Max 25 Words Allowed)</h3>
+            <small></small>            
           <input type="text" value={title} onChange={(e)=> setTitle(e.target.value)}
            
               placeholder='Add the question title' />
@@ -670,8 +670,8 @@ const Question = () => {
         </div>
           <div className='question-option'>
           <div className='body'>
-            <h3>Body</h3>
-            <small>Include all the information someone would need to answer your question</small>
+            <h3>Body&nbsp;(Max 150 Words Allowed)</h3>
+            <small></small>
              <ReactQuill value={body} id='textbox' onChange={handleQuill} className='react-quill'theme='snow'/>
              <p>
               <span dangerouslySetInnerHTML={{__html:char}}>

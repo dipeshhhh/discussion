@@ -23,6 +23,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import Cookies from 'js-cookie';
 import Filter from 'bad-words'
+import {Tooltip} from '../sidebar/Tooltip'
 const words = require('../Ask-Question/extra-words.json')
 
 const Mainquestion = (details) => {
@@ -169,7 +170,6 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
         <div className="main-desc">
           <div className="info">
             <p>on {new Date(detail?.created_at).toLocaleString().replace(/,/g, ' at ')}</p>
-
             {
               detail.file ?
                               <a onClick={(e) => download(detail._id)}>
@@ -189,10 +189,12 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
               <p>{parse(detail.body)}</p>
 
               <div className="author">
-                <small></small>
+                
                 <div className="auth-details">
-                  <Avatar />
-                  <p>{String(detail?.auth).split('@')[0]}</p>
+                <Tooltip text={detail?.auth}>
+                <Avatar />
+                  <p className='material-symbols-outlined'>{String(detail?.auth).split('@')[0]}</p>
+                </Tooltip>      
                 </div>
               </div>
             </div>
@@ -416,12 +418,14 @@ function Comment(props) {
               </a>
             ) : (
               <></>
-            )}
-            <small>on {new Date(resp?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
+            )}            
             <div className="auth-details">
-              <Avatar />
-              <p>{String(resp?.auth).split('@')[0]}</p>
-            </div>
+            <Tooltip text={resp?.auth}>
+                <Avatar />
+                  <p className='material-symbols-outlined'>{String(resp?.auth).split('@')[0]}</p>
+                </Tooltip>
+             </div>
+             <small>on {new Date(resp?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
           </div>
         </div>
       </div>
