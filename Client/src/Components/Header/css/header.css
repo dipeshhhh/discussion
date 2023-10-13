@@ -71,6 +71,15 @@ header{
     cursor: pointer;
 }
 
+.header-profile-icon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    color: var(--primary-color);
+}
+
 .header-dropdown {
     display: flex;
     flex-direction: column;
