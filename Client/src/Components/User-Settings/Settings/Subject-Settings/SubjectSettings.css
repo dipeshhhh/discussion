@@ -16,10 +16,15 @@
 }
 
 #ss-smd-options,
-#ss-institute-options {
+#ss-institute-options{
   height: 30px;
   width: 400px;
+  max-width: 400px;
   border-radius: 5px;
+}
+.ss-select-input {
+  max-width: 400px;
+  background-color: white;
 }
 
 .ss-submit-button {
