@@ -34,7 +34,7 @@ const Index = () => {
 
   const decodedSubject = decodeURI(currentSubject);
   const pageTitle = capitalize(
-    ((decodedSubject.toLowerCase() == 'index') || (decodedSubject.toLowerCase() == 'all') || (decodedSubject.toLowerCase() == 'home')) ? 'All Questions' : decodedSubject
+    ((decodedSubject.toLowerCase() == 'index') || (decodedSubject.toLowerCase() == 'all') || (decodedSubject.toLowerCase() == 'home')) ? 'All Posts' : decodedSubject
   );
 
   let [questions, setQuestions] = useState([]);

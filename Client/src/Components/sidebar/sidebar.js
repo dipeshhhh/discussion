@@ -141,16 +141,16 @@ const sidebar = () => {
             detail.status == 1 ?
               <>
                 <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Your Institute</small>
+                  <small className="sidebar-option-category">Institute</small>
                   <SidebarOption title={institute.name} icon={<PeopleIcon />} />
                 </div>
 
                 <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Your Subject</small>
+                  <small className="sidebar-option-category">Main Discipline</small>
                   <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
                 </div>           
                 <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Your favourite subject</small>
+                  <small className="sidebar-option-category">Interested Disciplines</small>
                   {group.data?.map((resp) =>
                     <SidebarOption title={resp.name} icon={<PeopleIcon />} key={resp.name} />
                   )}
@@ -159,17 +159,17 @@ const sidebar = () => {
               :
               <>
                 <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Your SMD</small>
+                  <small className="sidebar-option-category">SMD</small>
                   <SidebarOption title={smd.name} icon={<PeopleIcon />} />
                 </div>
 
                 <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Your Subject</small>
+                  <small className="sidebar-option-category">Main Discipline</small>
                   <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
                 </div>
 
                 <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Your favourite subject</small>
+                  <small className="sidebar-option-category">Interested Disciplines</small>
                   {group.data?.map((resp) =>
                     <SidebarOption title={resp.name} icon={<PeopleIcon />} key={resp.name} />
                   )}
@@ -183,17 +183,17 @@ const sidebar = () => {
           (
             <>
               <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your SMD</small>
+                <small className="sidebar-option-category">SMD</small>
                 <SidebarOption title={smd.name} icon={<PeopleIcon />} />
               </div>
 
               <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your Subject</small>
+                <small className="sidebar-option-category">Main Discipline</small>
                 <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
               </div>
 
               <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Your favourite subject</small>
+                <small className="sidebar-option-category">Interested Disciplines</small>
                 {group.data?.map((resp) =>
                   <SidebarOption title={resp.name} icon={<PeopleIcon />} key={resp.name} />
                 )}

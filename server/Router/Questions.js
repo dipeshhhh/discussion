@@ -300,7 +300,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
            const questionsFromDB = await Question.find({
             $and: [
               {                        
-                   $or: [{Imember:`${inst._id}`},{Imember:userEmailReq},{auth:userEmailReq},{$and:[{Imember:`${inst._id}`},{auth:userEmailReq}]}]            
+                   $or: [{Imember:`${inst._id}`},{Imember:userEmailReq},{$and:[{Imember:`${inst._id}`},{auth:userEmailReq}]}]            
               },
               {
                 $or: orConditions,

@@ -109,17 +109,17 @@ const Index = () => {
         }
         else if(intrested.length>4)
         {
-            setError("Maximum 4 Intrested Subject Allowed");
+            setError("Maximum 4 Interested Disciplines Allowed");
             setLoading(false);   
         }
         else if(intrested.includes(Divisionid))
         {            
-            setError("You should Select different Intrested subject from main Subject");
+            setError("Interested Discipline should be diffrent from main Discipline");
             setLoading(false);   
         }
         else if(!Divisionid)
         {
-            setError("Please Select Main Subject");
+            setError("Please Select Main Discipline");
             setLoading(false);
         }
         else if(!password || !cpassword)
@@ -129,7 +129,7 @@ const Index = () => {
         }
         else if(!Hqrs)
         {
-            setError("Please Select Location");
+            setError("Please Select Working Place");
             setLoading(false);
         }
         else if(!designation)
@@ -373,8 +373,7 @@ const handleInstitute = (e)=>{
             setSmdid(data.data._id)
             setInstitute(e._id) 
         }   
-    )
-    
+    )    
 }  
 /****************Select Intrested Subjects*********************/
       let options = []
@@ -549,9 +548,9 @@ const [demail, setDemail] = useState(false)
                                   placeholder='Enter your full name' />
                               </div>
                               <div className='input-field'>
-                                  <p>Select Location</p>
+                                  <p>Select Work Place</p>
                                   <select name="division" onChange={(e)=>handleLocation(e)} id="smd">
-                                  <option value=''>--Select Location--</option> 
+                                  <option value=''>--Select Work Place--</option> 
                                  {
                                     location.map((res)=>
                                     <option value={res.id}>{res.name}</option> 
@@ -616,9 +615,9 @@ const [demail, setDemail] = useState(false)
                                 )                           
                               }                            
                               <div className='input-field'>
-                                  <p>Select Main Subject</p>
+                                  <p>Select Main Discipline</p>
                                 <Select_S
-                                placeholder="Select Main Subject" 
+                                placeholder="Select Main Discipline" 
                                 onChange={handleDivision}
                                 getOptionLabel={option => {
                                 return option.name;
@@ -630,7 +629,7 @@ const [demail, setDemail] = useState(false)
                                 />                          
                               </div>                                 
                               <div className='input-field'>
-                              <p>Select Intrested Subject(optional)</p>                           
+                              <p>Select Interested Disciplines (optional)</p>                           
                               <Select
                             name='select'
                             options={values.length>3 ? values : subject}
@@ -668,7 +667,7 @@ const [demail, setDemail] = useState(false)
                                 
                                 <>
                                 <div className='input-field'>
-                                  <p>Email</p>
+                                  <p>Email (xxx@icar.gov.in)</p>
                                   <input  type="email" name='email'  autoComplete='off' 
                                    value={user.email}
                                    onChange={handleInput}
