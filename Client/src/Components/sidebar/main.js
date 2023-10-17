@@ -14,7 +14,7 @@ const main = ({questions,status,pageTitle}) => {
            <div className='main-top'>
         <h2>{pageTitle}</h2>
         <NavLink to="/add-question">
-          <button>New Question</button>
+          <button>Create Post</button>
           </NavLink>
         </div>    
 

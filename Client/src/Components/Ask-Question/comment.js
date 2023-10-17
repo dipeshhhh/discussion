@@ -1,130 +1,39 @@
 import React, {useState,useEffect} from 'react'
 import axios from 'axios'
-import {Multiselect} from 'multiselect-react-dropdown'
-import Select from 'react-dropdown-select'
+import Select from 'react-select';
 
 const Comment = () => {
 
-  const [Smd , setSmd] = useState([])
-  const [Smdid, setSmdid] = useState('')
-  const [Division, setDivision]= useState([])
-  const [Divisionid, setDivisionid]= useState('')
-  const [enable, setEnable] = useState(true)
+  const options = [
+    { name: "nitin", id: '1' },
+    { name: "chhavi", id: '2' },
+    { name: "Pawan", id: '3' },
+    { name: "Lakshay", id: '4' },
+    { name: "Anjali", id: '5' }
+  ];
 
-  useEffect(()=>{
-    async function getSmd()
-    {
-      await axios.get('/Group').then((res)=>{
-         
-          //console.log(res.data)
-          setSmd(res.data)
-      }).catch((err)=>{
-        console.log(err)
-      })
-    }
-    getSmd()
-  },[])  
-
-  const handleSmd = async (e)=>{           
-            
-    setSmdid('')
-    setDivisionid('')    
-    const Smdname = e.target.value    
-  
-
-    if(Smdname!='')
-    {                   
-        await axios.get(`/groupdetail/${Smdname}`).then((res)=>{
-                  
-            setDivision(res.data)
-            setSmdid(Smdname)
-            setEnable(false)
-
-           
-            }).catch((err)=>{
-          console.log(err)
-        })
-
-       
-    }
-    else
-    {
-        setDivisionid('')
-        setSmdid('')       
-        setDivision([])
-        setEnable(true)
-
-    }
-}
-
-const handeDivision = async (e)=>{
-  setDivisionid(e.target.value)
-   
-}
-
-let options = []
-
-Division.map((resp)=>
-            options.push(resp)               
-      ) 
-   
-let intrest = []
-// const [value, setValue] = useState([])
-
-// console.log(value)
-
-const [values, setValues] = useState([])
-
-values.map((resp)=>{
-   intrest.push(resp._id)
-})
-
-
+  //get selected values ni dari DB.
+  const values = ['1', '2','5'];
 
   return (
-    <div>
-     <div className='input-field'>
-                                  <p>Select SMD</p>
-                                  <select name="division" onChange={(e)=>handleSmd(e)} id="smd">
-                                  <option value=''>--Select SMD--</option> 
-                                  {
-                                    Smd.map((data)=>
-                                      
-                                        <option value={data.name}>{data.name}</option>
-                                    )
-                                  }                                                      
-                                 
-                                  </select>
-                                    </div>
-
-                                    <div className='input-field'>
-                                  <p>Select Main Subject</p>
-                                  <select onChange={(e)=>{handeDivision(e)}} id="division">
-                                  <option value=''>--Select Subject--</option>
-                                  {
-                                     Division.map((resp)=>
-                                     <option value={resp._id}>{resp.name}</option>
-                                    )
-                                  }
-                                 
-                                  </select>
-                              </div>
-                              <div className='input-field'>
-                              <p>Select Intrested Subjects</p>
-
-
-                            <Select
-                            name='select'
-                            options={values.length>3 ? values : options }
-                            labelField='name'
-                            valueField='name'                           
-                            multi                                                                                                                      
-                            onChange={values =>                
-
-                              setValues(values)                              
-                              }
-                            />
-                              </div>
+    <div>     
+      <div className='input-field'>
+        <p>Select Intrested Subjects</p>
+        <Select
+                  placeholder="Select Institute"
+                  isMulti
+                  defaultValue={options.filter((data) => values.includes(data.id))}
+                  onChange={(value) => console.log(value)}
+                  getOptionLabel={option => {
+                    return option.name;
+                  }}
+                  getOptionValue={option => {
+                    return option.id;
+                  }}
+                  options={options}
+                  className='ss-select-input'
+                />
+        </div>
     </div>
 
 

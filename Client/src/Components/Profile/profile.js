@@ -229,13 +229,13 @@ function ActivitiesMenu({ userDetails, currentUserDetails }) {
           onClick={() => { setSelectedActivity('questions') }}
           className={selectedActivity == 'questions' ? 'active' : ''}
         >
-          Questions
+          Posts
         </button>
         <button
           onClick={() => { setSelectedActivity('answers') }}
           className={selectedActivity == 'answers' ? 'active' : ''}
         >
-          Answers
+          Reply
         </button>
         {/* <button
           onClick={() => { setSelectedActivity('replies') }}
@@ -417,7 +417,7 @@ function AnswersActivity({ userDetails, currentUserDetails }) {
     <div className='user-activity-main'>
       <h3 className='user-activity-heading'>
         {answerData ?
-          `${answerData.length} ${answerData.length == 1 ? 'Answer' : 'Answers'}`
+          `${answerData.length} ${answerData.length == 1 ? 'Reply' : 'Replies'}`
           :
           'Loading...'
         }
