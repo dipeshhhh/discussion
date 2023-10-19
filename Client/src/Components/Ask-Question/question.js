@@ -651,7 +651,7 @@ const Question = () => {
     <div className='add-question'>
       <div className='add-question-container'>
       <div className='head-title'>
-        <h1>Ask a Question</h1>
+        <h1>Create a Post</h1>
       </div>
       <div className='question-container'>
         <div className='question-options'>
@@ -685,7 +685,7 @@ const Question = () => {
             {groupidd.status === 1 ?
             <>
              <h3>
-                Your Subject is : {user}
+                Your Main Discipline is : {user}
               </h3>           
 
             </>
@@ -717,8 +717,8 @@ const Question = () => {
               
              <select onChange={(e)=>{groupMember(e)}}>
            <option value=''>--Select Group--</option>             
-              <option value='0'>To All Member Subject</option>
-              <option value='1'>To Specific Member Subject</option>
+              <option value='0'>To All Discipline Member </option>
+              <option value='1'>To Specific Discipline Member</option>
        
                     </select>                      
               
@@ -758,7 +758,7 @@ const Question = () => {
   <div className='input-field'>    
     <select name="division" onChange={(e)=>Select_Type(e)} id="smd">
     <option value=''>--Select options--</option> 
-    <option value='1'>Subject</option>                                                        
+    <option value='1'>Discipline</option>                                                        
     <option value='2'>SMD</option>       
     </select>
 </div>
@@ -773,8 +773,8 @@ const Question = () => {
               
              <select onChange={(e)=>{groupMember(e)}}>
            <option value=''>--Select Group--</option>             
-              <option value='0'>To All Member Subject</option>
-              <option value='1'>To Specific Member Subject</option>
+              <option value='0'>To All Discipline Member</option>
+              <option value='1'>To Specific Discipline Member</option>
        
                     </select>                      
               
@@ -818,8 +818,8 @@ const Question = () => {
   <div className='input-field'>    
     <select name="division" onChange={(e)=>Select_Member(e)} id="smd">
     <option value=''>--Select Institute--</option> 
-    <option value='1'>All SMD Institute</option>                                                        
-    <option value='2'>Multiple Institute </option>
+    <option value='1'>All SMD Institutes</option>                                                        
+    <option value='2'>Multiple Institutes</option>
     <option value='3'>Specific Institute Member</option>   
     </select>
 </div>   
@@ -895,7 +895,7 @@ const Question = () => {
   <div className='input-field'>    
     <select name="division" onChange={(e)=>Select_Type1(e)} id="smd">
     <option value=''>--Select options--</option> 
-    <option value='1'>Subject</option>                                                        
+    <option value='1'>Discipline</option>                                                        
     <option value='2'>SMD</option>       
     </select>
   </div>
@@ -909,8 +909,8 @@ const Question = () => {
                <small>Please Select the Member</small>              
              <select onChange={(e)=>{groupMember(e)}}>
            <option value=''>--Select Group--</option>             
-              <option value='0'>To All Member Subject</option>
-              <option value='1'>To Specific Member Subject</option>       
+              <option value='0'>To All Discipline Member</option>
+              <option value='1'>To Specific Discipline Member</option>       
               </select>          
           </div>
         </div>   
@@ -950,9 +950,9 @@ const Question = () => {
         <div className='input-field'>    
           <select name="division" onChange={(e)=>Select_SMD(e)} id="smd">
           <option value=''>--Select --</option> 
-          <option value='1'>All SMD</option>                                                        
-          <option value='2'>Multiple SMD</option>
-          <option value='3'>Specific SMD Institute </option>   
+          <option value='1'>All SMD's</option>                                                        
+          <option value='2'>Multiple SMD's</option>
+          <option value='3'>Specific SMD Institute</option>   
           </select>
       </div> 
 
@@ -992,8 +992,8 @@ const Question = () => {
   <div className='input-field'>    
     <select name="division" onChange={(e)=>Select_Member(e)} id="smd">
     <option value=''>--Select Institute--</option> 
-    <option value='1'>All SMD Institute</option>                                                        
-    <option value='2'>Multiple Institute</option>
+    <option value='1'>All SMD Institutes</option>                                                        
+    <option value='2'>Multiple Institutes</option>
     <option value='3'>Specific Institute Member</option>   
     </select>
 </div>   

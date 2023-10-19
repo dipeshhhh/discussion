@@ -113,19 +113,19 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
     data.append('question_id', question_id);
 
     if (!body) {
-      setError('Please fill in the Comment Box');
+      setError('Please fill in the Reply Box');
       setLoading(false);
     }
     else if (filter.isProfane(body) == true)
       {
-        setError('You Should Remove bad words from comment box');
+        setError('You Should Remove bad words from Reply box');
         setLoading(false);
       } 
     else {
-      if (window.confirm('Please click to confirm Comment')) {
+      if (window.confirm('Please click to confirm Reply')) {
         Axios.post('/Answer', data).then((res) => {
           if (res) {
-            toast.success('Comment Successful');
+            toast.success('Reply Successful');
             window.location.reload(false);
           }
         });
@@ -164,7 +164,7 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
           <h2 className="main-question">{detail?.title}</h2>
           <h2 className="main-question"></h2>
           <NavLink to="/add-question">
-            <button>Ask Question</button>
+            <button>Create Post</button>
           </NavLink>
         </div>
         <div className="main-desc">
@@ -203,11 +203,11 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
         <div id='write-new-answer'>
           <div className={enable ? "icon-reply" : "icon-reply red-colored"} onClick={() => reply()}>
             {enable ? <ReplyAllIcon /> : <CancelIcon />}
-            <p>{enable ? "Answer" : "Cancel"}</p>
+            <p>{enable ? "Reply" : "Cancel"}</p>
           </div>
           <div className="answer" hidden={enable}>
             <div className="main-answer">
-              <h3>You can Answer</h3>
+              <h3>You can Reply</h3>
               <ReactQuill
                 theme="snow"
                 value={body}
@@ -234,7 +234,7 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
                 maxWidth: 'fit-content',
               }}
             >
-              {loading ? 'Commenting...' : 'Post Comment'}
+              {loading ? 'Submitting...' : 'Submit'}
             </button>
             {error !== '' && (
               <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>
@@ -242,7 +242,7 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
           </div>
         </div>
         <div className="all-questions">
-          <p>Number of Comments: {answerdata?.length}</p>
+          <p>Number of Reply: {answerdata?.length}</p>
           <div className="comments-container">
             {answerdata?.map((resp) => (              
               <Comment key={resp._id} data={resp} />              
@@ -359,16 +359,16 @@ function Comment(props) {
     filter.addWords(...words)     
 
     if (!bodyReply) {
-      setErrorReply('Please fill in the Comment Box');
+      setErrorReply('Please fill in the Reply Box');
       setLoadingReply(false);
     }
     else if (filter.isProfane(bodyReply) == true)
       {
-        setErrorReply('You Should Remove bad words from Comment Box');
+        setErrorReply('You Should Remove bad words from Reply Box');
         setLoadingReply(false);
       } 
      else {
-      if (window.confirm('Please click to confirm Reply')) {
+      if (window.confirm('Please click to Reply Reply')) {
         Axios.patch(`/Answer-reply/${resp._id}`, data).then((res) => {
           if (res) {
             toast.success('Reply Successful');
@@ -444,17 +444,7 @@ function Comment(props) {
               className="react-quill"
               style={{ height: '200px' }}
             />
-          </div>
-          <div className="file-attach">
-            {/* <h3>Attach file (only PDF with 5 MB)</h3>
-            <input
-              label="File upload"
-              type="file"
-              name="file"
-              onChange={handleReplyFileChange}
-              placeholder="Select file..."
-            /> */}
-          </div>
+          </div>          
           <button
             hidden={bthiddenReply}
             onClick={replyToAnswer}

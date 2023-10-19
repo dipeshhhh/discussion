@@ -48,7 +48,7 @@ const AllQuestions = ({ question }) => {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="search-input"
-          placeholder='Search question'
+          placeholder='Search posts'
         />
         <SearchIcon className='search-icon' />
       </div>

@@ -79,14 +79,34 @@ router.post('/updateSMD',(req,res)=>{
 
   const p_id = new ObjectId(req.body.smd1._id)
   const n_id = new ObjectId(req.body.smd)  
+  
 
-  SmdDivision.updateOne({_id:p_id},{$pull:{member:req.body.auth}}).then((resp)=>{       
+  if(req.body.inst1)
+  {
+    const id = new ObjectId(req.body.inst1._id)  
+    Institute.updateOne({_id:id},{$pull:{member:req.body.auth}}).then((resp)=>{    
+          User.updateOne({email:req.body.auth},{$set:{institute:'',Smdid:''}}).then((respo)=>{                 
+              SmdDivision.updateOne({_id:n_id},{$push:{member:req.body.auth}}).then((respon)=>{
+                  User.updateOne({email:req.body.auth},{$set:{Smdid:req.body.smd,Hqrs:2}}).then((response)=>{
+                    res.status(200).send(response)
+                  })
+                })                      })    
+         })  
+  }
+  
+  else
+  {
+     SmdDivision.updateOne({_id:p_id},{$pull:{member:req.body.auth}}).then((resp)=>{       
     SmdDivision.updateOne({_id:n_id},{$push:{member:req.body.auth}}).then((respo)=>{
         User.updateOne({email:req.body.auth},{$set:{Smdid:req.body.smd}}).then((response)=>{
           res.status(200).send(response)
         })
     })
   })
+  }
+
+
+
 })
 
 
@@ -152,15 +172,31 @@ router.get('/institute', (req, res) => {
 /****************Institute Updation API*****************/
 router.post('/updateInstitute',(req,res)=>{
   const p_id = new ObjectId(req.body.inst1._id)
-  const n_id = new ObjectId(req.body.inst)  
-
-  Institute.updateOne({_id:p_id},{$pull:{member:req.body.auth}}).then((resp)=>{       
-    Institute.updateOne({_id:n_id},{$push:{member:req.body.auth}}).then((respo)=>{
-        User.updateOne({email:req.body.auth},{$set:{institute:req.body.inst,Smdid:req.body.smd}}).then((response)=>{
+  const n_id = new ObjectId(req.body.inst) 
+  
+  if(req.body.smd1)
+  {
+    const id = new ObjectId(req.body.smd1._id)
+    SmdDivision.updateOne({_id:id},{$pull:{member:req.body.auth}}).then((resp)=>{ 
+      Institute.updateOne({_id:n_id},{$push:{member:req.body.auth}}).then((respo)=>{
+        User.updateOne({email:req.body.auth},{$set:{institute:req.body.inst,Smdid:req.body.smd,Hqrs:1}}).then((response)=>{
           res.status(200).send(response)
         })
     })
-  })  
+    })    
+  }
+  else
+  {
+    Institute.updateOne({_id:p_id},{$pull:{member:req.body.auth}}).then((resp)=>{       
+      Institute.updateOne({_id:n_id},{$push:{member:req.body.auth}}).then((respo)=>{
+          User.updateOne({email:req.body.auth},{$set:{institute:req.body.inst,Smdid:req.body.smd}}).then((response)=>{
+            res.status(200).send(response)
+          })
+      })
+    }) 
+  }
+
+ 
 })
 /******************************************/
 

@@ -30,7 +30,7 @@ function App() {
             <Route exact path='/profile' element={<Profile />}></Route>
             <Route exact path='/add-question' element={<Question />}></Route>           
             <Route exact path='/view-question' element={<ViewQuestion />}></Route>
-            <Route exact path='/comment' element={<Comment />}></Route>
+            <Route exact path='/comment' element={<Comment/>}></Route>
             <Route exact path='/group-question' element={<GroupQuestion />}></Route>
             <Route exact path='/settings/*' element={<UserSettings />}></Route>
             <Route exact path='*' element={<Errorpage />}></Route>

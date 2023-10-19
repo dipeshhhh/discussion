@@ -30,7 +30,7 @@ const Index = () => {
 
   const location = useLocation();
   const queryParams = new URLSearchParams(location.search);
-  const currentSubject = (queryParams.get('subject') || 'index');
+  const currentSubject = (queryParams.get('id') || 'index');
 
   // const decodedSubject = decodeURI(currentSubject);
   // const pageTitle = capitalize(
