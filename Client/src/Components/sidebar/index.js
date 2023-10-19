@@ -32,10 +32,11 @@ const Index = () => {
   const queryParams = new URLSearchParams(location.search);
   const currentSubject = (queryParams.get('id') || 'index');
 
-  const decodedSubject = decodeURI(currentSubject);
-  const pageTitle = capitalize(
-    ((decodedSubject.toLowerCase() == 'index') || (decodedSubject.toLowerCase() == 'all') || (decodedSubject.toLowerCase() == 'home')) ? 'All Posts' : decodedSubject
-  );
+  // const decodedSubject = decodeURI(currentSubject);
+  // const pageTitle = capitalize(
+  //   (['index','all','home'].includes(decodedSubject.toLowerCase())) ? 'All Posts' : decodedSubject
+  // );
+  const [pageTitle, setPageTitle] = useState('');
 
   let [questions, setQuestions] = useState([]);
   let [status, setStatus] = useState('')
@@ -43,10 +44,17 @@ const Index = () => {
     async function getQuestionsForIndexPage() {
       const question_data = await axios.get(`/questions_for_index_page`,
         { params: { userEmail: auth, subject: currentSubject } })
+
+      setPageTitle(
+        capitalize(
+          ['index', 'all', 'home'].includes(question_data.data.subject.toLowerCase()) ?
+            'All Posts' : question_data.data.subject
+        )
+      );
       setQuestions(question_data.data.questions);
       setStatus(question_data.data.userStatus);
     }
-    getQuestionsForIndexPage();    
+    getQuestionsForIndexPage();
   }, [location])
 
   return (
@@ -55,7 +63,7 @@ const Index = () => {
         <Sidebar />
         <Main questions={questions} status={status} pageTitle={pageTitle} />
       </div>
-    </div> 
+    </div>
   )
 }
 

@@ -76,7 +76,7 @@ const sidebar = () => {
         console.error(error);
       }
     );
-  }, []); 
+  }, []);
 
   return (
     <div className='sidebar-container'>
@@ -131,7 +131,7 @@ const sidebar = () => {
       */}
 
         <div className='sidebar-option-category-container'>
-          <SidebarOption title='Home' icon={<HomeIcon />} />
+          <SidebarOption optionId={'Home'} title='Home' icon={<HomeIcon />} />
         </div>
 
         {
@@ -142,17 +142,17 @@ const sidebar = () => {
               <>
                 <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Institute</small>
-                  <SidebarOption title={institute.name} icon={<PeopleIcon />} />
+                  <SidebarOption optionId={institute._id} title={institute.name} icon={<PeopleIcon />} />
                 </div>
 
                 <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Main Discipline</small>
-                  <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
-                </div>           
+                  <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
+                </div>
                 <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Interested Disciplines</small>
                   {group.data?.map((resp) =>
-                    <SidebarOption title={resp.name} icon={<PeopleIcon />} key={resp.name} />
+                    <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
                   )}
                 </div>
               </>
@@ -160,18 +160,18 @@ const sidebar = () => {
               <>
                 <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">SMD</small>
-                  <SidebarOption title={smd.name} icon={<PeopleIcon />} />
+                  <SidebarOption optionId={smd._id} title={smd.name} icon={<PeopleIcon />} />
                 </div>
 
                 <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Main Discipline</small>
-                  <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
+                  <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
                 </div>
 
                 <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">Interested Disciplines</small>
                   {group.data?.map((resp) =>
-                    <SidebarOption title={resp.name} icon={<PeopleIcon />} key={resp.name} />
+                    <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
                   )}
                 </div>
               </>
@@ -184,31 +184,32 @@ const sidebar = () => {
             <>
               <div className='sidebar-option-category-container'>
                 <small className="sidebar-option-category">SMD</small>
-                <SidebarOption title={smd.name} icon={<PeopleIcon />} />
+                <SidebarOption optionId={smd._id} title={smd.name} icon={<PeopleIcon />} />
               </div>
 
               <div className='sidebar-option-category-container'>
                 <small className="sidebar-option-category">Main Discipline</small>
-                <SidebarOption title={mainG.name} icon={<PeopleIcon />} />
+                <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
               </div>
 
               <div className='sidebar-option-category-container'>
                 <small className="sidebar-option-category">Interested Disciplines</small>
                 {group.data?.map((resp) =>
-                  <SidebarOption title={resp.name} icon={<PeopleIcon />} key={resp.name} />
+                  <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
                 )}
               </div>
             </>
-                      )
+          )
         }
       </div>
     </div>
   )
 }
 
-function SidebarOption({ title, icon }) {
+function SidebarOption({ title, icon, optionId }) {
   return (
-    <NavLink to={`/?id=${encodeURI(title)}`} className='sidebar-option'>
+    // <NavLink to={`/?subject=${encodeURI(title)}`} className='sidebar-option'>
+    <NavLink to={`/?id=${optionId}`} className='sidebar-option'>
       {icon}
       <p>{title}</p>
     </NavLink>
