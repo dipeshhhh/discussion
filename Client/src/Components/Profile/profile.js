@@ -275,7 +275,7 @@ function QuestionsActivity({ userDetails, currentUserDetails }) {
     <div className='user-activity-main'>
       <h3 className='user-activity-heading'>
         {questionData ?
-          `${questionData.length} ${questionData.length == 1 ? 'Question' : 'Questions'}`
+          `${questionData.length} ${questionData.length == 1 ? 'Post' : 'Posts'}`
           :
           'Loading...'
         }
@@ -287,7 +287,7 @@ function QuestionsActivity({ userDetails, currentUserDetails }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="search-input"
-          placeholder='Search question'
+          placeholder='Search Posts'
         />
         <SearchIcon className='search-icon' />
       </div>
@@ -429,7 +429,7 @@ function AnswersActivity({ userDetails, currentUserDetails }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="search-input"
-          placeholder='Search answer'
+          placeholder='Search Replies'
         />
         <SearchIcon className='search-icon' />
       </div>
@@ -476,7 +476,7 @@ function Answer({ data, currentUserDetails }) {
 
       <div className='user-question'>
         {/* NEED: Question title here :) */}
-        <NavLink to={`/view-question?id=${data.question_id}`}>Question: Click to view question</NavLink>
+        <NavLink to={`/view-question?id=${data.question_id}`}>Post: Click to view Post</NavLink>
         <div>
           <div>{isExpanded ? parse(data.body) : parse(truncate(data.body, 200))}</div>
         </div>
@@ -528,7 +528,7 @@ function StarredMenu({ userDetails, currentUserDetails }) {
 
   return (
     <div className='starred-menu-main'>
-      <h3 className='user-activity-heading'>{starredQuestions ? (`${starredQuestions.length} Starred ${starredQuestions.length == 1 ? 'question' : 'questions'}`) : 'Loading...'}</h3>
+      <h3 className='user-activity-heading'>{starredQuestions ? (`${starredQuestions.length} Starred ${starredQuestions.length == 1 ? 'post' : 'posts'}`) : 'Loading...'}</h3>
       <div className='search-bar'>
         <input
           name="searchItem"
@@ -536,7 +536,7 @@ function StarredMenu({ userDetails, currentUserDetails }) {
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className="search-input"
-          placeholder='Search starred question'
+          placeholder='Search starred post'
         />
         <SearchIcon className='search-icon' />
       </div>

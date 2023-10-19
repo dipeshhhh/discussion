@@ -12,7 +12,7 @@ function Change() {
 
   const navigate = useNavigate()
   const [isLoading, setIsLoading] = useState(false);
-  const [userDetails, setUserDetails] = useState(null);
+  const [userDetails, setUserDetails] = useState('');
   let subject = []
   const [subject2, setSubject2] = useState([])
   const [subject1, setSubject1] = useState([])
@@ -27,7 +27,7 @@ function Change() {
         setUserDetails(userResponse.data);
     
         const subject = await axios.get(`/group/${auth}`)
-        const subjects = await axios.get('/subject')
+        const subjects = await axios.get('/subject')       
         setSubject2(userResponse.data.intrested)
         setSubjects(subjects.data)
         setSubject1(subject.data)       
@@ -48,14 +48,16 @@ function Change() {
       })
 
   const handleSubmit = async (e) => {
-
+    
     e.preventDefault()
     setIsLoading(true)
-    if (subject.length < 1) {
-      toast.error('Please Select Intrested Disciplines')
-      setIsLoading(false)
-    }
-    else if (subject.includes(userDetails.Divisionid)) {
+
+    // if (subject.length < 1) {
+    //   toast.error('Please Select Intrested Disciplines')
+    //   setIsLoading(false)
+    // }
+    
+    if (subject.includes(userDetails.Divisionid)) {
       toast.error('You should Select different subject from main Disciplines')
       setIsLoading(false)
     }
@@ -109,7 +111,8 @@ function Change() {
             (
             <Select
               name='select Intrested Discipline'
-              isMulti              
+              isMulti   
+              tabSelectsValue={subjects.filter((data) => subject2.includes(data._id))}           
               defaultValue={subjects.filter((data) => subject2.includes(data._id))}
               options={values.length > 3 ? values : subjects}
               getOptionLabel={option => {
@@ -122,7 +125,8 @@ function Change() {
                 setValues(values)
               }
               className='ss-select-input'
-            />)
+            />        
+            )
           }
           {
              subject2.length<1 &&

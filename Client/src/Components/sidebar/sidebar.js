@@ -208,7 +208,7 @@ const sidebar = () => {
 
 function SidebarOption({ title, icon }) {
   return (
-    <NavLink to={`/?subject=${encodeURI(title)}`} className='sidebar-option'>
+    <NavLink to={`/?id=${encodeURI(title)}`} className='sidebar-option'>
       {icon}
       <p>{title}</p>
     </NavLink>
