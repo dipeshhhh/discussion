@@ -29,7 +29,7 @@ router.post('/Question', upload, async (req, res) => {
 
   // console.log(req.body,req.file)
 
-  const { title, body, auth, Imembers, Members, smdids, institutes,subject } = req.body;
+  const { title, body, auth, Imembers, Members, smdids, institutes, subject } = req.body;
 
   const created_at = new Date();
   const updated_at = new Date();
