@@ -152,7 +152,7 @@ const Question = () => {
     }, [])    
 
   
-   const handleFileChange = (event) => {
+   const handleFileChange = (event) => {  
               
     const files = event.target.files[0];
       console.log(files,"files");
@@ -164,11 +164,11 @@ const Question = () => {
       setFile(event.target.files[0]);
     }
 
-    if(files == undefined) {
+    if(files == undefined) {      
       cancelFile(event)
       return
     } 
-    if (files.size / 1024 > 5120 || files.type.split('/').pop() !== 'pdf') {
+    else if (files.size / 1024 > 5120 || files.type.split('/').pop() !== 'pdf') {
       setBthidden(true);
       setError('Please upload file as per the specified criteria');
     } else {

@@ -46,7 +46,8 @@ export const Tooltip = ({text,children})=>{
             {             
             userDetails.status == 1 ?            
             <>
-             <p>Institute: {institute.name}</p>           
+             <p>Institute: {institute.name}</p>  
+             <p>SMD: {smd.name}</p>         
             </>           
             :
             <p>SMD: {smd.name}</p>

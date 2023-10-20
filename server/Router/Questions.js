@@ -479,7 +479,7 @@ const getdata = async () => {
 
       day_diff.push(Math.ceil(time_diff / (1000 * 60 * 60 * 24)))
 
-      if (day_diff[i] > 30) {
+      if (day_diff[i] > 31) {
         day_id.push(resp[i]._id)
 
         file.push(resp[i].file)
@@ -493,7 +493,7 @@ const getdata = async () => {
 
             if (resp[i].file) {
               fs.unlinkSync(resp[i].file)
-              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {
+              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {                
                 console.log('file has been deleted')
               })
                 .catch((e) => {
@@ -501,7 +501,7 @@ const getdata = async () => {
                 })
             }
             else {
-              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {
+              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {               
                 console.log('file has been deleted')
               })
                 .catch((e) => {
@@ -512,12 +512,12 @@ const getdata = async () => {
 
         })
         fs.unlinkSync(file[z])
-        Question.deleteMany({ _id: day_id[z] }).then(() => {
-          console.log('file has been deleted')
+        User.updateMany({starred:day_id[z]},{$pull:{starred:day_id[z]}}).then((res)=>{
+          console.log('Stared posts'+res)
         })
-          .catch((e) => {
-            console.log(e)
-          })
+        Question.deleteMany({ _id:day_id[z]}).then((resp)=>{
+          console.log('Posted Question'+resp)
+        })
       }
       else {
 
@@ -526,15 +526,16 @@ const getdata = async () => {
 
             if (resp[i].file) {
               fs.unlinkSync(resp[i].file)
-              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {
+              Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {                
                 console.log('file has been deleted')
               })
                 .catch((e) => {
                   console.log(e)
                 })
             }
-            else {
+            else {             
               Answer.deleteMany({ question_id: resp[i].question_id }).then(() => {
+                
                 console.log('file has been deleted')
               })
                 .catch((e) => {
@@ -542,13 +543,14 @@ const getdata = async () => {
                 })
             }
           }
+        })        
+        User.updateMany({starred:day_id[z]},{$pull:{starred:day_id[z]}}).then((res)=>{
+          console.log('Stared posts deleted')
         })
-        Question.deleteMany({ _id: day_id[z] }).then(() => {
-          console.log('file has been deleted')
+        Question.deleteMany({ _id: day_id[z]}).then((resp)=>{
+          console.log('posts deleted')
         })
-          .catch((e) => {
-            console.log(e)
-          })
+        
       }
     }
   })

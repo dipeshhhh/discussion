@@ -181,7 +181,7 @@ function Reply({ id, replied_to, question_id, body, auth, replies, created_at })
                 maxWidth: 'fit-content',
               }}
             >
-              {loadingReply ? 'Replying...' : 'Post Reply'}
+              {loadingReply ? 'Replying...' : 'Reply'}
             </button>
             {errorReply !== '' && (
               <p style={{ color: 'red', fontSize: '14px' }}>{errorReply}</p>
