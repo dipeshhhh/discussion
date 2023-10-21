@@ -1,47 +1,80 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import './PasswordSettings.css';
+import axios from 'axios';
 import Cookies from 'js-cookie';
-const currentUserEmailFromCookies = Cookies.get('auth')?.split(',')[0] || '';
+import validator from 'validator'
+import { ToastContainer, toast } from 'react-toastify';
+const email = Cookies.get('auth')?.split(',')[0] || '';
 
-function ChangePasswordSettings() {
+function ChangePasswordSettings() {  
+/********************Current Password Checking*********************/ 
+  let password;
+  const [errorMessage, setErrorMessage] = useState('')
+  const [loading, setLoading] = useState(false);  
+  const [pblock, setPblock] = useState(false)
+
+  const handCurrent = async (e)=>{
+    password = e.target.value
+    try{
+      const resp = await axios.post('/Signin', {
+          email,
+          password
+      }).then((resp)=>{
+          const UserName = [resp.data.userExist.email,resp.data.userExist.name]        
+         if(UserName)
+         {          
+          setErrorMessage('Password is Correct')
+          setPblock(true)
+         }
+      })
+      }
+      catch(err) {
+
+          // setError(err.response.data.err)
+
+          setErrorMessage(err.response.data.err)
+          setLoading(false);
+      }  
+  }
+/****************************************************************/
+
+const [user, setUSer] = useState({
+  npassword:'',cpassword:''
+})
+let name, value 
+const handleInput = (e)=>{
+ 
+  name =e.target.name
+  value =e.target.value
+
+  setUSer({...user, [name]:value})
+  Validationnpassword(user.npassword)
+  Validationcpassword(user.cpassword)
+}
 
 
-  
-  useEffect(() => {
-    const fetchUserData = async () => {
-      console.log(currentUserEmailFromCookies)
-
-      // try {
-      //   setIsLoading(true);
-      //   const userResponse = await axios.get(`/user-details/${currentUserEmailFromCookies}`);
-      //   const currentUserResponse = await axios.get(`/user-details/${currentUserEmailFromCookies}`);
-      //   setUserDetails(userResponse.data);
-      //   setCurrentUserDetails(currentUserResponse.data)
-
-      //   if(userResponse.data.Hqrs ==1)
-      //   {
-      //     const Smd = await axios.get(`/SmdName/${userResponse.data.Smdid}`);
-      //     const Inst = await axios.get(`/InstituteName/${userResponse.data.institute}`)
-      //     setSmd(Smd.data)
-      //     setInstitute(Inst.data)
-      //   }
-      //   else if (userResponse.data.Hqrs == 2)
-      //   {
-      //     const Smd = await axios.get(`/SmdName/${userResponse.data.Smdid}`);
-      //     setSmd(Smd.data)
-      //   }
-      // } catch (error) {
-      //   console.error('Error fetching user data:', error);
-      // } finally {
-      //   setIsLoading(false);
-      // }
-    };
-    fetchUserData();
-  },[]);
-
-
-
-
+const Validationnpassword = (value)=>{
+  if (validator.isStrongPassword(value, { 
+    minLength: 8, minLowercase: 1, 
+    minUppercase: 1, minNumbers: 1, minSymbols: 1 
+  })) { 
+    console.log('sabchangahai')
+  }  
+   else { 
+    console.log('Kuch thik hi nahi hai') 
+  }
+}
+const Validationcpassword = (value)=>{
+  if (validator.isStrongPassword(value, { 
+    minLength: 8, minLowercase: 1, 
+    minUppercase: 1, minNumbers: 1, minSymbols: 1 
+  })) { 
+    console.log('sabchangahai')
+  }  
+   else { 
+    console.log('Kuch thik hi nahi hai') 
+  }
+}
 
   function handleSubmit(event) {
     event.preventDefault();
@@ -57,24 +90,48 @@ function ChangePasswordSettings() {
         <form className='change-password-form'>
 
           <div className='cp-input-section'>
-            <label className='cp-input-label' for='us-cp-input-1'>Current password</label>
-            <input className='cp-input' id='us-cp-input-1' type='password' />
+            <label className='cp-input-label' for='us-cp-input-1' >Current password</label>
+            <input className='cp-input' disabled={pblock} autoComplete='off' id='us-cp-input-1' type='password' placeholder='Enter your Current Password' onChange={(e)=>handCurrent(e)} />
+            {pblock == true ? <span style={{fontWeight: 'bold',color: 'Green', 
+              }}>{errorMessage}</span> 
+              : 
+                    <span style={{ 
+                        fontWeight: 'bold', 
+                        color: 'red', 
+                    }}>{errorMessage}</span>} 
           </div>
 
-          <div className='cp-input-section'>
+          {
+            pblock==true &&
+            <>
+             <div className='cp-input-section'>
             <label className='cp-input-label' for='us-cp-input-2'>New password</label>
-            <input className='cp-input' id='us-cp-input-2' type='password' />
+            <input className='cp-input' id='us-cp-input-2'
+             type='password'
+             name='npassword'
+             value={user.npassword}
+             onChange={handleInput}
+            />
           </div>
 
           <div className='cp-input-section'>
             <label className='cp-input-label' for='us-cp-input-3'>Confirm new password</label>
-            <input className='cp-input' id='us-cp-input-3' type='password' />
+            <input className='cp-input' id='us-cp-input-3'
+            type='password'
+            name='cpassword'
+            value={user.cpassword}
+            onChange={handleInput}
+            />
           </div>
 
           <div className='cp-submit-section'>
             <div className='cp-error-message'>This is an error</div>
             <button className='cp-submit-button' type='submit' onClick={handleSubmit}>Change password</button>
           </div>
+            </>
+
+          }
+         
 
         </form>
       </div>

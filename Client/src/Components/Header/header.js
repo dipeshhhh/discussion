@@ -86,7 +86,7 @@ const Header = () => {
         </div>
         <div className='header-center'>
           <h1 className='header-title'><font style={{ color: '#006633' }}>Discussion Forum</font></h1>
-          <h2 className='header-title2'><font style={{ color: '#006633' }}>ICAR (Indian Council Of Agricultural Research)</font></h2>
+          <h2 className='header-title2'><font style={{ color: '#006633' }}>ICAR (Indian Council of Agricultural Research)</font></h2>
         </div>
         {
           auth ?
