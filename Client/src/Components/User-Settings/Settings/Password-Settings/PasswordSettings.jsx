@@ -12,9 +12,13 @@ function ChangePasswordSettings() {
   const [errorMessage, setErrorMessage] = useState('')
   const [loading, setLoading] = useState(false);  
   const [pblock, setPblock] = useState(false)
+  const [npblock, setNpblock] = useState(false)
+  const [cpblock, setCpblock] = useState(false)
 
   const handCurrent = async (e)=>{
     password = e.target.value
+
+    console.log(password)
     try{
       const resp = await axios.post('/Signin', {
           email,
@@ -29,9 +33,8 @@ function ChangePasswordSettings() {
       })
       }
       catch(err) {
-
           // setError(err.response.data.err)
-
+          setPblock(false)
           setErrorMessage(err.response.data.err)
           setLoading(false);
       }  
@@ -58,10 +61,12 @@ const Validationnpassword = (value)=>{
     minLength: 8, minLowercase: 1, 
     minUppercase: 1, minNumbers: 1, minSymbols: 1 
   })) { 
-    console.log('sabchangahai')
+    setNpblock(true)
+    setErrorMessage('sabchangahai')
   }  
    else { 
-    console.log('Kuch thik hi nahi hai') 
+    setNpblock(false)
+    setErrorMessage('Kuch thik hi nahi hai') 
   }
 }
 const Validationcpassword = (value)=>{
@@ -69,10 +74,12 @@ const Validationcpassword = (value)=>{
     minLength: 8, minLowercase: 1, 
     minUppercase: 1, minNumbers: 1, minSymbols: 1 
   })) { 
-    console.log('sabchangahai')
+    setCpblock(true)
+    setErrorMessage('sabchangahai')
   }  
    else { 
-    console.log('Kuch thik hi nahi hai') 
+    setCpblock(false)
+    setErrorMessage('Kuch thik hi nahi hai') 
   }
 }
 
@@ -112,6 +119,13 @@ const Validationcpassword = (value)=>{
              value={user.npassword}
              onChange={handleInput}
             />
+            {npblock == true ? <span style={{fontWeight: 'bold',color: 'Green', 
+              }}>{errorMessage}</span> 
+              : 
+                    <span style={{ 
+                        fontWeight: 'bold', 
+                        color: 'red', 
+                    }}>{errorMessage}</span>} 
           </div>
 
           <div className='cp-input-section'>
@@ -122,6 +136,13 @@ const Validationcpassword = (value)=>{
             value={user.cpassword}
             onChange={handleInput}
             />
+            {cpblock == true ? <span style={{fontWeight: 'bold',color: 'Green', 
+              }}>{errorMessage}</span> 
+              : 
+                    <span style={{ 
+                        fontWeight: 'bold', 
+                        color: 'red', 
+                    }}>{errorMessage}</span>} 
           </div>
 
           <div className='cp-submit-section'>
