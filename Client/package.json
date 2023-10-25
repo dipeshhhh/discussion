@@ -34,6 +34,7 @@
     "react-helmet": "^6.1.0",
     "react-html-parser": "^2.0.2",
     "react-multiple-select-dropdown-lite": "^2.0.6",
+    "react-password-strength-bar": "^0.4.1",
     "react-quill": "^2.0.0",
     "react-redux": "^8.0.5",
     "react-router-dom": "^6.11.0",

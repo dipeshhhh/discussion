@@ -1,19 +1,22 @@
 import React, { useState, useEffect, useReducer } from 'react';
+import PasswordStrengthBar from 'react-password-strength-bar';
 import './PasswordSettings.css';
+import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
-import Cookies from 'js-cookie';
 import validator from 'validator'
+import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 const email = Cookies.get('auth')?.split(',')[0] || '';
 
 function ChangePasswordSettings() {  
+
+  const navigate = useNavigate()   
 /********************Current Password Checking*********************/ 
   let password;
   const [errorMessage, setErrorMessage] = useState('')
+  const [errorpmessage, setErrorPmessage] = useState('')  
   const [loading, setLoading] = useState(false);  
   const [pblock, setPblock] = useState(false)
-  const [npblock, setNpblock] = useState(false)
-  const [cpblock, setCpblock] = useState(false)
 
   const handCurrent = async (e)=>{
     password = e.target.value
@@ -45,46 +48,65 @@ const [user, setUSer] = useState({
   npassword:'',cpassword:''
 })
 let name, value 
-const handleInput = (e)=>{
- 
+const handleInput = (e)=>{ 
   name =e.target.name
   value =e.target.value
-
-  setUSer({...user, [name]:value})
-  Validationnpassword(user.npassword)
-  Validationcpassword(user.cpassword)
-}
+  setUSer({...user, [name]:value})}
 
 
-const Validationnpassword = (value)=>{
-  if (validator.isStrongPassword(value, { 
-    minLength: 8, minLowercase: 1, 
-    minUppercase: 1, minNumbers: 1, minSymbols: 1 
-  })) { 
-    setNpblock(true)
-    setErrorMessage('sabchangahai')
-  }  
-   else { 
-    setNpblock(false)
-    setErrorMessage('Kuch thik hi nahi hai') 
-  }
-}
-const Validationcpassword = (value)=>{
-  if (validator.isStrongPassword(value, { 
-    minLength: 8, minLowercase: 1, 
-    minUppercase: 1, minNumbers: 1, minSymbols: 1 
-  })) { 
-    setCpblock(true)
-    setErrorMessage('sabchangahai')
-  }  
-   else { 
-    setCpblock(false)
-    setErrorMessage('Kuch thik hi nahi hai') 
-  }
-}
+  const handleSubmit = async (event)=> {
+    const {npassword, cpassword} = user
 
-  function handleSubmit(event) {
+    setLoading(true)
     event.preventDefault();
+    if(!npassword || !cpassword)  
+    {
+      setErrorPmessage("Please Enter the New password and Confirm Password");
+        setLoading(false);
+    }
+    else if(!validator.isStrongPassword(npassword||cpassword, { 
+      minLength: 8, minLowercase: 1, 
+      minUppercase: 1, minNumbers: 1, minSymbols: 1 
+    }))
+    {
+      setErrorPmessage("Password must have combination of uppercase letters, lowercase letters, numbers, and symbols.");
+        setLoading(false);
+    }
+    else if(npassword!=cpassword)
+    {
+      setErrorPmessage('New Password and Confirm Password should be same')
+      setLoading(false);
+    }
+    else{
+      setErrorPmessage('')
+      if(window.confirm('Please confirm to change Current Password'))
+      {
+
+        try{
+          const resp =await axios.post('/ChangePassword',
+          {
+              email,
+              npassword
+              
+          }).then((resp)=>{
+              toast.success('Password successfully changed')
+              navigate('/')
+              setLoading(false)
+          })
+      }
+      catch(err)
+      {
+          toast.error(err.response.data.err)
+          setLoading(false);
+      }
+        
+
+      }
+      else
+      {
+        setLoading(false);
+      }
+    }
   }
 
   return (
@@ -119,13 +141,7 @@ const Validationcpassword = (value)=>{
              value={user.npassword}
              onChange={handleInput}
             />
-            {npblock == true ? <span style={{fontWeight: 'bold',color: 'Green', 
-              }}>{errorMessage}</span> 
-              : 
-                    <span style={{ 
-                        fontWeight: 'bold', 
-                        color: 'red', 
-                    }}>{errorMessage}</span>} 
+            <PasswordStrengthBar   className='cp-input' password={user.npassword} />         
           </div>
 
           <div className='cp-input-section'>
@@ -136,18 +152,18 @@ const Validationcpassword = (value)=>{
             value={user.cpassword}
             onChange={handleInput}
             />
-            {cpblock == true ? <span style={{fontWeight: 'bold',color: 'Green', 
-              }}>{errorMessage}</span> 
-              : 
-                    <span style={{ 
-                        fontWeight: 'bold', 
-                        color: 'red', 
-                    }}>{errorMessage}</span>} 
+          <PasswordStrengthBar className='cp-input' password={user.cpassword} />           
           </div>
 
           <div className='cp-submit-section'>
-            <div className='cp-error-message'>This is an error</div>
+            <div className='cp-error-message'>       
+            </div>
             <button className='cp-submit-button' type='submit' onClick={handleSubmit}>Change password</button>
+            { errorpmessage !== "" &&
+                    <span style={{ 
+                        fontWeight: 'bold', 
+                        color: 'red', 
+                    }}>{errorpmessage}</span>} 
           </div>
             </>
 

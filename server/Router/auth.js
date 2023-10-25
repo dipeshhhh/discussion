@@ -168,8 +168,6 @@ router.post('/Signin', async (req, res) => {
         }
 
         const userExist = await Users.findOne({ email: email })
-
-
         
         if (userExist) {
             const verified = await bcyrpt.compare(password, userExist.password);
@@ -185,11 +183,8 @@ router.post('/Signin', async (req, res) => {
             
             else if (verified) {          
 
-                    return res.status(200).json({userExist})
-                            
-                
-
-            }
+                    return res.status(200).json({userExist}) 
+                 }
             else {
                 return res.status(402).json({ err: 'wrong credentail' })
             }
@@ -204,6 +199,17 @@ router.post('/Signin', async (req, res) => {
     }
 }
 )
+
+/***********************************User Password Change*****************************/
+
+router.post('/ChangePassword', async(req,res)=>{  
+   const password = await bcyrpt.hash(req.body.npassword, 10);   
+   Users.updateOne({email:req.body.email},{$set:{password:password}}).then((resp)=>{
+    return res.status(200).json({resp})
+   })    
+})
+
+/************************************************************************************/
 
 /***********************************************************************************/
 
