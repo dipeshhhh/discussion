@@ -164,7 +164,12 @@ function Question({ data, currentUser, isAlreadyStarred }) {
           </NavLink> */}
           <Tooltip text={data?.auth}>
           <Avatar />
+          {
+            currentUser.email == data?.auth ?
+            <p className='material-symbols-outlined'>You</p>
+            :
             <p className='material-symbols-outlined'>{String(data?.auth).split('@')[0]}</p>
+          }           
           </Tooltip>
           <small>on {new Date(data?.updated_at).toLocaleString().replace(/,/g, ' at ')}</small>
           {currentUser.status > 1 ? (
