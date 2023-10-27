@@ -91,7 +91,7 @@ function Change() {
   return (
     <div className='us-main-section'>
       <div className='us-main-section-title'>
-        Change interested subjects
+        Change interested Disciplines
       </div>
       <div className='us-main-section-body'>
         <div className='ss-input-section'>
@@ -105,7 +105,7 @@ function Change() {
           </ul>
         </div>
         <div className='ss-input-section'>
-          <label className='ss-input-label' htmlFor='ss-smd-options'>Select new interested Disciplines</label>
+          <label className='ss-input-label' htmlFor='ss-smd-options'>Select new interested Disciplines<sup style={{color: "red"}}>&nbsp;*</sup></label>
           {
             subject2.length>0 &&
             (
@@ -151,7 +151,7 @@ function Change() {
           }
         </div>
         <div className='ss-submit-section'>
-          <button className='ss-submit-button' onClick={handleSubmit}>Update subjects</button>
+          <button className='ss-submit-button' onClick={handleSubmit}>Change Disciplines</button>
         </div>
       </div>
    </div>

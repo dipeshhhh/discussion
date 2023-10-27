@@ -29,8 +29,9 @@ function ChangePasswordSettings() {
       }).then((resp)=>{
           const UserName = [resp.data.userExist.email,resp.data.userExist.name]        
          if(UserName)
-         {          
-          setErrorMessage('Password is Correct')
+         {  
+          setErrorMessage('')        
+          toast.success('Password is correct')
           setPblock(true)
          }
       })
@@ -59,22 +60,27 @@ const handleInput = (e)=>{
 
     setLoading(true)
     event.preventDefault();
-    if(!npassword || !cpassword)  
+    if(!npassword)  
     {
-      setErrorPmessage("Please Enter the New password and Confirm Password");
+      toast.error("Please Enter the New password");
+        setLoading(false);
+    }
+    else if(!cpassword)
+    {
+      toast.error("Please Enter the Confirm password");
         setLoading(false);
     }
     else if(!validator.isStrongPassword(npassword||cpassword, { 
-      minLength: 8, minLowercase: 1, 
+      minLength: 8, minLowercase: 1, maxLength:24,
       minUppercase: 1, minNumbers: 1, minSymbols: 1 
     }))
     {
-      setErrorPmessage("Password must have combination of uppercase letters, lowercase letters, numbers, and symbols.");
-        setLoading(false);
+      toast.error("Password must have combination of uppercase letters, lowercase letters, numbers, and symbols.");
+      setLoading(false);
     }
     else if(npassword!=cpassword)
     {
-      setErrorPmessage('New Password and Confirm Password should be same')
+      toast.error('New Password and Confirm Password should be same')
       setLoading(false);
     }
     else{
@@ -86,7 +92,7 @@ const handleInput = (e)=>{
           const resp =await axios.post('/ChangePassword',
           {
               email,
-              npassword
+              cpassword
               
           }).then((resp)=>{
               toast.success('Password successfully changed')
@@ -119,7 +125,7 @@ const handleInput = (e)=>{
         <form className='change-password-form'>
 
           <div className='cp-input-section'>
-            <label className='cp-input-label' for='us-cp-input-1' >Current password</label>
+            <label className='cp-input-label' for='us-cp-input-1' >Enter Current password<sup style={{color: "red"}}>&nbsp;*</sup></label>
             <input className='cp-input' disabled={pblock} autoComplete='off' id='us-cp-input-1' type='password' placeholder='Enter your Current Password' onChange={(e)=>handCurrent(e)} />
             {pblock == true ? <span style={{fontWeight: 'bold',color: 'Green', 
               }}>{errorMessage}</span> 
@@ -134,7 +140,7 @@ const handleInput = (e)=>{
             pblock==true &&
             <>
              <div className='cp-input-section'>
-            <label className='cp-input-label' for='us-cp-input-2'>New password</label>
+            <label className='cp-input-label' for='us-cp-input-2'>New password<sup style={{color: "red"}}>&nbsp;*</sup></label>
             <input className='cp-input' id='us-cp-input-2'
              type='password'
              name='npassword'
@@ -145,7 +151,7 @@ const handleInput = (e)=>{
           </div>
 
           <div className='cp-input-section'>
-            <label className='cp-input-label' for='us-cp-input-3'>Confirm new password</label>
+            <label className='cp-input-label' for='us-cp-input-3'>Confirm new password<sup style={{color: "red"}}>&nbsp;*</sup></label>
             <input className='cp-input' id='us-cp-input-3'
             type='password'
             name='cpassword'
@@ -158,18 +164,10 @@ const handleInput = (e)=>{
           <div className='cp-submit-section'>
             <div className='cp-error-message'>       
             </div>
-            <button className='cp-submit-button' type='submit' onClick={handleSubmit}>Change password</button>
-            { errorpmessage !== "" &&
-                    <span style={{ 
-                        fontWeight: 'bold', 
-                        color: 'red', 
-                    }}>{errorpmessage}</span>} 
+            <button className='cp-submit-button' type='submit' onClick={handleSubmit}>Change password</button>       
           </div>
             </>
-
           }
-         
-
         </form>
       </div>
 

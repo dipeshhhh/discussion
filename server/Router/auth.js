@@ -15,15 +15,13 @@ const { ObjectId } = require('mongodb');
 //Signup Page query
 
 
-router.post('/SendOtp', async(req,res)=>{
+router.post('/SendOtp', async(req,res)=>{   
    
-   
-    const data = await Users.findOne({email:req.body.email}) 
-    
+    const data = await Users.findOne({email:req.body.email})    
    
     if(data)
     {
-        return res.status(422).json({err:'Email already Exist'})
+        return res.status(422).json({err:'Email id already in use'})
     }
     else
     {
@@ -42,6 +40,32 @@ router.post('/SendOtp', async(req,res)=>{
     }
 
 
+})
+
+router.post('/SendPassword', async(req,res)=>{ 
+    
+    const data = await Users.findOne({email:req.body.email})    
+   
+    if(data)
+    {
+        let otpcode = Math.random().toString(36).substring(2,7)
+        let otpData = new Otp({
+            email:req.body.email,
+            code:otpcode,
+            expireIn:new Date().getTime()+300*1000
+        })
+
+        let otpResponse = await otpData.save()
+        if(otpResponse)
+        {
+            return res.status(200).json('otp send to you email ID')    }
+        
+      }
+    else
+    {
+        return res.status(422).json({err:'Email is not Register'})
+    }   
+        
 })
 
 router.post('/Resotp',async(req,res)=>{
@@ -203,7 +227,7 @@ router.post('/Signin', async (req, res) => {
 /***********************************User Password Change*****************************/
 
 router.post('/ChangePassword', async(req,res)=>{  
-   const password = await bcyrpt.hash(req.body.npassword, 10);   
+   const password = await bcyrpt.hash(req.body.cpassword, 10);   
    Users.updateOne({email:req.body.email},{$set:{password:password}}).then((resp)=>{
     return res.status(200).json({resp})
    })    

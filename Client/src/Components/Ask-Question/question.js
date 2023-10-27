@@ -657,7 +657,7 @@ const Question = () => {
         <div className='question-options'>
          <div className='question-option'>
           <div className='title'>
-            <h3>Title&nbsp;(Max 25 Words Allowed)</h3>
+            <h3>Title&nbsp;(Max 25 Words Allowed)<sup style={{color: "red"}}>&nbsp;*</sup></h3>
             <small></small>            
           <input type="text" value={title} onChange={(e)=> setTitle(e.target.value)}
            
@@ -670,7 +670,7 @@ const Question = () => {
         </div>
           <div className='question-option'>
           <div className='body'>
-            <h3>Body&nbsp;(Max 150 Words Allowed)</h3>
+            <h3>Body&nbsp;(Max 150 Words Allowed)<sup style={{color: "red"}}>&nbsp;*</sup></h3>
             <small></small>
              <ReactQuill value={body} id='textbox' onChange={handleQuill} className='react-quill'theme='snow'/>
              <p>
@@ -713,7 +713,7 @@ const Question = () => {
           <div className='group'>
             <h3>Member</h3>
            
-               <small>Please Select the Member</small>
+               <small>Please Select the Member<sup style={{color: "red"}}>&nbsp;*</sup></small>
               
              <select onChange={(e)=>{groupMember(e)}}>
            <option value=''>--Select Group--</option>             
@@ -769,7 +769,7 @@ const Question = () => {
           <div className='group'>
             <h3>Member</h3>
            
-               <small>Please Select the Member</small>
+               <small>Please Select the Member<sup style={{color: "red"}}>&nbsp;*</sup></small>
               
              <select onChange={(e)=>{groupMember(e)}}>
            <option value=''>--Select Group--</option>             
@@ -827,7 +827,7 @@ const Question = () => {
   {  selectMember == 2 &&
 
   <div className='input-field'>
-        <p>Select Institute</p>                           
+        <p>Select Institute<sup style={{color: "red"}}>&nbsp;*</sup></p>                           
         <Select        
       name='select'
       options={subject}
@@ -843,7 +843,7 @@ const Question = () => {
        selectMember == 3 &&
         <>
           <div className='input-field'>
-         <p>Select Institute</p>
+         <p>Select Institute<sup style={{color: "red"}}>&nbsp;*</sup></p>
          <select name="division" onChange={(e)=>handleSubject(e)} id="smd">
          <option value=''>--Select Institute--</option> 
          {
@@ -904,7 +904,7 @@ const Question = () => {
   <>
   <div className='question-option'>
           <div className='group'>
-            <h3>Member</h3>
+            <h3>Member<sup style={{color: "red"}}>&nbsp;*</sup></h3>
            
                <small>Please Select the Member</small>              
              <select onChange={(e)=>{groupMember(e)}}>
@@ -959,7 +959,7 @@ const Question = () => {
             {selectSmd == 2 &&
 
         <div className='input-field'>
-            <p>Select SMD</p>                           
+            <p>Select SMD<sup style={{color: "red"}}>&nbsp;*</sup></p>                           
             <Select        
           name='select'
           options={smd}
@@ -975,7 +975,7 @@ const Question = () => {
           
           <>
           <div className='input-field'>
-          <p>Select SMD</p>
+          <p>Select SMD<sup style={{color: "red"}}>&nbsp;*</sup></p>
           <select name="division" onChange={(e)=>handleSmd(e)} id="smd">
           <option value=''>--Select SMD--</option> 
           {
@@ -1001,7 +1001,7 @@ const Question = () => {
   {  selectMember == 2 &&
 
   <div className='input-field'>
-        <p>Select Institute</p>                           
+        <p>Select Institute<sup style={{color: "red"}}>&nbsp;*</sup></p>                           
         <Select        
       name='select'
       options={subject}
@@ -1017,7 +1017,7 @@ const Question = () => {
        selectMember == 3 &&
         <>
           <div className='input-field'>
-         <p>Select Institute</p>
+         <p>Select Institute<sup style={{color: "red"}}>&nbsp;*</sup></p>
          <select name="division" onChange={(e)=>handleSubject(e)} id="smd">
          <option value=''>--Select Institute--</option> 
          {
