@@ -168,10 +168,16 @@ const Question = () => {
       cancelFile(event)
       return
     } 
-    else if (files.size / 1024 > 5120 || files.type.split('/').pop() !== 'pdf') {
+    else if (files.size / 1024 > 5120) {
       setBthidden(true);
-      setError('Please upload file as per the specified criteria');
-    } else {
+      setError('Size is different');
+    }
+    else if( files.type.split('/').pop() != 'pdf'&&'jpeg')
+    {
+      setBthidden(true);
+      setError('Please upload diffrent extetion file');      
+    } 
+    else {
       cancelFile(event)
     }      
     };  
@@ -1073,7 +1079,7 @@ const Question = () => {
 }
         <div className='question-option'>
           <div className='attachment'>
-            <h3>Attach file (only PDF with 5 MB)</h3>
+            <h3>Attach file</h3>
             <input label="File upload" type="file" name='file' onChange={handleFileChange}
               placeholder="Select file..." />
           </div>

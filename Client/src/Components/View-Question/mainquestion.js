@@ -152,7 +152,10 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
       method: 'GET',
       responseType: 'blob',
     }).then((resp) => {
-      FileDownload(resp.data, 'file.pdf');
+     
+      const file = resp.data.type.split('/')
+    
+     FileDownload(resp.data,`file.${file[1]}`);
     });
   };
 

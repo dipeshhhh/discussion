@@ -224,6 +224,40 @@ router.post('/Signin', async (req, res) => {
 }
 )
 
+/******************************************************************************/
+
+/**************************Check password API*******************************/
+router.post('/checkpassword', async (req, res) => {
+    const { email, password } = req.body; 
+
+          const userExist = await Users.findOne({ email:email})
+        
+        if (userExist) {
+            const verified = await bcyrpt.compare(password, userExist.password);
+            if(userExist.status === 0)
+            {
+                return res.status(404).json({ err: 'User is not Activated' }) 
+            }
+            else if (userExist.status > 3)
+            {
+                return res.status(404).json({ err: 'Wrong Credentails' })
+            }            
+            else if (verified) {          
+
+                    return res.status(200).json({userExist}) 
+                 }
+            else {
+                return res.status(404).json({ err: 'wrong credentail' })
+            }
+        }
+        else {
+            return res.status(402).json({ err: 'wrong credentail' })
+        }    
+    }
+    )
+
+/*****************************************************************************/
+
 /***********************************User Password Change*****************************/
 
 router.post('/ChangePassword', async(req,res)=>{  

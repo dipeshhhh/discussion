@@ -18,12 +18,16 @@ function ChangePasswordSettings() {
   const [loading, setLoading] = useState(false);  
   const [pblock, setPblock] = useState(false)
 
-  const handCurrent = async (e)=>{
-    password = e.target.value
 
+  const handCurrent = async (e)=>{   
+
+    setLoading(true)
+    e.preventDefault();
+   
+    password = e.target.value
     console.log(password)
     try{
-      const resp = await axios.post('/Signin', {
+      const resp = await axios.post('/checkpassword', {
           email,
           password
       }).then((resp)=>{
