@@ -67,16 +67,7 @@ const Mainquestion = (details) => {
   const handleQuill = (value) => {
     setBody(value);
   };
-
-  const downloadanswer = (e) => {
-    Axios({
-      url: `/A_download/${e}`,
-      method: 'GET',
-      responseType: 'blob',
-    }).then((resp) => {
-      FileDownload(resp.data, 'file.pdf');
-    });
-  };
+ 
   /*************code Handle the file uploading file*******************/
   const handleFileChange = (event) => {
     event.preventDefault();
@@ -381,6 +372,16 @@ function Comment(props) {
         });
       }
     }
+  };
+
+  const downloadanswer = (e) => {
+    Axios({
+      url: `/A_download/${e}`,
+      method: 'GET',
+      responseType: 'blob',
+    }).then((resp) => {
+      FileDownload(resp.data, 'file.pdf');
+    });
   };
 
   /***********************************/
