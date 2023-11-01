@@ -123,15 +123,34 @@ router.post('/VerifyOtp', async(req,res)=>{
     }
 })
 
-router.get('/location', (req,res)=>{
-    
+/*******************Location with Designation*******************/
+
+router.get('/location', (req,res)=>{    
     Location.find().then((resp)=>{
         res.status(200).send(resp)
     })
-
 })
 
+/*************************************************************/
 
+/***************************fetch Designation**********************************/
+
+router.get('/designation/:id', (req,res)=>{   
+    Location.findOne({id:req.params.id},{_id:0,designation:1}).then((resp)=>{
+        res.status(200).send(resp)
+    })
+})
+/***********************************************************************/
+
+/***********************Update Designation**************************/
+
+router.post('/updateDesignation',(req,res)=>{
+    Users.updateOne({email:req.body.auth},{$set:{designation:req.body.designation,status:req.body.status}}).then((resp)=>{
+        res.status(200).send(resp)
+    })
+})
+
+/******************************************************************/
 
 /************************Signup API*************************/
 router.post('/Signup', async (req,res)=>{

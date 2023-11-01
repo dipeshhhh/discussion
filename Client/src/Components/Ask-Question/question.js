@@ -54,9 +54,7 @@ const Question = () => {
   const [gStatus, setGStatus]= useState(true)
   const [mStatus, setMstatus] = useState(true)
   const handleQuill = (value) => {
-      setBody(value)
-    
-      
+      setBody(value)         
       
     }
 /*********  Words Count for body & title part   ***********/
@@ -168,15 +166,15 @@ const Question = () => {
       cancelFile(event)
       return
     } 
-    else if (files.size / 1024 > 5120) {
+    else if (files.size / 1024 >10240) {
       setBthidden(true);
-      setError('Size is different');
+      setError('File should be less than 10MB');
     }
-    else if( files.type.split('/').pop() != 'pdf'&&'jpeg')
+    else if(!files.type.split('/').pop().match('jpeg')&&!files.type.split('/').pop().match('pdf')&&!files.type.split('/').pop().match('mp4')&&!files.type.split('/').pop().match('mp3')&&!files.type.split('/').pop().match('mpeg'))
     {
       setBthidden(true);
-      setError('Please upload diffrent extetion file');      
-    } 
+      setError('Please upload file with parameters');      
+    }   
     else {
       cancelFile(event)
     }      
@@ -1079,7 +1077,7 @@ const Question = () => {
 }
         <div className='question-option'>
           <div className='attachment'>
-            <h3>Attach file</h3>
+            <h3>Attach file&nbsp;(.pdf,.jpeg,.mp4,.mp3,.mpeg extention file allowed with 10 MB size)</h3>
             <input label="File upload" type="file" name='file' onChange={handleFileChange}
               placeholder="Select file..." />
           </div>
