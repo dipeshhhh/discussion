@@ -198,9 +198,9 @@ function Location() {
               <div className='ss-input-section'>          
                 <label className='ss-input-label' htmlFor='ss-current-smd'>Current Location</label>
                 {userDetails.Hqrs ==1 ?
-            <p lassName='ss-current-smd' id='ss-current-smd'>ICAR Institute</p>
+            <p className='ss-current-smd' id='ss-current-smd'>- ICAR Institute</p>
             :
-            <p lassName='ss-current-smd' id='ss-current-smd'>ICAR HQRS</p>
+            <p className='ss-current-smd' id='ss-current-smd'>- ICAR HQRS</p>
             }
            
               </div>

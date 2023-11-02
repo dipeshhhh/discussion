@@ -922,7 +922,7 @@ const Getotp = async(e) =>{
                                     color:'var(--secondary-color-forlink)',
                                     textDecoration:'underline',
                                     cursor:'pointer'
-                              }}>{ login ? 'Login' : 'Reset Password'}?</p>
+                              }}>{ login ? 'Login' : 'Forgot Password'}?</p>
                                     }
                               {
                                 !login &&

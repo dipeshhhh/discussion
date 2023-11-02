@@ -6,7 +6,7 @@ import axios from 'axios';
 import validator from 'validator'
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
-const email = Cookies.get('auth')?.split(',')[0] || '';
+
 
 function ChangePasswordSettings() {  
 
@@ -17,6 +17,7 @@ function ChangePasswordSettings() {
   const [errorpmessage, setErrorPmessage] = useState('')  
   const [loading, setLoading] = useState(false);  
   const [pblock, setPblock] = useState(false)
+  const email = Cookies.get('auth')?.split(',')[0] || '';
 
 
   const handCurrent = async (e)=>{   

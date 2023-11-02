@@ -86,7 +86,7 @@ function Designation() {
             <div className='us-main-section-body'>
               <div className='ss-input-section'>
                 <label className='ss-input-label' htmlFor='ss-current-institute'>Current Designation</label>
-                <p className='ss-current-institute' id='ss-current-institute'>{userdetail.designation}</p>
+                <p className='ss-current-institute' id='ss-current-institute'>- {userdetail.designation}</p>
               </div>
               <div className='ss-input-section'>
                 <label className='ss-input-label' htmlFor='ss-institute-options'>New Designation</label>
