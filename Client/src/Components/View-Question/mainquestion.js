@@ -21,6 +21,7 @@ import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
 import CancelIcon from '@mui/icons-material/Cancel';
 import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
+import CryptoJS from 'crypto-js'
 import Cookies from 'js-cookie';
 import Filter from 'bad-words'
 import {Tooltip} from '../sidebar/Tooltip'
@@ -55,7 +56,9 @@ const Mainquestion = (details) => {
   const userData = Cookies.get('auth')
   let auth = ''
   if (userData) {
-    const data = userData.split(',')
+
+    var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+    const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));     
     auth = data[0]
   }
 
@@ -305,6 +308,7 @@ function Comment(props) {
   const [errorReply, setErrorReply] = useState('');
   const [bodyReply, setBodyReply] = useState('');
   const [fileReply, setFileReply] = useState('');
+
   const [bthiddenReply, setBthiddenReply] = useState(false);
 
   const handleQuillReply = (value) => {
@@ -332,7 +336,9 @@ function Comment(props) {
     const userData = Cookies.get('auth');
     let currentUserEmail;
     if (userData) {
-      currentUserEmail = userData.split(',')[0];
+
+      var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+      currentUserEmail = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))[0];      
     }
     else {
       setLoadingReply(false);

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useReducer } from 'react';
 import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js'
 import './DesignationSettings.css';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -10,8 +11,9 @@ import axios from 'axios'
 function Designation() {
 
   const navigate = useNavigate()
-  const [isLoading, setIsLoading] = useState(false);  
-  const auth = Cookies.get('auth')?.split(',')[0] || '';
+  const [isLoading, setIsLoading] = useState(false); 
+  var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+  const auth = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))[0];   
   const [userdetail, setUserDetail] = useState('')
   const [designations, setDesigantions] = useState([])
   const [designation1, setDesignation1] = useState('')

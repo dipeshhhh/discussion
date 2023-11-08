@@ -4,6 +4,7 @@ import './PasswordSettings.css';
 import {useNavigate} from 'react-router-dom'
 import axios from 'axios';
 import validator from 'validator'
+import CryptoJS from 'crypto-js'
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
 
@@ -17,9 +18,9 @@ function ChangePasswordSettings() {
   const [errorpmessage, setErrorPmessage] = useState('')  
   const [loading, setLoading] = useState(false);  
   const [pblock, setPblock] = useState(false)
-  const email = Cookies.get('auth')?.split(',')[0] || '';
-
-
+  var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+  const email = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))[0]; 
+  
   const handCurrent = async (e)=>{   
 
     setLoading(true)

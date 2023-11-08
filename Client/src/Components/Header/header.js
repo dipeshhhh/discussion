@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom'
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { ToastContainer, toast } from 'react-toastify';
-
+import CryptoJS from 'crypto-js'
 import { Avatar } from '@mui/material';
 import PersonIcon from '@mui/icons-material/Person';
 import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
@@ -44,9 +44,8 @@ const Header = () => {
   let auth
 
   if (Cookies.get('auth')) {
-    const detail = Cookies.get('auth')
-    auth = detail.split(',')
-
+    var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+    auth = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));      
   }
 
   const logout = () => {

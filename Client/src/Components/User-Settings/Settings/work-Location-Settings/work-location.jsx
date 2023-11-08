@@ -3,6 +3,7 @@ import Cookies from 'js-cookie';
 import './work-location.css'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import CryptoJS from 'crypto-js'
 import { useNavigate } from 'react-router-dom'
 import Select from 'react-select'
 import axios from 'axios'
@@ -23,8 +24,8 @@ function Location() {
   const [hsmd, setHsmd] = useState(false)
   const [hinst, setHinst] = useState(false)
   const [userDetails, setUserDetails] = useState('');
-  const auth = Cookies.get('auth')?.split(',')[0] || '';
-
+  var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+  const auth = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))[0];   
   /*****************User All Detail Fetch Here*******************/
   useEffect(() => {
     const fetchUserData = async () => {

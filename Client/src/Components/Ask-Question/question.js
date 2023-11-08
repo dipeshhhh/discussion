@@ -8,6 +8,7 @@ import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import {useNavigate} from 'react-router-dom'
 import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js'
 import Checkbox from '@mui/material/Checkbox';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
@@ -27,7 +28,8 @@ const Question = () => {
   let auth =''
   if(userData)
   {
-    const data = userData.split(',')
+    var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+    const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));    
     auth = data[0]  
   }
   

@@ -11,6 +11,7 @@ import validator from 'validator'
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Cookies from 'js-cookie';
+import CryptoJS from 'crypto-js'
 import Select from 'react-dropdown-select'
 import Select_S from 'react-select'
 
@@ -218,8 +219,10 @@ const handleLogin= async (e)=>{
             email,
             password
         }).then((resp)=>{
-            const UserName = [resp.data.userExist.email,resp.data.userExist.name]
+            const ciphertext= [resp.data.userExist.email,resp.data.userExist.name]
 
+            var UserName = CryptoJS.AES.encrypt(JSON.stringify(ciphertext), 'secret key 123').toString();
+          
             let myPromise = new Promise((resolve,reject)=>{
 
                 setTimeout(() => resolve(Cookies.set('auth',UserName)), 500)  

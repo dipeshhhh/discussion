@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useLocation } from 'react-router-dom';
 import './css/index.css'
 import Sidebar from './sidebar'
+import CryptoJS from 'crypto-js'
 import Main from './main'
 import axios from 'axios'
 import Cookies from 'js-cookie';
@@ -23,7 +24,8 @@ const Index = () => {
   const userData = Cookies.get('auth');
   let auth;
   if (userData) {
-    const data = userData.split(',');
+    var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+    const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));   
     auth = data[0];
   }
   // ============================================== //

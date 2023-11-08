@@ -3,6 +3,7 @@ import './index.css'
 import Sidebar from '../sidebar/sidebar'
 import Main from './mainquestion'
 import axios from 'axios'
+import CryptoJS from 'crypto-js'
 import Cookies from 'js-cookie';
 const Index = () => {
 
@@ -12,7 +13,8 @@ const Index = () => {
   let auth =''
   if(userData)
   {
-    const data = userData.split(',')
+    var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+    const data  = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));  
     auth = data[0]  
   }
 

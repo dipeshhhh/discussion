@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
 import axios from 'axios';
+import CryptoJS from 'crypto-js'
 import Cookies from 'js-cookie';
 import './css/sidebar.css';
 
@@ -12,7 +13,9 @@ const sidebar = () => {
   const userData = Cookies.get('auth');
   let auth;
   if (userData) {
-    const data = userData.split(',');
+
+    var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+    const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));     
     auth = data[0];
   }
 

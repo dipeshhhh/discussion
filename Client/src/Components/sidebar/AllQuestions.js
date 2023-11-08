@@ -12,6 +12,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import StarBorderIcon from '@mui/icons-material/StarBorder';
 import StarIcon from '@mui/icons-material/Star';
 import {Tooltip} from './Tooltip'
+import CryptoJS from 'crypto-js'
 
 function truncate(str, n) {
   return str.length > n ? str.substr(0, n - 1) + '...' : str;
@@ -21,9 +22,9 @@ const AllQuestions = ({ question }) => {
   const [search, setSearch] = useState('');
   // Initially kept null to prevent rendering data before it is fetched from DB
   const [currentUserDetailsFromDB, setCurrentUserDetailsFromDB] = useState(null);
-  const authCookie = Cookies.get('auth');
-  const currentUserEmailFromCookies = authCookie.split(',')[0];
-
+  var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+  const email = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));   
+  const currentUserEmailFromCookies  = email[0]
   useEffect(() => {
     async function getUser() {
       await axios.get(`/user-details/${currentUserEmailFromCookies}`)

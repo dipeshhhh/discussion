@@ -7,7 +7,7 @@ import parse from 'html-react-parser';
 import Cookies from 'js-cookie';
 import axios from 'axios'
 import PropTypes from 'prop-types';
-
+import CryptoJS from 'crypto-js'
 import { Avatar } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -32,7 +32,8 @@ const Profile = () => {
   const [smd, setSmd] = useState('')
   const [mainG, setMainG]= useState('');
   const [institute, setInstitute] = useState('')
-  const currentUserEmailFromCookies = Cookies.get('auth')?.split(',')[0] || '';
+  var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+  const currentUserEmailFromCookies = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))[0]; 
 
   // const location = useLocation();
   // const searchParams = new URLSearchParams(location.search);
@@ -86,8 +87,6 @@ const Profile = () => {
     };
     fetchUserData();
   },[]);
-
-  const auth = Cookies.get('auth');
 
   const renderSelectedMenu = () => {
     switch (selectedMenu) {

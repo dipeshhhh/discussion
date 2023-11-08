@@ -10,6 +10,7 @@ import CancelIcon from '@mui/icons-material/Cancel';
 import "./index.css";
 import { ToastContainer, toast } from 'react-toastify';
 import Axios from 'axios';
+import CryptoJS from 'crypto-js'
 import Cookies from 'js-cookie';
 import Filter from 'bad-words'
 import {Tooltip} from '../sidebar/Tooltip'
@@ -59,7 +60,10 @@ function Reply({ id, replied_to, question_id, body, auth, replies, created_at })
     const userData = Cookies.get('auth');
     let currentUserEmail;
     if (userData) {
-      currentUserEmail = userData.split(',')[0];
+
+      var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+      currentUserEmail = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))[0];  
+      
     }
     else {
       setLoadingReply(false);
