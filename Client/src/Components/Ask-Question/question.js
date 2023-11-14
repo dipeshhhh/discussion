@@ -74,6 +74,7 @@ const Question = () => {
     if(char>150)
     {
       char = 'You should write only 150'
+      
     }
 
     var t_text = title.trim()
@@ -82,12 +83,23 @@ const Question = () => {
       return element != ''
     }))
 
-    let t_char = t_clearList.length
+    let t_char = t_clearList.length    
 
-    if(t_char>25)
+    if(t_char>0)
     {
+      const ip = document.getElementById('val1')
+
+      ip.onkeypress = function(evt){
+        evt = evt || window.event;
+        var remaining;
+        var perm = ip.value;        
+      //   remaining = 25 - ip.value.length  
+      //  console.log(remaining)
+    if (t_char>25) {
+      document.getElementById('val1').value = ''
       t_char= 'you should write only 25'
-      
+    }
+      }      
     }
     /***************************************/    
 
@@ -665,7 +677,7 @@ const Question = () => {
           <div className='title'>
             <h3>Title&nbsp;(Max 25 Words Allowed)<sup style={{color: "red"}}>&nbsp;*</sup></h3>
             <small></small>            
-          <input type="text" value={title} onChange={(e)=> setTitle(e.target.value)}
+          <input type="text" id='val1' value={title} onChange={(e)=> setTitle(e.target.value)}
            
               placeholder='Add the question title' />
           <p>
