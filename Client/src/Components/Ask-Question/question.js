@@ -71,10 +71,19 @@ const Question = () => {
 
     let char = clearList.length   
 
-    if(char>150)
-    {
-      char = 'You should write only 150'
-      
+    if(char)
+    {  
+      const ip = document.getElementById('val1')
+      const maxString = 150
+
+      ip.addEventListener('keypress', (e)=>{        
+            if(char>maxString)
+            {   
+              e.target.textContent = clearList.slice(0,150).join(' ')           
+              char= ''    
+              return  
+            }             
+      })     
     }
 
     var t_text = title.trim()
@@ -84,23 +93,24 @@ const Question = () => {
     }))
 
     let t_char = t_clearList.length    
-
-    if(t_char>0)
+      
+    if(t_char)
     {
-      const ip = document.getElementById('val1')
+      const ip = document.getElementById('val')
+      const maxString = 25
 
-      ip.onkeypress = function(evt){
-        evt = evt || window.event;
-        var remaining;
-        var perm = ip.value;        
-      //   remaining = 25 - ip.value.length  
-      //  console.log(remaining)
-    if (t_char>25) {
-      document.getElementById('val1').value = ''
-      t_char= 'you should write only 25'
-    }
-      }      
-    }
+      ip.addEventListener('keypress', (e)=>{
+            if(t_char>maxString)
+            {   
+              e.target.value = t_clearList.slice(0,25).join(' ')           
+              t_char= ''       
+             
+              return  
+            }             
+      })
+
+    }         
+ 
     /***************************************/    
 
   useEffect(()=>{
@@ -213,8 +223,8 @@ const Question = () => {
     data.append('Members', member)
     data.append('smdids',smdid)
     data.append('subject',sub)
-    console.log('Member:'+member)
-    console.log('smdid:'+smdid)
+    
+    console.log(title)
     
     if(!title || !body)
       {       
@@ -677,9 +687,9 @@ const Question = () => {
           <div className='title'>
             <h3>Title&nbsp;(Max 25 Words Allowed)<sup style={{color: "red"}}>&nbsp;*</sup></h3>
             <small></small>            
-          <input type="text" id='val1' value={title} onChange={(e)=> setTitle(e.target.value)}
+          <input type="text" id='val' onPaste={(e)=>{e.preventDefault()}} value={title} onpaste={false}  onChange={(e)=> setTitle(e.target.value)}
            
-              placeholder='Add the question title' />
+              placeholder='Add the question title' />                 
           <p>
               <span dangerouslySetInnerHTML={{__html:t_char}}>
                 </span>&nbsp;words
@@ -690,7 +700,7 @@ const Question = () => {
           <div className='body'>
             <h3>Body&nbsp;(Max 150 Words Allowed)<sup style={{color: "red"}}>&nbsp;*</sup></h3>
             <small></small>
-             <ReactQuill value={body} id='textbox' onChange={handleQuill} className='react-quill'theme='snow'/>
+             <ReactQuill value={body} id='val1'  contextMenuHidden={true}  onChange={handleQuill} className='react-quill'theme='snow'/>
              <p>
               <span dangerouslySetInnerHTML={{__html:char}}>
                 </span>&nbsp;words
