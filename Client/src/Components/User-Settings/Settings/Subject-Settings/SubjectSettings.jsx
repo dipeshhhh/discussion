@@ -60,21 +60,21 @@ function Change() {
     // }
     
     if (subject.includes(userDetails.Divisionid)) {
-      toast.error('You should Select different subject from main Disciplines')
+      toast.error('You should select different subject from main disciplines')
       setIsLoading(false)
     }
     else if (subject.length > 4) {
-      toast.error('You should Select only 4 Disciplines')
+      toast.error('You should select only 4 disciplines')
       setIsLoading(false)
     }
     else {
-      if (window.confirm('Are you Sure to update Your Intrested Disciplines')) {
+      if (window.confirm('Are you Sure to update Your interested disciplines')) {
         try {   
           
           const data = await axios.post('/updateSubject', { subject, subject2, auth })
 
           if (data) {
-            toast.success('Intrested Disciplines Updated successfully')
+            toast.success('Intrested disciplines updated successfully')
             navigate('/')
             setIsLoading(false)
           }
@@ -93,11 +93,11 @@ function Change() {
   return (
     <div className='us-main-section'>
       <div className='us-main-section-title'>
-        Change interested Disciplines
+        Change interested disciplines
       </div>
       <div className='us-main-section-body'>
         <div className='ss-input-section'>
-          <label className='ss-input-label' htmlFor='ss-current-smd'>Current interested Disciplines</label>
+          <label className='ss-input-label' htmlFor='ss-current-smd'>Current interested disciplines</label>
           <ul className='ss-current-subjects' id='ss-current-subjects'>
             {
               subject1.map(subject => (
@@ -107,12 +107,12 @@ function Change() {
           </ul>
         </div>
         <div className='ss-input-section'>
-          <label className='ss-input-label' htmlFor='ss-smd-options'>Select new interested Disciplines<sup style={{color: "red"}}>&nbsp;*</sup></label>
+          <label className='ss-input-label' htmlFor='ss-smd-options'>Select new interested disciplines<sup style={{color: "red"}}>&nbsp;*</sup></label>
           {
             subject2.length>0 &&
             (
             <Select
-              name='select Intrested Discipline'
+              name='Select intrested discipline'
               isMulti   
               tabSelectsValue={subjects.filter((data) => subject2.includes(data._id))}           
               defaultValue={subjects.filter((data) => subject2.includes(data._id))}
@@ -134,7 +134,7 @@ function Change() {
              subject2.length<1 &&
              (
                <Select
-               name='select Intrested Discipline'
+               name='Select intrested discipline'
                isMulti             
                options={values.length > 3 ? values : subjects}
                getOptionLabel={option => {
@@ -153,7 +153,7 @@ function Change() {
           }
         </div>
         <div className='ss-submit-section'>
-          <button className='ss-submit-button' onClick={handleSubmit}>Change Disciplines</button>
+          <button className='ss-submit-button' onClick={handleSubmit}>Change disciplines</button>
         </div>
       </div>
    </div>

@@ -24,7 +24,7 @@ import PictureAsPdfIcon from '@mui/icons-material/PictureAsPdf';
 import CryptoJS from 'crypto-js'
 import Cookies from 'js-cookie';
 import Filter from 'bad-words'
-import {Tooltip} from '../sidebar/Tooltip'
+import { Tooltip } from '../sidebar/Tooltip'
 const words = require('../Ask-Question/extra-words.json')
 
 const Mainquestion = (details) => {
@@ -57,8 +57,8 @@ const Mainquestion = (details) => {
   let auth = ''
   if (userData) {
 
-    var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
-    const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));     
+    var bytes = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+    const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     auth = data[0]
   }
 
@@ -70,7 +70,7 @@ const Mainquestion = (details) => {
   const handleQuill = (value) => {
     setBody(value);
   };
- 
+
   /*************code Handle the file uploading file*******************/
   const handleFileChange = (event) => {
     event.preventDefault();
@@ -88,16 +88,16 @@ const Mainquestion = (details) => {
   };
 
   /***********************************************/
-/***********Bad Words****************/
+  /***********Bad Words****************/
 
-const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
-    filter.addWords(...words)
-/************************************/
+  const filter = new Filter({ replaceRegex: /[A-Za-z0-9가-힣_]/g })
+  filter.addWords(...words)
+  /************************************/
 
   /* Handle the answer button for Comment */
   const answer = async (e) => {
     e.preventDefault();
-    setLoading(true);   
+    setLoading(true);
 
     const data = new FormData();
 
@@ -110,11 +110,10 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
       setError('Please fill in the Reply Box');
       setLoading(false);
     }
-    else if (filter.isProfane(body) == true)
-      {
-        setError('You Should Remove bad words from Reply box');
-        setLoading(false);
-      } 
+    else if (filter.isProfane(body) == true) {
+      setError('You Should Remove bad words from Reply box');
+      setLoading(false);
+    }
     else {
       if (window.confirm('Please click to confirm Reply')) {
         Axios.post('/Answer', data).then((res) => {
@@ -146,10 +145,10 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
       method: 'GET',
       responseType: 'blob',
     }).then((resp) => {
-     
+
       const file = resp.data.type.split('/')
-    
-     FileDownload(resp.data,`file.${file[1]}`);
+
+      FileDownload(resp.data, `file.${file[1]}`);
     });
   };
 
@@ -169,7 +168,7 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
             <p>on {new Date(detail?.created_at).toLocaleString().replace(/,/g, ' at ')}</p>
             {
               detail.file ?
-                              <a onClick={(e) => download(detail._id)}>
+                <a onClick={(e) => download(detail._id)}>
                   <FileDownloadIcon />
                 </a>
                 :
@@ -186,12 +185,12 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
               <p>{parse(detail.body)}</p>
 
               <div className="author">
-                
-                <div className="auth-details">
-                <Tooltip text={detail?.auth}>
-                <Avatar />
-                  <p className='material-symbols-outlined'>{String(detail?.auth).split('@')[0]}</p>
-                </Tooltip>      
+
+                <div className="auth-details view-question-auth-details">
+                  <Tooltip text={detail?.auth}>
+                    <Avatar />
+                    <p className='material-symbols-outlined'>{String(detail?.auth).split('@')[0]}</p>
+                  </Tooltip>
                 </div>
               </div>
             </div>
@@ -202,7 +201,7 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
             {enable ? <ReplyAllIcon /> : <CancelIcon />}
             <p>{enable ? "Reply" : "Cancel"}</p>
           </div>
-          <div className="answer" hidden={enable}>
+          {!enable && <div className="answer" hidden={enable}>
             <div className="main-answer">
               <h3>You can Reply</h3>
               <ReactQuill
@@ -236,14 +235,14 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
             {error !== '' && (
               <p style={{ color: 'red', fontSize: '14px' }}>{error}</p>
             )}
-          </div>
+          </div>}
         </div>
         <div className="all-questions">
-          <p>Number of Reply: {answerdata?.length}</p>
+          <p className="number-of-reply-text" style={{ 'font-size': 'medium', 'margin-bottom': '0px' }}>Number of replies: {answerdata?.length}</p>
           <div className="comments-container">
-            {answerdata?.map((resp) => (              
-              <Comment key={resp._id} data={resp} />              
-            ))}            
+            {answerdata?.map((resp) => (
+              <Comment key={resp._id} data={resp} />
+            ))}
           </div>
         </div>
       </div>
@@ -253,54 +252,6 @@ const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
 
 function Comment(props) {
   const resp = props.data;
-
-  // NEED: Replies from database
-  const replies = [
-    {
-      _id: "someId",
-      replied_to: "64d0de75d3fd477d8c5bb3db",
-      // replied_to: "64c655f8c747dc4a4638aa95",
-      body: "This is reply body text",
-      auth: "Author of this reply",
-      created_at: "2023-07-26T17:49:54.625+00:00",
-      replies: [
-        // Nested replies for the first reply (if any)
-        {
-          _id: "nestedReplyId1",
-          replied_to: "someId", // ID of the parent reply
-          body: "This is a nested reply",
-          auth: "Author of the nested reply",
-          created_at: "2023-07-26T17:49:54.625+00:00",
-          replies: [
-            {
-              _id: "nestedReplyId11",
-              replied_to: "nestedReplyId1", // ID of the parent reply
-              body: "This is a nested reply",
-              auth: "Author of the nested reply",
-              created_at: "2023-07-26T17:49:54.625+00:00",
-              replies: [] // More nested replies can be added here
-            }
-          ] // More nested replies can be added here
-        },
-        {
-          _id: "nestedReplyId1",
-          replied_to: "someId", // ID of the parent reply
-          body: "This is a nested reply",
-          auth: "Author of the nested reply",
-          created_at: "2023-07-26T17:49:54.625+00:00",
-          replies: [] // More nested replies can be added here
-        },
-      ],
-    },
-    {
-      _id: "someOtherId",
-      replied_to: "64d0de84d3fd477d8c5bb3e3",
-      body: "This is another reply",
-      auth: "Author of this reply",
-      created_at: "2023-07-26T17:49:54.625+00:00",
-      replies: [],
-    },
-  ];
 
   /***********************************/
   // Code for replies
@@ -337,8 +288,8 @@ function Comment(props) {
     let currentUserEmail;
     if (userData) {
 
-      var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
-      currentUserEmail = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))[0];      
+      var bytes = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+      currentUserEmail = JSON.parse(bytes.toString(CryptoJS.enc.Utf8))[0];
     }
     else {
       setLoadingReply(false);
@@ -349,25 +300,24 @@ function Comment(props) {
     // NOTE: you might want to convert this to js FormData()
     const data = {
       replied_to: [resp._id],
-      question_id:resp.question_id,
+      question_id: resp.question_id,
       body: bodyReply,
       auth: currentUserEmail,
       created_at: new Date(),
       replies: []
-    } 
-    const filter = new Filter({ replaceRegex:  /[A-Za-z0-9가-힣_]/g })
-    filter.addWords(...words)     
+    }
+    const filter = new Filter({ replaceRegex: /[A-Za-z0-9가-힣_]/g })
+    filter.addWords(...words)
 
     if (!bodyReply) {
       setErrorReply('Please fill in the Reply Box');
       setLoadingReply(false);
     }
-    else if (filter.isProfane(bodyReply) == true)
-      {
-        setErrorReply('You Should Remove bad words from Reply Box');
-        setLoadingReply(false);
-      } 
-     else {
+    else if (filter.isProfane(bodyReply) == true) {
+      setErrorReply('You Should Remove bad words from Reply Box');
+      setLoadingReply(false);
+    }
+    else {
       if (window.confirm('Please click to Reply Reply')) {
         Axios.patch(`/Answer-reply/${resp._id}`, data).then((res) => {
           if (res) {
@@ -404,38 +354,42 @@ function Comment(props) {
           </div>
         </div>
         <div className="question-answer">
-          {parse(resp.body)}
-          <div className="answer-reply-buttons">
-            {
-              resp.comments.length>=1 &&
+          <div className="question-answer-body">
+            {parse(resp.body)}
+          </div>
+          <div className="answer-reply-buttons-and-author">
+            <div className="answer-reply-buttons">
+              {
+                resp.comments.length >= 1 &&
+                <small
+                  className="answer-reply-button"
+                  onClick={() => toggleReplies()}
+                >
+                  {showReplies ? "Hide replies" : "Show replies"}
+                </small>
+              }
               <small
                 className="answer-reply-button"
-                onClick={() => toggleReplies()}
+                onClick={() => { replyToReplyToggle() }}
               >
-                {showReplies ? "Hide replies" : "Show replies"} 
-              </small>
-            }
-            <small
-              className="answer-reply-button"
-              onClick={() => { replyToReplyToggle() }}
-            >
-              Reply</small>
-          </div>
-          <div className="author">
-            {resp?.file ? (
-              <a onClick={(e) => downloadanswer(resp?._id)}>
-                <AttachFileIcon />
-              </a>
-            ) : (
-              <></>
-            )}            
-            <div className="auth-details">
-            <Tooltip text={resp?.auth}>
-                <Avatar />
+                Reply</small>
+            </div>
+            <div className="author">
+              {resp?.file ? (
+                <a onClick={(e) => downloadanswer(resp?._id)}>
+                  <AttachFileIcon />
+                </a>
+              ) : (
+                <></>
+              )}
+              <div className="auth-details">
+                <Tooltip text={resp?.auth}>
+                  <Avatar />
                   <p className='material-symbols-outlined'>{String(resp?.auth).split('@')[0]}</p>
                 </Tooltip>
-             </div>
-             <small>on {new Date(resp?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
+              </div>
+              <small>on {new Date(resp?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
+            </div>
           </div>
         </div>
       </div>
@@ -444,7 +398,7 @@ function Comment(props) {
         className={enableReply ? "write-reply-box" : "write-reply-box active"}
       >
         {/* Reply Here :D */}
-        <div className="answer">
+        <div className="answer comment-answer">
           <div className="main-answer">
             <h3>You can Reply</h3>
             <ReactQuill
@@ -454,7 +408,7 @@ function Comment(props) {
               className="react-quill"
               style={{ height: '200px' }}
             />
-          </div>          
+          </div>
           <button
             hidden={bthiddenReply}
             onClick={replyToAnswer}
@@ -470,7 +424,7 @@ function Comment(props) {
           )}
         </div>
       </div>
-      {resp.comments.length>=1 && 
+      {resp.comments.length >= 1 &&
         <div
           id={"replies-to-" + resp?._id}
           className={`replies-container ${showReplies ? "active" : ""}`}

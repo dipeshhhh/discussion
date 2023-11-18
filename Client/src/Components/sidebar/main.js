@@ -6,28 +6,28 @@ import AllQuestions from './AllQuestions';
 import './css/main.css'
 
 
-const main = ({questions,status,pageTitle}) => { 
- 
+const main = ({ questions, status, pageTitle }) => {
+
   return (
     <div className='main'>
-      <div className='main-container'> 
-           <div className='main-top'>
-        <h2>{pageTitle}</h2>
-        <NavLink to="/add-question">
-          <button>Create Post</button>
+      <div className='main-container'>
+        <div className='main-top'>
+          <h2 id='main-page-title' style={{ "color": "var(--secondary-color)" }}>{pageTitle}</h2>
+          <NavLink to="/add-question">
+            <button id='create-post-button'>Create Post</button>
           </NavLink>
-        </div>    
+        </div>
 
         <div className='questions'>
-         
+
           <div className='question'>
-            
-            <AllQuestions question={questions}/>            
-            
-             </div>
-           
+
+            <AllQuestions question={questions} />
+
+          </div>
+
         </div>
-        
+
       </div>
     </div>
   )
