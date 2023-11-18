@@ -34,7 +34,7 @@
 
 .main-top>h2 {
   font-weight: 550;
-  font-size: 25px;
+  /* font-size: 25px; */
   color: var(--secondary-color);
   /* color:rgba(0,0,0,0.8); */
 }

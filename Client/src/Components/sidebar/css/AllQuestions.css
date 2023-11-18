@@ -84,6 +84,8 @@
   font-size: larger;
   width: fit-content;
   font-weight: 500;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .question-answer>a:hover {
@@ -93,6 +95,8 @@
 
 .question-answer-body-text {
   margin-bottom: 0.5em;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .author {
@@ -100,6 +104,8 @@
   flex-direction: row;
   align-items: center;
   justify-content: end;
+  word-wrap: break-word;
+  word-break: break-all;
 }
 
 .author>small {
@@ -114,7 +120,7 @@
   flex-direction: row;
   align-items: center;
   text-transform: capitalize;
-  margin: 0 10px;
+  /* margin: 0 10px; */
   margin-right: 0px;
   color: var(--primary-color);
 }
