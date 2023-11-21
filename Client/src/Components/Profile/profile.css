@@ -22,8 +22,8 @@
   padding: var(--container-gap);
   gap: var(--container-gap);
   width: calc(100vw - min(25%, 300px));
-  height: calc(100vh - 120px);
-  overflow-y: scroll;
+  /* height: calc(100vh - 120px);
+  overflow-y: scroll; */
 }
 
 .user-info-container {
@@ -117,7 +117,7 @@
   flex-direction: column !important;
   gap: var(--container-gap);
   width: 100%;
-  height: calc(100vh - 150px);
+  /* height: calc(100vh - 150px); */
   padding: 16px;
   border-radius: 10px;
   /* box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 12%),
@@ -267,6 +267,7 @@
 .user-question {
   display: flex;
   flex-direction: column;
+  gap: 1ch;
   position: relative;
   width: 100%;
 }
@@ -286,6 +287,10 @@
   align-items: center;
   gap: 0.5ch;
   height: 1rem !important;
+}
+
+.user-author > small {
+  color: rgba(0, 0, 0, 0.69);
 }
 
 .react-button {
@@ -327,3 +332,41 @@
 }
 
 /* *{border: 2px solid black} */
+/* 
+@media screen and (min-width: 769px) {
+  .user-info-container{
+    height: calc(100vh - 120px);
+  }
+} */
+@media screen and (max-width: 768px) {
+  .profile-main>main{
+    flex-direction: column;
+  }
+  .user-info-container{
+    width: 100%;
+  }
+  #profile-user-name{
+    font-size: x-large;
+  }
+  .profile-menu-bar,
+  .user-activity-bar{
+    justify-content: center;
+  }
+  .user-activity-heading{
+    text-align: center;
+  }
+}
+@media screen and (max-width: 580px) {
+  .profile-main > main {
+    margin-bottom: 34px;
+  }
+}
+@media screen and (max-width: 480px) {
+  .basic-info-container{
+    font-size: 0.9rem;
+  }
+  .user-question p,
+  .user-author small {
+    font-size: small;
+  }
+}

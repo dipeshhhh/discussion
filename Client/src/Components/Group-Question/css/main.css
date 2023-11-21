@@ -3,6 +3,7 @@
   --red-crayola-dark: #8f152d;
   --red-crayola-bright: #f76b6b;
   --notification-badge-color: var(--red-crayola);
+  --search-bar-bg-color: white;
 }
 
 .main {
@@ -33,7 +34,7 @@
 
 .main-top>h2 {
   font-weight: 550;
-  font-size: 25px;
+  /* font-size: 25px; */
   color: var(--secondary-color);
   /* color:rgba(0,0,0,0.8); */
 }
@@ -249,8 +250,26 @@ button {
   width: 100%;
 }
 
-@media screen and (min-width:768px) {
+/* @media screen and (min-width:768px) {
   .main {
     flex: 0.75;
+  }
+} */
+
+@media screen and (max-width:777px) {
+  .main {
+    flex: 1;
+    border-right: none;
+  }
+}
+@media screen and (max-width:580px) {
+  .main {
+    padding: 15px;
+    margin-bottom: 34px;
+  }
+}
+@media screen and (max-width:480px) {
+  #main-page-title{
+    font-size: larger;
   }
 }

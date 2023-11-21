@@ -174,3 +174,12 @@
     /* background-color: #053086; */
     background-color: rgb(6, 61, 34);
   }
+
+  @media screen and (max-width:480px) {
+    .head-title > h1{
+      font-size: larger;
+    }
+    .question-container h3{
+      font-size: medium;
+    }
+  }

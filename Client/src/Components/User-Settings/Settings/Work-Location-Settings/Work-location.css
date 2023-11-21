@@ -4,7 +4,6 @@
   gap: 0.5em;
   font-size: small;
   font-weight: 500;
-  width: max-content
 }
 
 .ss-current-subjects,
@@ -40,8 +39,3 @@
   background-color: var(--primary-hover-color);
 }
 
-@media screen and (max-width:768px) {  
-  .ss-select-input {
-    max-width: calc(100vw - 64px);
-  }
-}

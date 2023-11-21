@@ -79,20 +79,22 @@ const Header = () => {
         <div className='header-left'>
 
           <Link to="/index" >
-            <img src={logo} alt="" />
+            <img id='header-logo' src={logo} alt="" />
           </Link>
-          <h3>          </h3>
+
         </div>
         <div className='header-center'>
           <h1 className='header-title'><font style={{ color: '#006633' }}>Discussion Forum</font></h1>
-          <h2 className='header-title2'><font style={{ color: '#006633' }}>ICAR (Indian Council of Agricultural Research)</font></h2>
+          <h2 className='header-title2-l'><font style={{ color: '#006633' }}>ICAR (Indian Council of Agricultural Research)</font></h2>
+          <h2 className='header-title2-m'><font style={{ color: '#006633' }}>Indian Council of Agricultural Research</font></h2>
+          <h2 className='header-title2-s'><font style={{ color: '#006633' }}>I.C.A.R.</font></h2>
         </div>
         {
           auth ?
             <div className='header-right'>
               <div className='header-profile-icon' onClick={toggleDropdown} ref={profileIconRef}>
                 <Avatar />
-                <h4>{auth[1].toUpperCase()}</h4>
+                {/* <h4>{auth[1].toUpperCase()}</h4> */}
               </div>
               <div className={`header-dropdown ${isDropdownVisible && 'active'}`} ref={dropdownRef}>
                 <NavLink
@@ -101,6 +103,7 @@ const Header = () => {
                   }}
                   className='header-dropdown-item'
                   onClick={toggleDropdown}
+                  id='header-profile-icon'
                 // to={`/profile?id=${auth[0]}`}
                 // onClick={(e) => {
                 //   e.preventDefault();

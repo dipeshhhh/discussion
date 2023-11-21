@@ -7,25 +7,50 @@ import './css/sidebar.css';
 
 import HomeIcon from '@mui/icons-material/Home';
 import PeopleIcon from '@mui/icons-material/People';
+import MenuIcon from '@mui/icons-material/Menu';
+import CloseIcon from '@mui/icons-material/Close';
 
 
 const sidebar = () => {
+  // Responsiveness handling
+  const responsive_sidebar_width = 580;
+  const [windowWidth, setWindowWidth] = useState(window.innerWidth);
+  const [isSidebarVisible, setIsSidebarVisible] = windowWidth <= responsive_sidebar_width ? useState(false) : useState(true);
+  
+  function toggleSidebar() {
+    setIsSidebarVisible(!isSidebarVisible);
+  }
+  function closeSidebar() {
+    setIsSidebarVisible(false);
+  }
+
+  useEffect(() => {
+    const handleResize = () => {
+      setWindowWidth(window.innerWidth);
+      (window.innerWidth <= responsive_sidebar_width) ? setIsSidebarVisible(false) : setIsSidebarVisible(true);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
+  // Authorization
   const userData = Cookies.get('auth');
   let auth;
   if (userData) {
-
-    var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
-    const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));     
+    var bytes = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
+    const data = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));
     auth = data[0];
   }
 
+  // Content fetching
   const [ssmd, setSsmd] = useState([]);
   const [institute, setInstitute] = useState('');
   const [group, setGroup] = useState('');
   const [mainG, setMainG] = useState('');
   const [detail, setDetail] = useState('');
   const [smd, setSmd] = useState('');
-
   useEffect(() => {
     let userDetails = new Promise(async (resolve, reject) => {
       const response = await axios.get(`/user-detail/${auth}`);
@@ -81,11 +106,25 @@ const sidebar = () => {
     );
   }, []);
 
+  // Components
+  function SidebarOption({ title, icon, optionId }) {
+    return (
+      // <NavLink to={`/?subject=${encodeURI(title)}`} className='sidebar-option'>
+      <NavLink to={`/?id=${optionId}`} className='sidebar-option' onClick={closeSidebar}>
+        {icon}
+        <p>{title}</p>
+      </NavLink>
+    )
+  }
   return (
-    <div className='sidebar-container'>
-      <div className='sidebar-options'>
+    <>
+      <div className={`sidebar-open-button ${!isSidebarVisible ? 'active' : ''}`} onClick={toggleSidebar}>
+        <MenuIcon />
+      </div>
+      <div className={`sidebar-container ${isSidebarVisible ? 'active' : ''}`}>
+        <div className='sidebar-options'>
 
-        {/*
+          {/*
       
       "sidebar-options" structure: 
       ---------------------------------<=="sidebar-options"
@@ -133,33 +172,60 @@ const sidebar = () => {
 
       */}
 
-        <div className='sidebar-option-category-container'>
-          <SidebarOption optionId={'Home'} title='Home' icon={<HomeIcon />} />
-        </div>
+          <div className='sidebar-option-category-container sidebar-option-top'>
+            <SidebarOption optionId={'Home'} title='Home' icon={<HomeIcon />} />
+            <div className={`sidebar-close-button ${(windowWidth <= responsive_sidebar_width) ? 'active' : ''}`} onClick={toggleSidebar}>
+              <CloseIcon />
+            </div>
+          </div>
 
-        {
-          detail.Hqrs == 1 &&
+          {
+            detail.Hqrs == 1 &&
 
-          (
-            detail.status == 1 ?
-              <>
-                <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Institute</small>
-                  <SidebarOption optionId={institute._id} title={institute.name} icon={<PeopleIcon />} />
-                </div>
+            (
+              detail.status == 1 ?
+                <>
+                  <div className='sidebar-option-category-container'>
+                    <small className="sidebar-option-category">Institute</small>
+                    <SidebarOption optionId={institute._id} title={institute.name} icon={<PeopleIcon />} />
+                  </div>
 
-                <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Main Discipline</small>
-                  <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
-                </div>
-                <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Interested Disciplines</small>
-                  {group.data?.map((resp) =>
-                    <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
-                  )}
-                </div>
-              </>
-              :
+                  <div className='sidebar-option-category-container'>
+                    <small className="sidebar-option-category">Main Discipline</small>
+                    <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
+                  </div>
+                  <div className='sidebar-option-category-container'>
+                    <small className="sidebar-option-category">Interested Disciplines</small>
+                    {group.data?.map((resp) =>
+                      <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
+                    )}
+                  </div>
+                </>
+                :
+                <>
+                  <div className='sidebar-option-category-container'>
+                    <small className="sidebar-option-category">SMD</small>
+                    <SidebarOption optionId={smd._id} title={smd.name} icon={<PeopleIcon />} />
+                  </div>
+
+                  <div className='sidebar-option-category-container'>
+                    <small className="sidebar-option-category">Main Discipline</small>
+                    <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
+                  </div>
+
+                  <div className='sidebar-option-category-container'>
+                    <small className="sidebar-option-category">Interested Disciplines</small>
+                    {group.data?.map((resp) =>
+                      <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
+                    )}
+                  </div>
+                </>
+            )
+
+          }
+          {
+            detail.Hqrs == 2 &&
+            (
               <>
                 <div className='sidebar-option-category-container'>
                   <small className="sidebar-option-category">SMD</small>
@@ -178,45 +244,14 @@ const sidebar = () => {
                   )}
                 </div>
               </>
-          )
-
-        }
-        {
-          detail.Hqrs == 2 &&
-          (
-            <>
-              <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">SMD</small>
-                <SidebarOption optionId={smd._id} title={smd.name} icon={<PeopleIcon />} />
-              </div>
-
-              <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Main Discipline</small>
-                <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
-              </div>
-
-              <div className='sidebar-option-category-container'>
-                <small className="sidebar-option-category">Interested Disciplines</small>
-                {group.data?.map((resp) =>
-                  <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
-                )}
-              </div>
-            </>
-          )
-        }
+            )
+          }
+        </div>
       </div>
-    </div>
+    </>
   )
 }
 
-function SidebarOption({ title, icon, optionId }) {
-  return (
-    // <NavLink to={`/?subject=${encodeURI(title)}`} className='sidebar-option'>
-    <NavLink to={`/?id=${optionId}`} className='sidebar-option'>
-      {icon}
-      <p>{title}</p>
-    </NavLink>
-  )
-}
+
 
 export default sidebar

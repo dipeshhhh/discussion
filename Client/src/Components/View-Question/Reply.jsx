@@ -130,26 +130,30 @@ function Reply({ id, replied_to, question_id, body, auth, replies, created_at })
       <div className="reply">
         <div className="gray-reply-box">
           <div className="reply-box">
-            <div className="reply-buttons">
-              {replies.length > 0 && (
-                <p className={`option-icon expand active`} onClick={toggleExpand}>
-                  {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+            <div className="reply-box-left">
+              <div className="reply-buttons">
+                {replies.length > 0 && (
+                  <p className={`option-icon expand active`} onClick={toggleExpand}>
+                    {expanded ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                  </p>
+                )}
+                <p onClick={replyToReplyToggle} className="option-icon">
+                  {enableReply ? <ReplyIcon /> : <CancelIcon />}
                 </p>
-              )}
-              <p onClick={replyToReplyToggle} className="option-icon">
-                {enableReply ? <ReplyIcon /> : <CancelIcon />}
-              </p>
+              </div>
             </div>
-            <div className="reply-body" style={{ "margin-bottom": "16px", "overflow-wrap": "break-word" }}>
-              {parse(body)}
-            </div>
-            <div className='author reply-author'>
-              <small>on {new Date(created_at).toLocaleString().replace(/,/g, ' at ')}</small>
-              <div className='author-details'>
-              <Tooltip text={auth}>
-                <Avatar />
-                  <p className='material-symbols-outlined'>{String(auth).split('@')[0]}</p>
-                </Tooltip>              
+            <div className="reply-box-right">
+              <div className="reply-body" style={{ "margin-bottom": "16px", "overflow-wrap": "break-word" }}>
+                {parse(body)}
+              </div>
+              <div className='author reply-author'>
+                <div className='author-details'>
+                <Tooltip text={auth}>
+                  <Avatar />
+                    <p className='material-symbols-outlined'>{String(auth).split('@')[0]}</p>
+                  </Tooltip>              
+                </div>
+                <small>on {new Date(created_at).toLocaleString().replace(/,/g, ' at ')}</small>
               </div>
             </div>
           </div>

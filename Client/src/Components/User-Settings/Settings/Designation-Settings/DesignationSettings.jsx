@@ -55,16 +55,16 @@ function Designation() {
     e.preventDefault()
     setIsLoading(true)
     if (!status) {
-      toast.error('Please Select Designation')
+      toast.error('Please select designation')
       setIsLoading(false)
     }
     else
     {
-      if (window.confirm('Are you Sure to update Designation')) {
+      if (window.confirm('Are you Sure to update designation')) {
         try {
           const data = await axios.post('/updateDesignation', {status,designation,auth})
           if (data) {
-            toast.success('Designation Updated successfully')
+            toast.success('Designation updated successfully')
             navigate('/')
             setIsLoading(false)
           }
@@ -83,17 +83,17 @@ function Designation() {
   return (
     <div className='us-main-section'>
      <div className='us-main-section-title'>
-              Change Designation
+              Change designation
             </div>
             <div className='us-main-section-body'>
               <div className='ss-input-section'>
-                <label className='ss-input-label' htmlFor='ss-current-institute'>Current Designation</label>
+                <label className='ss-input-label' htmlFor='ss-current-institute'>Current designation</label>
                 <p className='ss-current-institute' id='ss-current-institute'>- {userdetail.designation}</p>
               </div>
               <div className='ss-input-section'>
-                <label className='ss-input-label' htmlFor='ss-institute-options'>New Designation</label>
+                <label className='ss-input-label' htmlFor='ss-institute-options'>New designation</label>
                 <select name='ss-smd-options' id='ss-smd-options' onChange={(e) => handleDesignation(e)}>
-                  <option value=''>Select Designation</option>
+                  <option value=''>Select designation</option>
                   {
                     designations.map((res) =>
                       <option value={[res.id,res.name]}>{res.name}</option>
@@ -102,7 +102,7 @@ function Designation() {
                 </select>
               </div>
               <div className='ss-submit-section'>
-                <button className='ss-submit-button' onClick={submit}>Update Designation</button>
+                <button className='ss-submit-button' onClick={submit}>Update designation</button>
               </div>
             </div>
    </div>
