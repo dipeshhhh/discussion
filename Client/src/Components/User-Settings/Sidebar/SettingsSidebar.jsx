@@ -17,7 +17,9 @@ function SettingsSidebar() {
     setIsSidebarVisible(!isSidebarVisible);
   }
   function closeSidebar() {
-    setIsSidebarVisible(false);
+    if(windowWidth <= responsive_ss_width) {      
+      setIsSidebarVisible(false);
+    }
   }
   useEffect(() => {
     const handleResize = () => {

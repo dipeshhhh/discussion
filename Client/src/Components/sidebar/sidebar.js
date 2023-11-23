@@ -21,7 +21,9 @@ const sidebar = () => {
     setIsSidebarVisible(!isSidebarVisible);
   }
   function closeSidebar() {
-    setIsSidebarVisible(false);
+    if(windowWidth <= responsive_sidebar_width) {      
+      setIsSidebarVisible(false);
+    }
   }
 
   useEffect(() => {
