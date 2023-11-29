@@ -77,14 +77,37 @@ const Mainquestion = (details) => {
 
     const files = event.target.files[0];
 
-    if (files.size / 1024 > 5120 || files.type.split('/').pop() !== 'pdf') {
-      setBthidden(true);
-      setError('Please upload file as per the specified criteria');
-    } else {
+    const cancelFile = (event) =>{
       setError('');
       setBthidden(false);
       setFile(event.target.files[0]);
     }
+
+    if(files == undefined) {      
+      cancelFile(event)
+      return
+    } 
+    else if (files.size / 1024 >10240) {
+      setBthidden(true);
+      setError('File should be less than 10MB');
+    }
+    else if(!files.type.split('/').pop().match('jpeg')&&!files.type.split('/').pop().match('pdf')&&!files.type.split('/').pop().match('mp4')&&!files.type.split('/').pop().match('mp3')&&!files.type.split('/').pop().match('mpeg')&&!files.type.split('/').pop().match('png'))
+    {
+      setBthidden(true);
+      setError('Please upload file with parameters');      
+    }   
+    else {
+      cancelFile(event)
+    } 
+
+    // if (files.size / 1024 > 5120 || files.type.split('/').pop() !== 'pdf') {
+    //   setBthidden(true);
+    //   setError('Please upload file as per the specified criteria');
+    // } else {
+    //   setError('');
+    //   setBthidden(false);
+    //   setFile(event.target.files[0]);
+    // }
   };
 
   /***********************************************/
@@ -213,7 +236,7 @@ const Mainquestion = (details) => {
               />
             </div>
             <div className="file-attach">
-              <h3>Attach file (only PDF with 5 MB)</h3>
+              <h3>Attach file&nbsp;(pdf,jpeg,png,mp4,mp3,mpeg extention file allowed with 10 MB size)</h3>
               <input
                 label="File upload"
                 type="file"
@@ -336,7 +359,8 @@ function Comment(props) {
       method: 'GET',
       responseType: 'blob',
     }).then((resp) => {
-      FileDownload(resp.data, 'file.pdf');
+      const file = resp.data.type.split('/')
+      FileDownload(resp.data, `file.${file[1]}`);
     });
   };
 

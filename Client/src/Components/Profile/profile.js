@@ -384,16 +384,16 @@ function Question({ data, currentUserDetails, isAlreadyStarred }) {
         </div>
 
         <div className='author'>
-          <NavLink to={`/profile?id=${data.auth}`} className='author-details'>
+          <NavLink className='author-details'>
             <Avatar />
             <p>{String(data?.auth).split('@')[0]}</p>
           </NavLink>
           <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
-          {currentUserDetails.status === 2 ? (
+          {/* {currentUserDetails.status === 2 ? (
             <DeleteIcon className='react-button' onClick={(e) => { handeDelete(data._id) }} />
           ) : (
             <p></p>
-          )}
+          )} */}
         </div>
       </div>
     </div>
@@ -481,11 +481,11 @@ function Answer({ data, currentUserDetails }) {
         </div>
 
         <div className='user-author'>
-          {currentUserDetails.status == 2 ? (
+          {/* {currentUserDetails.status == 2 ? (
             <DeleteIcon className='react-button' onClick={(e) => { handleDelete(data._id) }} />
           ) : (
             <p></p>
-          )}
+          )} */}
           <small>on {new Date(data?.created_at).toLocaleString().replace(/,/g, ' at ')}</small>
           <div className='user-author-details'>
             <Avatar className='user-avatar' />

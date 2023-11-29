@@ -55,10 +55,20 @@ const Question = () => {
   const [bthidden, setBthidden] = useState(false);
   const [gStatus, setGStatus]= useState(true)
   const [mStatus, setMstatus] = useState(true)
-  const handleQuill = (value) => {
-      setBody(value)         
-      
-    }
+  const handleQuill = (value,editor) => {
+      setBody(value) 
+      const text = value.replace(/<\/?[^>]+(>|$)/g, ''); // Remove HTML tags
+      const words = text.split(/\s+/).filter(word => word.length > 0); 
+      if (words.length <151) {
+        setBody(value);
+      } else {
+        // If the limit is exceeded, trim the content
+        const trimmedContent = words.slice(0,150).join(' ');
+        setBody(trimmedContent);
+      }  
+
+    }  
+
 /*********  Words Count for body & title part   ***********/
     var text = body.replace(/<[^>]*>/g,'')
               
@@ -66,25 +76,9 @@ const Question = () => {
     let word = text.split(' ')
    
     let clearList =word.filter((function(elm){
-      return elm != '';
-    }))
+      return elm != '';    }))
 
-    let char = clearList.length   
-
-    if(char)
-    {  
-      const ip = document.getElementById('val1')
-      const maxString = 150
-
-      ip.addEventListener('keypress', (e)=>{        
-            if(char>maxString)
-            {   
-              e.target.textContent = clearList.slice(0,150).join(' ')           
-              char= ''    
-              return  
-            }             
-      }) 
-    }
+      /*Count for Title*/   
 
     var t_text = title.trim()
     let t_word = t_text.split(' ')
@@ -174,18 +168,14 @@ const Question = () => {
     }, [])    
 
   
-   const handleFileChange = (event) => {  
-              
+   const handleFileChange = (event) => {                
     const files = event.target.files[0];
-      console.log(files,"files");
-      console.log(files == undefined,"files");
 
     const cancelFile = (event) =>{
       setError('');
       setBthidden(false);
       setFile(event.target.files[0]);
     }
-
     if(files == undefined) {      
       cancelFile(event)
       return
@@ -194,7 +184,7 @@ const Question = () => {
       setBthidden(true);
       setError('File should be less than 10MB');
     }
-    else if(!files.type.split('/').pop().match('jpeg')&&!files.type.split('/').pop().match('pdf')&&!files.type.split('/').pop().match('mp4')&&!files.type.split('/').pop().match('mp3')&&!files.type.split('/').pop().match('mpeg'))
+    else if(!files.type.split('/').pop().match('jpeg')&&!files.type.split('/').pop().match('pdf')&&!files.type.split('/').pop().match('mp4')&&!files.type.split('/').pop().match('mp3')&&!files.type.split('/').pop().match('mpeg')&&!files.type.split('/').pop().match('png'))
     {
       setBthidden(true);
       setError('Please upload file with parameters');      
@@ -700,12 +690,13 @@ const Question = () => {
           <div className='body'>
             <h3>Body&nbsp;(Max 150 Words Allowed)<sup style={{color: "red"}}>&nbsp;*</sup></h3>
             <small></small>
-             <ReactQuill value={body} id='val1'  contextMenuHidden={true} onChange={handleQuill} className='react-quill'theme='snow'/>
+             <ReactQuill value={body} id='val1'         
+      contextMenuHidden={true} onChange={handleQuill} className='react-quill'theme='snow'/>
              <p>
-              <span dangerouslySetInnerHTML={{__html:char}}>
+              <span dangerouslySetInnerHTML={{__html:clearList.length}}>
                 </span>&nbsp;words
              </p>
-             </div>
+             </div>             
         </div>
         <div className='question-option'>
           <div className='group'>
@@ -1101,7 +1092,7 @@ const Question = () => {
 }
         <div className='question-option'>
           <div className='attachment'>
-            <h3>Attach file&nbsp;(.pdf,.jpeg,.mp4,.mp3,.mpeg extention file allowed with 10 MB size)</h3>
+            <h3>Attach file&nbsp;(pdf,jpeg,png,mp4,mp3,mpeg extention file allowed with 10 MB size)</h3>
             <input label="File upload" type="file" name='file' onChange={handleFileChange}
               placeholder="Select file..." />
           </div>
