@@ -230,7 +230,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
     };
 
     let orConditions = [];
-    if ((userDetails.status == 1) && (userDetails.Hqrs == 1)) {
+    if ((userDetails.status == 1 || userDetails.status == 2) && (userDetails.Hqrs == 1)) {
       orConditions = [
         { member: userDetails.Divisionid },
         { member: { $in: userDetails.intrested } },
@@ -240,7 +240,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
         { Imember: userDetails.email },
       ];
     }
-    else if ((userDetails.status == 2) || (userDetails.Hqrs == 2) || (userDetails.status == 1) || (userDetails.Hqrs == 1)) {
+    else if ((userDetails.status == 2 || userDetails.status == 1) && (userDetails.Hqrs == 2)) {
       orConditions = [
         { member: userDetails.Divisionid },
         { member: { $in: userDetails.intrested } },
@@ -255,23 +255,22 @@ router.get(`/questions_for_index_page`, async (req, res) => {
       result.questions = questionsFromDB;
       result.subject = 'index';
     }
-    else if (orConditions.length > 0) {
-      const idArray = [];
+    else if (orConditions.length > 0) {    
+     
 
       // const smd = await SmdDivision.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
       // const div = await Division.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
       // const inst = await Institute.findOne({ name: { $regex: new RegExp(subjectReq, 'i') } });
       const smd = await SmdDivision.findOne({ _id: subjectReq });
       const div = await Division.findOne({ _id: subjectReq });
-      const inst = await Institute.findOne({ _id: subjectReq });
+      const inst = await Institute.findOne({ _id: subjectReq });     
 
       //! When pusing data in 'idArray', the datatype must be string. Since smdid and memberid are stored as strings in question object.
       if (smd) {
-
         const questionsFromDB = await Question.find({
           $and: [
             {
-              $or: [{ smdid: `${smd._id}` }, { $and: [{ smdid: `${smd._id}` }, { auth: userEmailReq }] }]
+              $or: [{ smdid: `${smd._id}` }, { $or: [{ smdid: `${smd._id}` },{ auth: userEmailReq }] }]
             },
             {
               $or: orConditions,
@@ -288,7 +287,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
         const questionsFromDB = await Question.find({
           $and: [
             {
-              $or: [{ member: `${div._id}` }, { $and: [{ member: userEmailReq }, { subject: `${div._id}` }] }, { $and: [{ subject: `${div._id}` }, { auth: userEmailReq }] }]
+              $or: [{ member: `${div._id}` },{ $and: [{ member: userEmailReq }, { subject: `${div._id}` }] }, { $and: [{ subject: `${div._id}` }, { auth: userEmailReq }] }]
             },
             {
               $or: orConditions,
@@ -298,17 +297,20 @@ router.get(`/questions_for_index_page`, async (req, res) => {
         result.questions = questionsFromDB;
         result.subject = div.name;
       }
-      if (inst) {
-        const questionsFromDB = await Question.find({
+      if (inst) {      
+    
+        const questionsFromDB = await Question.find({          
           $and: [
             {
-              $or: [{ Imember: `${inst._id}` }, { Imember: userEmailReq }, { $and: [{ Imember: `${inst._id}` }, { auth: userEmailReq }] }]
+              //{$or:[{Imember: userEmailReq },{Imember:`${inst._id}`}]}
+              //
+              $or:[{Imember:userEmailReq},{$or:[{Imember:`${inst._id}`},{ auth: userEmailReq }]}]
             },
             {
               $or: orConditions,
             },
           ],
-        }).sort({ updated_at: 1 });
+        }).sort({ updated_at: 1 });        
         result.questions = questionsFromDB;
         result.subject = inst.name;
       }
@@ -479,7 +481,7 @@ const getdata = async () => {
 
       day_diff.push(Math.ceil(time_diff / (1000 * 60 * 60 * 24)))
 
-      if (day_diff[i] > 31) {
+      if (day_diff[i] >31) {
         day_id.push(resp[i]._id)
 
         file.push(resp[i].file)

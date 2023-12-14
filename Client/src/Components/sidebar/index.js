@@ -45,7 +45,7 @@ const Index = () => {
   useEffect(() => {
     async function getQuestionsForIndexPage() {
       const question_data = await axios.get(`/questions_for_index_page`,
-        { params: { userEmail: auth, subject: currentSubject } })
+        { params: { userEmail: auth, subject: currentSubject } })      
 
       setPageTitle(
         capitalize(
@@ -55,9 +55,12 @@ const Index = () => {
       );
       setQuestions(question_data.data.questions);
       setStatus(question_data.data.userStatus);
+    
     }
     getQuestionsForIndexPage();
   }, [location])
+
+  
 
   return (
     <div className='stack-index'>
