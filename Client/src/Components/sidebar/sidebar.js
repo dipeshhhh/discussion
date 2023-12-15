@@ -83,28 +83,19 @@ const sidebar = () => {
         getMain();
         setDetail(value);
 
-        // if (value.Hqrs == 1) {
-        //   if (value.status == 1) {
-        //     const Inst_Name = await axios.get(`/InstituteName/${value.institute}`);
-        //     // console.log('Institute: ',Inst_Name);
-        //     setInstitute(Inst_Name.data);
-        //   }
-        //   else if (value.status == 2 || value.status == 3) {
-        //     const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`);
-        //     // console.log('Smd1 : ',Smd_Name.data);
-        //     setSmd(Smd_Name.data);
-
-        //   }
-        // }
-
         if (value.Hqrs == 1) {
-     
+          if (value.status == 1) {
             const Inst_Name = await axios.get(`/InstituteName/${value.institute}`);
             // console.log('Institute: ',Inst_Name);
             setInstitute(Inst_Name.data);
+          }
+          else if (value.status == 2 || value.status == 3) {
+            const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`);
+            // console.log('Smd1 : ',Smd_Name.data);
+            setSmd(Smd_Name.data);
+
+          }
         }
-
-
         else if (value.Hqrs == 2) {
           const Smd_Name = await axios.get(`/SmdName/${value.Smdid}`);
           // console.log('Smd2 : ',Smd_Name.data);
@@ -192,7 +183,6 @@ const sidebar = () => {
 
           {
             detail.Hqrs == 1 &&
-
             (
               detail.status == 1 ?
                 <>
@@ -214,40 +204,23 @@ const sidebar = () => {
                 </>
                 :
                 <>
-                <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Institute</small>
-                  <SidebarOption optionId={institute._id} title={institute.name} icon={<PeopleIcon />} />
-                </div>
+                  <div className='sidebar-option-category-container'>
+                    <small className="sidebar-option-category">SMD</small>
+                    <SidebarOption optionId={smd._id} title={smd.name} icon={<PeopleIcon />} />
+                  </div>
 
-                <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Main Discipline</small>
-                  <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
-                </div>
-                <div className='sidebar-option-category-container'>
-                  <small className="sidebar-option-category">Interested Disciplines</small>
-                  {group.data?.map((resp) =>
-                    <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
-                  )}
-                </div>
-              </>
-                // <>
-                //   <div className='sidebar-option-category-container'>
-                //     <small className="sidebar-option-category">SMD</small>
-                //     <SidebarOption optionId={smd._id} title={smd.name} icon={<PeopleIcon />} />
-                //   </div>
+                  <div className='sidebar-option-category-container'>
+                    <small className="sidebar-option-category">Main Discipline</small>
+                    <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
+                  </div>
 
-                //   <div className='sidebar-option-category-container'>
-                //     <small className="sidebar-option-category">Main Discipline</small>
-                //     <SidebarOption optionId={mainG._id} title={mainG.name} icon={<PeopleIcon />} />
-                //   </div>
-
-                //   <div className='sidebar-option-category-container'>
-                //     <small className="sidebar-option-category">Interested Disciplines</small>
-                //     {group.data?.map((resp) =>
-                //       <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
-                //     )}
-                //   </div>
-                // </>
+                  <div className='sidebar-option-category-container'>
+                    <small className="sidebar-option-category">Interested Disciplines</small>
+                    {group.data?.map((resp) =>
+                      <SidebarOption optionId={resp._id} title={resp.name} icon={<PeopleIcon />} key={resp.name} />
+                    )}
+                  </div>
+                </>
             )
 
           }
