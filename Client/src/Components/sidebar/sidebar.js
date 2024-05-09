@@ -183,7 +183,6 @@ const sidebar = () => {
 
           {
             detail.Hqrs == 1 &&
-
             (
               detail.status == 1 ?
                 <>

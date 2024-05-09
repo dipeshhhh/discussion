@@ -93,8 +93,7 @@ const Header = () => {
           auth ?
             <div className='header-right'>
               <div className='header-profile-icon' onClick={toggleDropdown} ref={profileIconRef}>
-                <Avatar />
-                {/* <h4>{auth[1].toUpperCase()}</h4> */}
+                <Avatar />                
               </div>
               <div className={`header-dropdown ${isDropdownVisible && 'active'}`} ref={dropdownRef}>
                 <NavLink
@@ -109,10 +108,9 @@ const Header = () => {
                 //   e.preventDefault();
                 //   navigate(`/profile?id=${auth[0]}`);
                 // }}
-                >
-                  {/* <h4>{auth[1].toUpperCase()}</h4> */}
+                >              
                   <PersonIcon />
-                  Profile
+                  {auth[1].toUpperCase()}
                 </NavLink>
                 <NavLink
                   to={{

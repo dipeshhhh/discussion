@@ -245,6 +245,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
         { member: userDetails.Divisionid },
         { member: { $in: userDetails.intrested } },
         { member: userDetails.email },
+        {$or:[{Imember:userEmailReq}]},
         { auth: userDetails.email },
         { smdid: userDetails.Smdid },
       ];
@@ -266,12 +267,11 @@ router.get(`/questions_for_index_page`, async (req, res) => {
       const inst = await Institute.findOne({ _id: subjectReq });
 
       //! When pusing data in 'idArray', the datatype must be string. Since smdid and memberid are stored as strings in question object.
-      if (smd) {
-
-        const questionsFromDB = await Question.find({
+      if (smd) {               
+        const questionsFromDB = await Question.find({          
           $and: [
             {
-              $or: [{ smdid: `${smd._id}` }, { $and: [{ smdid: `${smd._id}` }, { auth: userEmailReq }] }]
+              $or: [{smdid:`${smd._id}`},{Imember:userEmailReq},{ $and:[{smdid:`${smd._id}` },{ auth: userEmailReq }]}]
             },
             {
               $or: orConditions,
@@ -302,7 +302,7 @@ router.get(`/questions_for_index_page`, async (req, res) => {
         const questionsFromDB = await Question.find({
           $and: [
             {
-              $or: [{ Imember: `${inst._id}` }, { Imember: userEmailReq }, { $and: [{ Imember: `${inst._id}` }, { auth: userEmailReq }] }]
+              $or: [{institute:`${inst._id}` },{ Imember: userEmailReq },{ $and: [{ Imember: `${inst._id}` }, { auth: userEmailReq }] }]
             },
             {
               $or: orConditions,
@@ -560,4 +560,3 @@ getdata()
 
 /*************************************************************************/
 module.exports = router;
-

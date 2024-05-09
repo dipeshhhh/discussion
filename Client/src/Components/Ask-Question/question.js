@@ -442,7 +442,8 @@ const Question = () => {
         for(let i=0;i<subject.length;i++)
         {          
           val.push(subject[i]._id)           
-        }        
+        }
+        setSmdid(smdid)       
         setImember(val)        
         setInstitute(val)
 
