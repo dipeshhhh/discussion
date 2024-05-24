@@ -38,6 +38,30 @@ router.post('/Question', upload, async (req, res) => {
   const Imember = Imembers.split(',')
   const smdid = smdids.split(',')
   const institute = institutes.split(',')
+ 
+//  console.log(Imember.constructor != Object)
+   
+  new Promise((resolve,reject)=>{
+    
+    if(smdid || Imember instanceof Object)
+      {
+        SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{
+          resp.forEach((resp)=>{
+            resolve(resp.member)
+          })
+        })
+      }
+  
+     
+
+  })
+  .then((userId)=>{
+    console.log(userId)
+  })
+ 
+  
+      
+
 
   /* for upload the file     
      upload(req,res, function(err)
@@ -55,44 +79,45 @@ router.post('/Question', upload, async (req, res) => {
 
   if (req.file) {
     const file = req.file.path
+   
 
-    try {
-      const data = new Question({ auth, title, body, file, created_at, updated_at, subject, member, Imember, smdid, institute });
-      const result = await data.save()
+    // try {
+    //   const data = new Question({ auth, title, body, file, created_at, updated_at, subject, member, Imember, smdid, institute });
+    //   const result = await data.save()
 
-      if (result) {
+    //   if (result) {
 
-        res.status(200).json({ message: 'inserted' })
-      }
-      else {
-        console.log('error')
-        return res.status(402).json({ err: 'not inserted' })
-      }
-    }
-    catch (err) {
-      console.log(err);
-    }
+    //     res.status(200).json({ message: 'inserted' })
+    //   }
+    //   else {
+    //     console.log('error')
+    //     return res.status(402).json({ err: 'not inserted' })
+    //   }
+    // }
+    // catch (err) {
+    //   console.log(err);
+    // }
 
   }
 
-  else {
+  else { 
+     
+    // try {
+    //   const data = new Question({ auth, title, body, created_at, updated_at, subject, member, Imember, smdid, institute });
+    //   const result = await data.save()
 
-    try {
-      const data = new Question({ auth, title, body, created_at, updated_at, subject, member, Imember, smdid, institute });
-      const result = await data.save()
+    //   if (result) {
 
-      if (result) {
-
-        res.status(200).json({ message: 'inserted' })
-      }
-      else {
-        console.log('error')
-        return res.status(402).json({ err: 'not inserted' })
-      }
-    }
-    catch (err) {
-      console.log(err);
-    }
+    //     res.status(200).json({ message: 'inserted' })
+    //   }
+    //   else {
+    //     console.log('error')
+    //     return res.status(402).json({ err: 'not inserted' })
+    //   }
+    // }
+    // catch (err) {
+    //   console.log(err);
+    // }
 
   }
 

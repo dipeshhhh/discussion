@@ -32,7 +32,11 @@ const Userschema = new mongoose.Schema({
     Hqrs:{
         type:Number,
         required:true
-    }
+    },
+    message:[{
+        post_id:mongoose.Schema.Types.ObjectId,
+        seen:Boolean
+    }]
     });
 
 Userschema.pre('save', async function(next){

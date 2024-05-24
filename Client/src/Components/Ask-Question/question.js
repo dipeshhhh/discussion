@@ -362,8 +362,7 @@ const Question = () => {
    
       }
     }    
-   /**************Handle user Regarding the Subjects **************/ 
-     
+   /**************Handle user Regarding the Subjects **************/      
    const groupMember= (e)=>{
         const val = e.target.value       
         if(val == '')
@@ -762,8 +761,8 @@ const Question = () => {
             style={{ marginRight: 8 }}
             checked={selected}
             name={option.email}
-          />                  
-          {option.name}
+          />  
+           {option.name} ({option.email})
         </li>
       )}
       style={{ width: 500 }}
@@ -819,7 +818,7 @@ const Question = () => {
             checked={selected}
             name={option.email}
           />                  
-          {option.name}
+         {option.name} ({option.email})
         </li>
       )}
       style={{ width: 500 }}
@@ -894,7 +893,7 @@ const Question = () => {
             checked={selected}           
             name={option.email}
           />                  
-          {option.name}
+          {option.name} ({option.email})
         </li>
       )}
       style={{ width: 500 }}
@@ -953,7 +952,7 @@ const Question = () => {
                   checked={selected}
                   name={option.email}
                 />                  
-                {option.name}
+                {option.name} ({option.email})
               </li>
             )}
             style={{ width: 500 }}
@@ -1068,7 +1067,7 @@ const Question = () => {
             checked={selected}           
             name={option.email}
           />                  
-          {option.name}
+          {option.name} ({option.email})
         </li>
       )}
       style={{ width: 500 }}
