@@ -39,64 +39,135 @@ router.post('/Question', upload, async (req, res) => {
   const smdid = smdids.split(',')
   const institute = institutes.split(',')   
 
-    
-  new Promise((resolve,reject)=>{    
-    
-    let user = []
-    
+
+// console.log(member)
+
+
+  new Promise((resolve,reject)=>{        
     function containsSpecialCharacters(str) {
       var regex = /@/;
       return regex.test(str);
   }
 
-  if(Imember && smdid[0]=='')
-    {
-      Imember.forEach(str => {
-        if(containsSpecialCharacters(str))
-         {
-
-         }
-        else if(!containsSpecialCharacters(str))
+  if(member[0]!='')
+      {
+       const data = member.filter((item)=>{
+              return containsSpecialCharacters(item)
+        })
+  
+       if(data.length!=0)
         {
-          Institute.find({_id:{$in:Imember}},{member:1,_id:0}).then((resp)=>{
-                for(let i in resp)
-                  {
-                    console.log(resp[i].member)
-                   
-                  }
-
-          })
-          // Institute.find({name:{$in:["ICAR-Indian Institute of Pulses Research","ICAR-Indian Agricultural Research Institute"]}}).then((resp)=>{
-          //     resp.forEach((resp)=>{
-          //       resolve(resp)
-          //     })
-          //   })
+          resolve(member)
+        } 
+        else
+        {
+          resolve('All Discipline Member')
         }
-        
-     });
+      }
+  
 
+  else if(Imember && smdid[0]=='')
+    {
+     const data = Imember.filter((item)=>{
+            return containsSpecialCharacters(item)
+      })
+
+     if(data.length!=0)
+      {
+        resolve(Imember)
+      } 
+    else {
+      const user = []
+      Institute.find({ _id: { $in: Imember } }, { member: 1, _id: 0 }).then((resp) => {
+        for (var key in resp) {
+          resp[key].member.forEach((item) => {
+            user.push(item)
+            resolve(user)
+          })
+        }
+      })
     }
+  }
+   
     else if(smdid)
     {
-      SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{
-              resp.forEach((resp)=>{
-                resolve(resp.member)
-              })
+      const user = []
+      new Promise((res,rej)=>{
+        Institute.find({ _id: { $in: Imember } }, { member: 1, _id: 0 }).then((resp) => {
+          for (var key in resp) {
+            resp[key].member.forEach((item) => {
+              user.push(item) 
+              res(user)             
             })
-    }
+          }
+        })  
+       })  
+      .then((data)=>{
 
-    
-     
+        
+        SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{      
+          resp.forEach((resp)=>{
 
+             resolve(data.concat(resp.member))
+           })
+         })
+      })
+      
+    }   
   })
   .then((userId)=>{
+
     console.log(userId)
-  })
- 
+    
+    // if (req.file) {
+    //   const file = req.file.path  
   
-      
+    //   try {
+    //     const data = new Question({ auth, title, body, file, created_at, updated_at, subject, member, Imember, smdid, institute });
+    //     const result = data.save()
+  
+    //     if (result) {
+  
+    //       res.status(200).json({ message: 'inserted' })
+    //     }
+    //     else {
+    //       console.log('error')
+    //       return res.status(402).json({ err: 'not inserted' })
+    //     }
+    //   }
+    //   catch (err) {
+    //     console.log(err);
+    //   }
+  
+    // }
+  
+    // else { 
+       
+    //   try {
+    //     const data = new Question({ auth, title, body, created_at, updated_at, subject, member, Imember, smdid, institute });
+    //     const result = data.save()
+  
+    //     if (result) {
+  
+    //       res.status(200).json({ message: 'inserted' })
+    //     }
+    //     else {
+    //       console.log('error')
+    //       return res.status(402).json({ err: 'not inserted' })
+    //     }
+    //   }
+    //   catch (err) {
+    //     console.log(err);
+    //   }  
+    // }  
+
+    
+  })
 
 
+  
+  
+  
   /* for upload the file     
      upload(req,res, function(err)
      {
@@ -110,53 +181,8 @@ router.post('/Question', upload, async (req, res) => {
      )
      This code for Check file uploaded or not
      */
-
-  if (req.file) {
-    const file = req.file.path
-   
-
-    // try {
-    //   const data = new Question({ auth, title, body, file, created_at, updated_at, subject, member, Imember, smdid, institute });
-    //   const result = await data.save()
-
-    //   if (result) {
-
-    //     res.status(200).json({ message: 'inserted' })
-    //   }
-    //   else {
-    //     console.log('error')
-    //     return res.status(402).json({ err: 'not inserted' })
-    //   }
-    // }
-    // catch (err) {
-    //   console.log(err);
-    // }
-
-  }
-
-  else { 
-     
-    // try {
-    //   const data = new Question({ auth, title, body, created_at, updated_at, subject, member, Imember, smdid, institute });
-    //   const result = await data.save()
-
-    //   if (result) {
-
-    //     res.status(200).json({ message: 'inserted' })
-    //   }
-    //   else {
-    //     console.log('error')
-    //     return res.status(402).json({ err: 'not inserted' })
-    //   }
-    // }
-    // catch (err) {
-    //   console.log(err);
-    // }
-
-  }
-
-
 })
+
 
 router.get('/selected-questions-division/:divisionName/:id', async (req, res) => {
   const divName = decodeURIComponent(req.params.divisionName)
