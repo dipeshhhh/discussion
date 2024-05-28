@@ -37,21 +37,55 @@ router.post('/Question', upload, async (req, res) => {
   const member = Members.split(',')
   const Imember = Imembers.split(',')
   const smdid = smdids.split(',')
-  const institute = institutes.split(',')
- 
-//  console.log(Imember.constructor != Object)
-   
-  new Promise((resolve,reject)=>{
+  const institute = institutes.split(',')   
+
     
-    if(smdid || Imember instanceof Object)
-      {
-        SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{
-          resp.forEach((resp)=>{
-            resolve(resp.member)
+  new Promise((resolve,reject)=>{    
+    
+    let user = []
+    
+    function containsSpecialCharacters(str) {
+      var regex = /@/;
+      return regex.test(str);
+  }
+
+  if(Imember && smdid[0]=='')
+    {
+      Imember.forEach(str => {
+        if(containsSpecialCharacters(str))
+         {
+
+         }
+        else if(!containsSpecialCharacters(str))
+        {
+          Institute.find({_id:{$in:Imember}},{member:1,_id:0}).then((resp)=>{
+                for(let i in resp)
+                  {
+                    console.log(resp[i].member)
+                   
+                  }
+
           })
-        })
-      }
-  
+          // Institute.find({name:{$in:["ICAR-Indian Institute of Pulses Research","ICAR-Indian Agricultural Research Institute"]}}).then((resp)=>{
+          //     resp.forEach((resp)=>{
+          //       resolve(resp)
+          //     })
+          //   })
+        }
+        
+     });
+
+    }
+    else if(smdid)
+    {
+      SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{
+              resp.forEach((resp)=>{
+                resolve(resp.member)
+              })
+            })
+    }
+
+    
      
 
   })
