@@ -34,8 +34,16 @@ const Userschema = new mongoose.Schema({
         required:true
     },
     message:[{
-        post_id:mongoose.Schema.Types.ObjectId,
-        seen:Boolean
+        post_id:{
+                type:String,
+                required:true
+        },
+        seen:{
+            type:Boolean,
+            required:true
+
+        },
+        _id:0,        
     }]
     });
 

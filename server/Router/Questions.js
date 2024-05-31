@@ -38,30 +38,35 @@ router.post('/Question', upload, async (req, res) => {
   const Imember = Imembers.split(',')
   const smdid = smdids.split(',')
   const institute = institutes.split(',')   
-
-
-// console.log(member)
-
+   
 
   new Promise((resolve,reject)=>{        
     function containsSpecialCharacters(str) {
       var regex = /@/;
       return regex.test(str);
-  }
+  }  
+  
 
-  if(member[0]!='')
+   
+  
+ if(member[0]!='')
       {
        const data = member.filter((item)=>{
               return containsSpecialCharacters(item)
         })
   
        if(data.length!=0)
-        {
+        {         
+          member.push(auth) 
           resolve(member)
         } 
         else
         {
-          resolve('All Discipline Member')
+          Division.find({_id:{$in:member}}).then((resp)=>{
+                resp.forEach((email)=>{
+                  resolve(email.member)
+                })
+          })
         }
       }
   
@@ -74,24 +79,33 @@ router.post('/Question', upload, async (req, res) => {
 
      if(data.length!=0)
       {
+        
         resolve(Imember)
       } 
     else {
       const user = []
       Institute.find({ _id: { $in: Imember } }, { member: 1, _id: 0 }).then((resp) => {
         for (var key in resp) {
-          resp[key].member.forEach((item) => {
-            user.push(item)
-            resolve(user)
-          })
+            
+            resolve(resp[key].member)        
         }
       })
     }
   }
    
-    else if(smdid)
-    {
-      const user = []
+     else if(smdid)
+    {     
+      if(smdid && institute.length==1)
+        {
+          SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{      
+            resp.forEach((resp)=>{              
+              resolve(resp.member)
+            })
+           })
+        } 
+        else
+        {
+          const user = []
       new Promise((res,rej)=>{
         Institute.find({ _id: { $in: Imember } }, { member: 1, _id: 0 }).then((resp) => {
           for (var key in resp) {
@@ -102,65 +116,69 @@ router.post('/Question', upload, async (req, res) => {
           }
         })  
        })  
-      .then((data)=>{
-
-        
-        SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{      
+      .then((data)=>{     
+        SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{           
           resp.forEach((resp)=>{
-
+                      
+            
              resolve(data.concat(resp.member))
            })
          })
       })
+        }
       
-    }   
+      
+     } 
+  
+   
   })
   .then((userId)=>{
 
-    console.log(userId)
-    
-    // if (req.file) {
-    //   const file = req.file.path  
+    // console.log(userId)
+ 
+      if (req.file) {
+      const file = req.file.path  
   
-    //   try {
-    //     const data = new Question({ auth, title, body, file, created_at, updated_at, subject, member, Imember, smdid, institute });
-    //     const result = data.save()
+      try {
+        const data = new Question({ auth, title, body, file, created_at, updated_at, subject, member, Imember, smdid, institute });
+        const result = data.save()
   
-    //     if (result) {
+        if (result) {          
+          User.updateMany({email:{$in:userId}},{$push:{message:{post_id:data._id,seen:false}}}).then((resp)=>{
+            res.status(200).json({ message: 'inserted' })
+          })          
+        }
+        else {
+          console.log('error')
+          return res.status(402).json({ err: 'not inserted' })
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
   
-    //       res.status(200).json({ message: 'inserted' })
-    //     }
-    //     else {
-    //       console.log('error')
-    //       return res.status(402).json({ err: 'not inserted' })
-    //     }
-    //   }
-    //   catch (err) {
-    //     console.log(err);
-    //   }
+    }
   
-    // }
-  
-    // else { 
+    else { 
        
-    //   try {
-    //     const data = new Question({ auth, title, body, created_at, updated_at, subject, member, Imember, smdid, institute });
-    //     const result = data.save()
+      try {
+        const data = new Question({ auth, title, body, created_at, updated_at, subject, member, Imember, smdid, institute });
+        const result = data.save()
   
-    //     if (result) {
-  
-    //       res.status(200).json({ message: 'inserted' })
-    //     }
-    //     else {
-    //       console.log('error')
-    //       return res.status(402).json({ err: 'not inserted' })
-    //     }
-    //   }
-    //   catch (err) {
-    //     console.log(err);
-    //   }  
-    // }  
-
+        if (result) {          
+          User.updateMany({email:{$in:userId}},{$push:{message:{post_id:data._id,seen:false}}}).then((resp)=>{
+            res.status(200).json({ message: 'inserted' })
+          })          
+        }
+        else {
+          console.log('error')
+          return res.status(402).json({ err: 'not inserted' })
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }  
+    }    
     
   })
 

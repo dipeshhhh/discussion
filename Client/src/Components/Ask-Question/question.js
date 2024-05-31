@@ -424,7 +424,8 @@ const Question = () => {
       const Ssubject = e.target.value
       setMember([])
       setImember([])
-      setInstitute([])      
+      setInstitute([]) 
+           
 
       if(Ssubject == '')
       {        
@@ -440,9 +441,9 @@ const Question = () => {
         {          
           val.push(subject[i]._id)           
         }  
-        setSmdid(smd._id)                   
+        setSmdid(tempsmdid)                   
         setImember(val)        
-        setInstitute(val)     
+        setInstitute(val)   
 
       }
       else if(Ssubject == 2)
