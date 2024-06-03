@@ -25,9 +25,16 @@ const Index = () => {
   useEffect(()=>{
     async function getQuestionDetails()
     {
-      await axios.get(`/Question-detail/${id}`).then((resp) =>{
+
+      // await axios.post('/update_seen',{
+      //     auth,id
+      // })  
+      
+      
+      await axios.post('/Question-detail',{
+        id
+      }).then((resp) =>{
           
-        
         setQuestionData(resp.data)
       })
       .catch((err)=>{

@@ -38,10 +38,9 @@ const AllQuestions = ({ question }) => {
     }
     getUser();
   }, []);
-
+   
  
   
-
   
 
   let result = question?.map((resp) => { return resp });
@@ -69,6 +68,7 @@ const AllQuestions = ({ question }) => {
                 <Question
                   key={data._id}
                   data={data}
+                  seen={seen}
                   currentUser={currentUserDetailsFromDB}
                   isAlreadyStarred={currentUserDetailsFromDB.starred.includes(data._id) ? true : false}
                 />
@@ -83,6 +83,7 @@ const AllQuestions = ({ question }) => {
                   <Question
                     key={data._id}
                     data={data}
+                    seen={seen}
                     currentUser={currentUserDetailsFromDB}
                     isAlreadyStarred={currentUserDetailsFromDB.starred.includes(data._id) ? true : false}
                   />
@@ -97,7 +98,7 @@ const AllQuestions = ({ question }) => {
   );
 };
 
-function Question({ data, currentUser, isAlreadyStarred }) {
+function Question({ data,seen,currentUser, isAlreadyStarred }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isStarred, setIsStarred] = useState(isAlreadyStarred);
 
@@ -146,7 +147,15 @@ function Question({ data, currentUser, isAlreadyStarred }) {
 
   return (
     
+    
     <div className='all-questions-container' key={data._id}>
+      {
+
+          console.log(seen.some(obj => obj.post_id === data._id && obj.seen === false))
+       
+        // console.log(seen.some(obj => obj._id === data._id))
+       
+      }
       <div className='all-questions-left'>
         <div className='all-options'>
           <p className='option-icon expand active'>
@@ -158,11 +167,25 @@ function Question({ data, currentUser, isAlreadyStarred }) {
         </div>
       </div>
 
-      <div className='question-answer'>        
+      <div className='question-answer'>  
+      {
+        seen.some(obj => obj.post_id === data._id && obj.seen === true) ?
+        <>
         <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>        
         <div>
           <div className='question-answer-body-text'>{isExpanded ? parse(data.body) : parse(truncate(data.body, 200))}</div>
-        </div>       
+        </div> 
+        </>         
+        :
+       <>
+        <NavLink to={`/view-question?id=${data._id}`}>{data?.title}</NavLink>        
+        <div>
+          <div className='question-answer-body-text'>{isExpanded ? parse(data.body) : parse(truncate(data.body, 200))}</div>
+        </div> 
+       </>
+
+      }      
+             
         <div className='author'>
           {/* <NavLink to={`/profile?id=${data.auth}`} className='author-details'>
             <Avatar />

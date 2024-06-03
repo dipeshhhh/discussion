@@ -453,12 +453,27 @@ router.get('/subject_question_institute', (req, res) => {
 // })
 
 
-router.get('/Question-detail/:id', (req, res) => {
+router.post('/Question-detail', (req, response) => {
 
+  // User.findOne({email:req.body.auth}).then((res)=>{
+    
+    
+  //   if(!res.message.some(obj=>obj.post_id == req.body.id))
+  //     {
+  //       User.update({email:req.body.auth},{$push:{message:{post_id:req.body.id,seen:true}}}).then((resp)=>{
+  //         return res.status(200).send(resp)
+  //       })  
 
-  const id = new ObjectId(req.params.id)
+  //     }
+  //     else
+  //     {
+  //       console.log('bhara hai')
+  //     }
 
+  // })
 
+  const id = new ObjectId(req.body.id)
+  
   Question.aggregate([
     {
       $match: { _id: id },
@@ -473,9 +488,9 @@ router.get('/Question-detail/:id', (req, res) => {
     }
 
   ]).exec()
-    .then((resp) => {
-
-      return res.status(200).send(resp)
+    .then((resp) => {     
+      
+      return response.status(200).send(resp)
 
     })
     .catch((e) => {
