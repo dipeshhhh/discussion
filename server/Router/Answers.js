@@ -3,6 +3,7 @@ const router = express.Router();
 require('../DB/conn');
 const Answer = require('../DB/Answers')
 const Reply = require('../DB/Replies')
+const User = require('../DB/module')
 const Question = require('../DB/Questions')
 const multer = require('multer')
 const { default: mongoose } = require('mongoose');
@@ -27,6 +28,10 @@ router.post('/Answer', upload, async (req, res) => {
     const created_at = new Date(); 
     
     const postdata = await Question.updateOne({ _id: question_id},{$set:{updated_at:created_at}});    
+
+    User.updateMany({'message.post_id':question_id},{$set:{'message.$[el].seen':false}},{arrayFilters:[{'el.post_id':question_id}]}).then((resp)=>{
+        
+      })
 
     if (req.file) {
         const file = req.file.path       
@@ -107,6 +112,10 @@ router.patch('/Answer-reply/:id', async(req, res) => {
         created_at: req.body.created_at,
     }
 
+    User.updateMany({'message.post_id':req.body.question_id},{$set:{'message.$[el].seen':false}},{arrayFilters:[{'el.post_id':req.body.question_id}]}).then((resp)=>{
+       
+      })
+
     const postdata = await Question.updateOne({ _id:req.body.question_id},{$set:{updated_at:req.body.created_at}}); 
     const newReply = new Reply(replyData);
     Answer.findOneAndUpdate(
@@ -154,6 +163,12 @@ router.patch('/Reply-reply/:id', async (req, res) => {
         targetReply.push(newReply);
 
         //   answer = await answer.save(); // This did not worked
+
+        User.updateMany({'message.post_id':req.body.question_id},{$set:{'message.$[el].seen':false}},{arrayFilters:[{'el.post_id':req.body.question_id}]}).then((resp)=>{
+            
+          })
+        
+
         await Question.updateOne({ _id:req.body.question_id},{$set:{updated_at:req.body.created_at}}); 
         await Answer.updateOne({ _id: id }, answer);
 

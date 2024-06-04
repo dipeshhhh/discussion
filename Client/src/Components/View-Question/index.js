@@ -10,9 +10,10 @@ const Index = () => {
   const [questiondata, setQuestionData] = useState()
   
   const userData = Cookies.get('auth')
+  const [group, setGroup] = useState('')
   let auth =''
   if(userData)
-  {
+  {  
     var bytes  = CryptoJS.AES.decrypt(Cookies.get('auth'), 'secret key 123');
     const data  = JSON.parse(bytes.toString(CryptoJS.enc.Utf8));  
     auth = data[0]  
@@ -22,19 +23,14 @@ const Index = () => {
   const params =new URLSearchParams(search)
   const id = params.get('id')
 
+
+  
   useEffect(()=>{
     async function getQuestionDetails()
     {
-
-      // await axios.post('/update_seen',{
-      //     auth,id
-      // })  
-      
-      
       await axios.post('/Question-detail',{
-        id
-      }).then((resp) =>{
-          
+        id,auth
+      }).then((resp) =>{        
         setQuestionData(resp.data)
       })
       .catch((err)=>{
@@ -42,11 +38,12 @@ const Index = () => {
       })
 
     }
-    getQuestionDetails()
+    
+    return ()=> getQuestionDetails()
+   
    
   },[])
 
-  const [group, setGroup] = useState('')
 
   useEffect(()=>{
     async function getGroup()
@@ -59,13 +56,9 @@ const Index = () => {
         console.log(err)
       })
     }
-    getGroup()
-  },[])  
-
-
-
-  
- 
+    
+    return ()=> getGroup()
+  },[])   
 
    return (
     <div className='stack-index'>

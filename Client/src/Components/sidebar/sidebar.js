@@ -49,13 +49,15 @@ const sidebar = () => {
   // Content fetching
   const [ssmd, setSsmd] = useState([]);
   const [institute, setInstitute] = useState('');
+  const [seenPost, setSeenPost] = useState('')
   const [group, setGroup] = useState('');
   const [mainG, setMainG] = useState('');
   const [detail, setDetail] = useState('');
   const [smd, setSmd] = useState('');
   useEffect(() => {
     let userDetails = new Promise(async (resolve, reject) => {
-      const response = await axios.get(`/user-detail/${auth}`);
+      const response = await axios.get(`/user-detail/${auth}`);    
+      setSeenPost(response.data.message)
       resolve(response.data);
     });
 
@@ -107,6 +109,15 @@ const sidebar = () => {
       }
     );
   }, []);
+
+  let seenQuestion = [];
+for (let i= 0; i<seenPost.length; i++) {
+    if (seenPost[i].seen === false) {
+      seenQuestion = [...seenQuestion,seenPost[i]];
+    }
+}
+
+
 
   // Components
   function SidebarOption({ title, icon, optionId }) {
@@ -174,9 +185,14 @@ const sidebar = () => {
 
       */}
 
-          <div className='sidebar-option-category-container sidebar-option-top'>
-            <SidebarOption optionId={'Home'} title='Home' icon={<HomeIcon />} />
+          <div className='sidebar-option-category-container sidebar-option-top'> 
+          {
+              seenQuestion.length
+            }           
+            <SidebarOption optionId={'Home'} title='Home' icon={<HomeIcon/>} />
+            
             <div className={`sidebar-close-button ${(windowWidth <= responsive_sidebar_width) ? 'active' : ''}`} onClick={toggleSidebar}>
+            
               <CloseIcon />
             </div>
           </div>

@@ -26,8 +26,7 @@ const storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single('file')
 
 router.post('/Question', upload, async (req, res) => {
-
-  // console.log(req.body,req.file)
+  
 
   const { title, body, auth, Imembers, Members, smdids, institutes, subject } = req.body;
 
@@ -40,15 +39,14 @@ router.post('/Question', upload, async (req, res) => {
   const institute = institutes.split(',')   
    
 
+  console.log(req.body)
+
   new Promise((resolve,reject)=>{        
     function containsSpecialCharacters(str) {
       var regex = /@/;
       return regex.test(str);
   }  
-  
 
-   
-  
  if(member[0]!='')
       {
        const data = member.filter((item)=>{
@@ -452,52 +450,55 @@ router.get('/subject_question_institute', (req, res) => {
 
 // })
 
-
-router.post('/Question-detail', (req, response) => {
-
-  // User.findOne({email:req.body.auth}).then((res)=>{
+  router.post('/Question-detail', (req, res) => {
     
-    
-  //   if(!res.message.some(obj=>obj.post_id == req.body.id))
-  //     {
-  //       User.update({email:req.body.auth},{$push:{message:{post_id:req.body.id,seen:true}}}).then((resp)=>{
-  //         return res.status(200).send(resp)
-  //       })  
+    const id = new ObjectId(req.body.id)
 
-  //     }
-  //     else
-  //     {
-  //       console.log('bhara hai')
-  //     }
+   User.findOne({email:req.body.auth}).then((res)=>{       
+       
+    if(!res.message.some(obj=>obj.post_id == req.body.id))
+      {        
+        User.updateOne({email:req.body.auth},{$push:{message:{post_id:req.body.id,seen:true}}}).then((resp)=>{
+            
+        })  
 
-  // })
-
-  const id = new ObjectId(req.body.id)
-  
-  Question.aggregate([
-    {
-      $match: { _id: id },
-    },
-    {
-      $lookup: {
-        from: 'answers',
-        localField: '_id',
-        foreignField: 'question_id',
-        as: 'result'
       }
-    }
+      else
+      {
+        User.updateOne({email:req.body.auth},{$set:{'message.$[el].seen':true}},{arrayFilters:[{'el.post_id':req.body.id}]}).then((resp)=>{
+          
+        })
+      }
 
-  ]).exec()
-    .then((resp) => {     
-      
-      return response.status(200).send(resp)
+  })
+     
+  
+    Question.aggregate([
+      {
+        $match: { _id: id },
+      },
+      {
+        $lookup: {
+          from: 'answers',
+          localField: '_id',
+          foreignField: 'question_id',
+          as: 'result'
+        }
+      }
+  
+    ]).exec()
+      .then((resp) => {
+  
+        return res.status(200).send(resp)
+  
+      })
+      .catch((e) => {
+        console.log("Error:", e)
+        res.status(400).send(e)
+      })
+  })
 
-    })
-    .catch((e) => {
-      console.log("Error:", e)
-      res.status(400).send(e)
-    })
-})
+ 
 
 
 router.get('/group-question/:id', (req, res) => {
