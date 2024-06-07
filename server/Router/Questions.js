@@ -559,12 +559,7 @@ router.get('/deletepost/:id', (req, res) => {
           return res.status(200).send(response)
         })
       })
-
-
   })
-
-
-
 })
 
 router.get('/Q_download/:id', (req, resp) => {
@@ -598,7 +593,7 @@ const getdata = async () => {
 
       day_diff.push(Math.ceil(time_diff / (1000 * 60 * 60 * 24)))
 
-      if (day_diff[i] > 31) {
+      if (day_diff[i]>31) {
         day_id.push(resp[i]._id)
 
         file.push(resp[i].file)
@@ -634,9 +629,13 @@ const getdata = async () => {
         User.updateMany({starred:day_id[z]},{$pull:{starred:day_id[z]}}).then((res)=>{
           console.log('Stared posts'+res)
         })
+        User.updateMany({'message.post_id':day_id[z]},{$pull:{message:{post_id:day_id[z]}}}).then((resp)=>{
+          console.log(resp)
+      }) 
         Question.deleteMany({ _id:day_id[z]}).then((resp)=>{
           console.log('Posted Question'+resp)
         })
+
       }
       else {
 
@@ -666,9 +665,13 @@ const getdata = async () => {
         User.updateMany({starred:day_id[z]},{$pull:{starred:day_id[z]}}).then((res)=>{
           console.log('Stared posts deleted')
         })
+        User.updateMany({'message.post_id':day_id[z]},{$pull:{message:{post_id:day_id[z]}}}).then((resp)=>{
+          console.log(resp)
+      })   
+
         Question.deleteMany({ _id: day_id[z]}).then((resp)=>{
           console.log('posts deleted')
-        })
+        })        
         
       }
     }
