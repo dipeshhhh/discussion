@@ -26,8 +26,7 @@ const storage = multer.diskStorage({
 var upload = multer({ storage: storage }).single('file')
 
 router.post('/Question', upload, async (req, res) => {
-
-  // console.log(req.body,req.file)
+  
 
   const { title, body, auth, Imembers, Members, smdids, institutes, subject } = req.body;
 
@@ -37,8 +36,154 @@ router.post('/Question', upload, async (req, res) => {
   const member = Members.split(',')
   const Imember = Imembers.split(',')
   const smdid = smdids.split(',')
-  const institute = institutes.split(',')
+  const institute = institutes.split(',')   
+   
 
+  console.log(req.body)
+
+  new Promise((resolve,reject)=>{        
+    function containsSpecialCharacters(str) {
+      var regex = /@/;
+      return regex.test(str);
+  }  
+
+ if(member[0]!='')
+      {
+       const data = member.filter((item)=>{
+              return containsSpecialCharacters(item)
+        })
+  
+       if(data.length!=0)
+        {         
+          member.push(auth) 
+          resolve(member)
+        } 
+        else
+        {
+          Division.find({_id:{$in:member}}).then((resp)=>{
+                resp.forEach((email)=>{
+                  resolve(email.member)
+                })
+          })
+        }
+      }
+  
+
+  else if(Imember && smdid[0]=='')
+    {
+     const data = Imember.filter((item)=>{
+            return containsSpecialCharacters(item)
+      })
+
+     if(data.length!=0)
+      {
+        
+        resolve(Imember)
+      } 
+    else {
+      const user = []
+      Institute.find({ _id: { $in: Imember } }, { member: 1, _id: 0 }).then((resp) => {
+        for (var key in resp) {
+            
+            resolve(resp[key].member)        
+        }
+      })
+    }
+  }
+   
+     else if(smdid)
+    {     
+      if(smdid && institute.length==1)
+        {
+          SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{      
+            resp.forEach((resp)=>{              
+              resolve(resp.member)
+            })
+           })
+        } 
+        else
+        {
+          const user = []
+      new Promise((res,rej)=>{
+        Institute.find({ _id: { $in: Imember } }, { member: 1, _id: 0 }).then((resp) => {
+          for (var key in resp) {
+            resp[key].member.forEach((item) => {
+              user.push(item) 
+              res(user)             
+            })
+          }
+        })  
+       })  
+      .then((data)=>{     
+        SmdDivision.find({_id:{$in:smdid}}).then((resp)=>{           
+          resp.forEach((resp)=>{
+                      
+            
+             resolve(data.concat(resp.member))
+           })
+         })
+      })
+        }
+      
+      
+     } 
+  
+   
+  })
+  .then((userId)=>{
+
+    // console.log(userId)
+ 
+      if (req.file) {
+      const file = req.file.path  
+  
+      try {
+        const data = new Question({ auth, title, body, file, created_at, updated_at, subject, member, Imember, smdid, institute });
+        const result = data.save()
+  
+        if (result) {          
+          User.updateMany({email:{$in:userId}},{$push:{message:{post_id:data._id,seen:false}}}).then((resp)=>{
+            res.status(200).json({ message: 'inserted' })
+          })          
+        }
+        else {
+          console.log('error')
+          return res.status(402).json({ err: 'not inserted' })
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }
+  
+    }
+  
+    else { 
+       
+      try {
+        const data = new Question({ auth, title, body, created_at, updated_at, subject, member, Imember, smdid, institute });
+        const result = data.save()
+  
+        if (result) {          
+          User.updateMany({email:{$in:userId}},{$push:{message:{post_id:data._id,seen:false}}}).then((resp)=>{
+            res.status(200).json({ message: 'inserted' })
+          })          
+        }
+        else {
+          console.log('error')
+          return res.status(402).json({ err: 'not inserted' })
+        }
+      }
+      catch (err) {
+        console.log(err);
+      }  
+    }    
+    
+  })
+
+
+  
+  
+  
   /* for upload the file     
      upload(req,res, function(err)
      {
@@ -52,52 +197,8 @@ router.post('/Question', upload, async (req, res) => {
      )
      This code for Check file uploaded or not
      */
-
-  if (req.file) {
-    const file = req.file.path
-
-    try {
-      const data = new Question({ auth, title, body, file, created_at, updated_at, subject, member, Imember, smdid, institute });
-      const result = await data.save()
-
-      if (result) {
-
-        res.status(200).json({ message: 'inserted' })
-      }
-      else {
-        console.log('error')
-        return res.status(402).json({ err: 'not inserted' })
-      }
-    }
-    catch (err) {
-      console.log(err);
-    }
-
-  }
-
-  else {
-
-    try {
-      const data = new Question({ auth, title, body, created_at, updated_at, subject, member, Imember, smdid, institute });
-      const result = await data.save()
-
-      if (result) {
-
-        res.status(200).json({ message: 'inserted' })
-      }
-      else {
-        console.log('error')
-        return res.status(402).json({ err: 'not inserted' })
-      }
-    }
-    catch (err) {
-      console.log(err);
-    }
-
-  }
-
-
 })
+
 
 router.get('/selected-questions-division/:divisionName/:id', async (req, res) => {
   const divName = decodeURIComponent(req.params.divisionName)
@@ -349,37 +450,55 @@ router.get('/subject_question_institute', (req, res) => {
 
 // })
 
+  router.post('/Question-detail', (req, res) => {
+    
+    const id = new ObjectId(req.body.id)
 
-router.get('/Question-detail/:id', (req, res) => {
+   User.findOne({email:req.body.auth}).then((res)=>{       
+       
+    if(!res.message.some(obj=>obj.post_id == req.body.id))
+      {        
+        User.updateOne({email:req.body.auth},{$push:{message:{post_id:req.body.id,seen:true}}}).then((resp)=>{
+            
+        })  
 
-
-  const id = new ObjectId(req.params.id)
-
-
-  Question.aggregate([
-    {
-      $match: { _id: id },
-    },
-    {
-      $lookup: {
-        from: 'answers',
-        localField: '_id',
-        foreignField: 'question_id',
-        as: 'result'
       }
-    }
+      else
+      {
+        User.updateOne({email:req.body.auth},{$set:{'message.$[el].seen':true}},{arrayFilters:[{'el.post_id':req.body.id}]}).then((resp)=>{
+          
+        })
+      }
 
-  ]).exec()
-    .then((resp) => {
+  })
+     
+  
+    Question.aggregate([
+      {
+        $match: { _id: id },
+      },
+      {
+        $lookup: {
+          from: 'answers',
+          localField: '_id',
+          foreignField: 'question_id',
+          as: 'result'
+        }
+      }
+  
+    ]).exec()
+      .then((resp) => {
+  
+        return res.status(200).send(resp)
+  
+      })
+      .catch((e) => {
+        console.log("Error:", e)
+        res.status(400).send(e)
+      })
+  })
 
-      return res.status(200).send(resp)
-
-    })
-    .catch((e) => {
-      console.log("Error:", e)
-      res.status(400).send(e)
-    })
-})
+ 
 
 
 router.get('/group-question/:id', (req, res) => {
@@ -440,12 +559,7 @@ router.get('/deletepost/:id', (req, res) => {
           return res.status(200).send(response)
         })
       })
-
-
   })
-
-
-
 })
 
 router.get('/Q_download/:id', (req, resp) => {
@@ -479,7 +593,7 @@ const getdata = async () => {
 
       day_diff.push(Math.ceil(time_diff / (1000 * 60 * 60 * 24)))
 
-      if (day_diff[i] > 31) {
+      if (day_diff[i]>31) {
         day_id.push(resp[i]._id)
 
         file.push(resp[i].file)
@@ -515,9 +629,13 @@ const getdata = async () => {
         User.updateMany({starred:day_id[z]},{$pull:{starred:day_id[z]}}).then((res)=>{
           console.log('Stared posts'+res)
         })
+        User.updateMany({'message.post_id':day_id[z]},{$pull:{message:{post_id:day_id[z]}}}).then((resp)=>{
+          console.log(resp)
+      }) 
         Question.deleteMany({ _id:day_id[z]}).then((resp)=>{
           console.log('Posted Question'+resp)
         })
+
       }
       else {
 
@@ -547,9 +665,13 @@ const getdata = async () => {
         User.updateMany({starred:day_id[z]},{$pull:{starred:day_id[z]}}).then((res)=>{
           console.log('Stared posts deleted')
         })
+        User.updateMany({'message.post_id':day_id[z]},{$pull:{message:{post_id:day_id[z]}}}).then((resp)=>{
+          console.log(resp)
+      })   
+
         Question.deleteMany({ _id: day_id[z]}).then((resp)=>{
           console.log('posts deleted')
-        })
+        })        
         
       }
     }

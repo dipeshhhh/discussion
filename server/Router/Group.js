@@ -13,7 +13,7 @@ const Institutes = require('../DB/Institutes');
 
 
 router.get('/user-details/:id', (req, res) => {
-  User.findOne({ email: req.params.id }, { _id: 0, name: 1, designation:1, email: 1, Smdid: 1, Divisionid: 1, Group: 1, status: 1,institute:1, Hqrs:1, intrested: 1, starred: 1 })
+  User.findOne({ email: req.params.id }, { _id: 0, name: 1, designation:1, email: 1, Smdid: 1, Divisionid: 1, Group: 1, status: 1,institute:1, Hqrs:1, intrested: 1, starred: 1,message:1 })
     .then(resp => res.status(200).send(resp))
     .catch(e => res.status(400).send(e));
 })

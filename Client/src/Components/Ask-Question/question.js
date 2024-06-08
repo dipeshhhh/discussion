@@ -213,8 +213,7 @@ const Question = () => {
     data.append('Members', member)
     data.append('smdids',smdid)
     data.append('subject',sub)
-    
-    console.log(title)
+
     
     if(!title || !body)
       {       
@@ -362,8 +361,7 @@ const Question = () => {
    
       }
     }    
-   /**************Handle user Regarding the Subjects **************/ 
-     
+   /**************Handle user Regarding the Subjects **************/      
    const groupMember= (e)=>{
         const val = e.target.value       
         if(val == '')
@@ -411,23 +409,23 @@ const Question = () => {
   //  console.log(member,subjectid)
   
 
-   const [selectMember , setSelectMember] = useState('')
- 
+   const [selectMember , setSelectMember] = useState('') 
 
-   const get_Instsitute = (e)=>{   
+   const get_Instsitute = (e)=>{       
   const val = e.map((resp)=>(resp._id)) 
   setInstitute(val)
-   setImember(val)  
+   setImember(val)    
+   console.log(smdid)
    }    
      
-   const Select_Member = (e)=>{
-
-      setSelectMember(e.target.value)
-
+   const Select_Member = (e)=>{    
+      
+      setSelectMember(e.target.value)          
       const Ssubject = e.target.value
       setMember([])
       setImember([])
-      setInstitute([])
+      setInstitute([]) 
+           
 
       if(Ssubject == '')
       {        
@@ -436,21 +434,21 @@ const Question = () => {
 
       }
       else if(Ssubject == 1)
-      {      
-
+      {  
+                
         let val = []
         for(let i=0;i<subject.length;i++)
         {          
           val.push(subject[i]._id)           
-        }
-        setSmdid(smdid)       
+        }  
+        setSmdid(tempsmdid)                   
         setImember(val)        
-        setInstitute(val)
+        setInstitute(val)   
 
       }
       else if(Ssubject == 2)
       {      
-        
+       setSmdid([''])
       }
       else if(Ssubject == 3)
       {
@@ -463,8 +461,7 @@ const Question = () => {
    const [hsubject, setHsubject] = useState(true)
    const [hinstitute, setHInstitute] = useState(true)
    const [hsmd, setHSmd] = useState(true)
-   const Select_Type = (e)=>{
-    
+   const Select_Type = (e)=>{  
 
     
     if(e.target.value == 1)
@@ -580,8 +577,7 @@ const Question = () => {
         instData.push(inst_data.data[i]._id)
       }
     setInstitute(instData)
-    setImember(instData)      
-      
+    setImember(instData)            
       
     }  
     else if(e.target.value == 2)
@@ -762,8 +758,8 @@ const Question = () => {
             style={{ marginRight: 8 }}
             checked={selected}
             name={option.email}
-          />                  
-          {option.name}
+          />  
+           {option.name} ({option.email})
         </li>
       )}
       style={{ width: 500 }}
@@ -819,7 +815,7 @@ const Question = () => {
             checked={selected}
             name={option.email}
           />                  
-          {option.name}
+         {option.name} ({option.email})
         </li>
       )}
       style={{ width: 500 }}
@@ -894,7 +890,7 @@ const Question = () => {
             checked={selected}           
             name={option.email}
           />                  
-          {option.name}
+          {option.name} ({option.email})
         </li>
       )}
       style={{ width: 500 }}
@@ -953,7 +949,7 @@ const Question = () => {
                   checked={selected}
                   name={option.email}
                 />                  
-                {option.name}
+                {option.name} ({option.email})
               </li>
             )}
             style={{ width: 500 }}
@@ -1068,7 +1064,7 @@ const Question = () => {
             checked={selected}           
             name={option.email}
           />                  
-          {option.name}
+          {option.name} ({option.email})
         </li>
       )}
       style={{ width: 500 }}
