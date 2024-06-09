@@ -260,7 +260,7 @@ const Mainquestion = (details) => {
           </div>}
         </div>
         <div className="all-questions">
-          <p className="number-of-reply-text" style={{ 'font-size': 'medium', 'margin-bottom': '0px' }}>Number of replies: {answerdata?.length}</p>
+          <p className="number-of-reply-text" style={{ 'fontSize': 'medium', 'marginBottom': '0px' }}>Number of replies: {answerdata?.length}</p>
           <div className="comments-container">
             {answerdata?.map((resp) => (
               <Comment key={resp._id} data={resp} />
@@ -454,6 +454,8 @@ function Comment(props) {
         >
           {
             resp.comments.map((reply) => {
+              console.log(`reply id: ${reply.body}`);
+              console.log(`replied to: ${reply.replied_to}`);
               return (
                 <Reply
                   key={reply._id}

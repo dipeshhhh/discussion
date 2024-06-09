@@ -143,7 +143,7 @@ function Reply({ id, replied_to, question_id, body, auth, replies, created_at })
               </div>
             </div>
             <div className="reply-box-right">
-              <div className="reply-body" style={{ "margin-bottom": "16px", "overflow-wrap": "break-word" }}>
+              <div className="reply-body" style={{ "marginBottom": "16px", "overflowWrap": "break-word" }}>
                 {parse(body)}
               </div>
               <div className='author reply-author'>
