@@ -92,6 +92,7 @@ router.get('/Answer-detail/:id', (req, res) => {
     const id = new ObjectId(req.params.id)
 
     Answer.find({ question_id: id }, {}).then((resp) => {
+        // console.log('Answer details fetched: ',JSON.stringify(resp));
         res.status(200).send(resp)
     }).catch((err) => {
         res.status(400).send(e)
@@ -162,9 +163,14 @@ router.patch('/Reply-reply/:id', async (req, res) => {
 
         targetReply.push(newReply);
 
-        //   answer = await answer.save(); // This did not worked
-
-        User.updateMany({'message.post_id':req.body.question_id},{$set:{'message.$[el].seen':false}},{arrayFilters:[{'el.post_id':req.body.question_id}]}).then((resp)=>{
+        // answer = await answer.save(); // This did not worked
+        
+        User.updateMany({'message.post_id':answer.question_id},{$set:{'message.$[el].seen':false}},{arrayFilters:[{'el.post_id':answer.question_id}]}).then((resp)=>{
+          
+          // req.body.question_id does not work because req.body is currently reply object not answer object (reply obj does not contain question_id but answer obj does),
+          // to get answer's question_id we do answer.question_id.
+          // at line 147 we are fetching the answer to which user has replied to
+          // now the constant named 'answer' holds the answer object. Now we can use the answer objects and values inside it.
             
           })
         
