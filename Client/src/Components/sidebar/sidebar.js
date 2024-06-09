@@ -16,12 +16,12 @@ const sidebar = () => {
   const responsive_sidebar_width = 580;
   const [windowWidth, setWindowWidth] = useState(window.innerWidth);
   const [isSidebarVisible, setIsSidebarVisible] = windowWidth <= responsive_sidebar_width ? useState(false) : useState(true);
-  
+
   function toggleSidebar() {
     setIsSidebarVisible(!isSidebarVisible);
   }
   function closeSidebar() {
-    if(windowWidth <= responsive_sidebar_width) {      
+    if (windowWidth <= responsive_sidebar_width) {
       setIsSidebarVisible(false);
     }
   }
@@ -56,7 +56,7 @@ const sidebar = () => {
   const [smd, setSmd] = useState('');
   useEffect(() => {
     let userDetails = new Promise(async (resolve, reject) => {
-      const response = await axios.get(`/user-detail/${auth}`);    
+      const response = await axios.get(`/user-detail/${auth}`);
       setSeenPost(response.data.message)
       resolve(response.data);
     });
@@ -111,19 +111,24 @@ const sidebar = () => {
   }, []);
 
   let seenQuestion = [];
-for (let i= 0; i<seenPost.length; i++) {
+  for (let i = 0; i < seenPost.length; i++) {
     if (seenPost[i].seen === false) {
-      seenQuestion = [...seenQuestion,seenPost[i]];
+      seenQuestion = [...seenQuestion, seenPost[i]];
     }
-}
+  }
 
 
 
   // Components
-  function SidebarOption({ title, icon, optionId }) {
+  function SidebarOption({ title, icon, optionId, seenQuestionLength }) {
     return (
       // <NavLink to={`/?subject=${encodeURI(title)}`} className='sidebar-option'>
       <NavLink to={`/?id=${optionId}`} className='sidebar-option' onClick={closeSidebar}>
+        {seenQuestionLength > 0 &&
+          <span className={`sidebar-notification-badge size-${String(seenQuestionLength).length}`}>
+            {seenQuestionLength > 99 ? '99+' : seenQuestionLength}
+          </span>
+        }
         {icon}
         <p>{title}</p>
       </NavLink>
@@ -137,7 +142,8 @@ for (let i= 0; i<seenPost.length; i++) {
       <div className={`sidebar-container ${isSidebarVisible ? 'active' : ''}`}>
         <div className='sidebar-options'>
 
-          {/*
+          <>
+            {/*
       
       "sidebar-options" structure: 
       ---------------------------------<=="sidebar-options"
@@ -184,15 +190,13 @@ for (let i= 0; i<seenPost.length; i++) {
       ---------------------------------
 
       */}
+          </>
 
-          <div className='sidebar-option-category-container sidebar-option-top'> 
-          {
-              seenQuestion.length
-            }           
-            <SidebarOption optionId={'Home'} title='Home' icon={<HomeIcon/>} />
-            
+          <div className='sidebar-option-category-container sidebar-option-top'>
+            <SidebarOption optionId={'Home'} title='Home' icon={<HomeIcon />} seenQuestionLength={seenQuestion.length} />
+
             <div className={`sidebar-close-button ${(windowWidth <= responsive_sidebar_width) ? 'active' : ''}`} onClick={toggleSidebar}>
-            
+
               <CloseIcon />
             </div>
           </div>

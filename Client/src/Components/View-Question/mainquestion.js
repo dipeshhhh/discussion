@@ -77,28 +77,27 @@ const Mainquestion = (details) => {
 
     const files = event.target.files[0];
 
-    const cancelFile = (event) =>{
+    const cancelFile = (event) => {
       setError('');
       setBthidden(false);
       setFile(event.target.files[0]);
     }
 
-    if(files == undefined) {      
+    if (files == undefined) {
       cancelFile(event)
       return
-    } 
-    else if (files.size / 1024 >10240) {
+    }
+    else if (files.size / 1024 > 10240) {
       setBthidden(true);
       setError('File should be less than 10MB');
     }
-    else if(!files.type.split('/').pop().match('jpeg')&&!files.type.split('/').pop().match('pdf')&&!files.type.split('/').pop().match('mp4')&&!files.type.split('/').pop().match('mp3')&&!files.type.split('/').pop().match('mpeg')&&!files.type.split('/').pop().match('png'))
-    {
+    else if (!files.type.split('/').pop().match('jpeg') && !files.type.split('/').pop().match('pdf') && !files.type.split('/').pop().match('mp4') && !files.type.split('/').pop().match('mp3') && !files.type.split('/').pop().match('mpeg') && !files.type.split('/').pop().match('png')) {
       setBthidden(true);
-      setError('Please upload file with parameters');      
-    }   
+      setError('Please upload file with parameters');
+    }
     else {
       cancelFile(event)
-    } 
+    }
 
     // if (files.size / 1024 > 5120 || files.type.split('/').pop() !== 'pdf') {
     //   setBthidden(true);
