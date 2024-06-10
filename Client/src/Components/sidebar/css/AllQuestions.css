@@ -27,6 +27,16 @@
     2px 5px 18px 0px rgb(0 139 41 / 10%);
 }
 
+.all-questions-container.unseen {
+  box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 52%),2px 5px 18px 0px rgb(0 139 41 / 50%);
+  animation: unseenQuestion;
+}
+
+@keyframes unseenQuestion {
+  from {box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 52%), 2px 5px 18px 0px rgb(0 139 41 / 50%);}
+  to {box-shadow: -3px 3px 10px 0px rgb(0 72 12 / 32%), 2px 5px 18px 0px rgb(0 139 41 / 30%);}
+}
+
 .all-questions-left {
   display: flex;
 }
@@ -224,7 +234,8 @@
   .all-questions-container {
     font-size: 0.9rem;
   }
-  .tooltip{
+
+  .tooltip {
     min-width: 200px;
   }
 }
@@ -266,8 +277,9 @@
     left: -40px;
   }
 }
+
 @media screen and (max-width:177px) {
-  .tooltip{
+  .tooltip {
     min-width: 0px;
     gap: 0.5ch;
   }

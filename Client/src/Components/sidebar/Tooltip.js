@@ -35,7 +35,7 @@ export const Tooltip = ({text,children})=>{
         {isVisible &&  <div className='tooltip'>
             
             <p className='tooltip-username'>{userDetails.name}</p>
-            <span class='tooltip-rounded-edge'> </span>
+            <span className='tooltip-rounded-edge'> </span>
             <p>Email: {userDetails.email}</p>
             <p>Designation: {userDetails.designation}</p>
             {userDetails.Hqrs ==1 ?

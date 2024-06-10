@@ -48,8 +48,8 @@
   /* background-image: linear-gradient(to left top, #d4eee2, #daf3f2, #e8f6fc, #f6faff, #ffffff);
   background-size: contain;
   background-attachment: fixed; */
-  background-color: rgba(251,250,250);
-  box-shadow: 0px -0.5px 8px rgba(0,0,0,0.178);
+  background-color: rgba(251, 250, 250);
+  box-shadow: 0px -0.5px 8px rgba(0, 0, 0, 0.178);
   z-index: 1;
   bottom: 0;
   left: 0;
@@ -97,6 +97,7 @@
   transition: background-color 0.1s ease-in-out;
   transition: border 0.1s ease-in-out;
   box-sizing: border-box;
+  position: relative;
 }
 
 .sidebar-option:hover,
@@ -106,6 +107,40 @@
   cursor: pointer;
   border-left: 5px solid green;
   outline: none;
+}
+
+.sidebar-notification-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: red;
+  border-radius: 100%;
+  color: white;
+  font-size: small;
+  /* height: 1rem;
+  width: 1rem; */
+  padding: 0ch 0.65ch;
+  position: absolute;
+  left: 1ch;
+  top: 1ch;
+  /* top: 50%; */
+}
+
+.sidebar-notification-badge.size-1 {
+  font-size: small;
+}
+
+.sidebar-notification-badge.size-2 {
+  font-size: x-small;
+  padding: 0.5ch 0.75ch;
+}
+
+.sidebar-notification-badge.size-3 {
+  font-size: xx-small;
+  padding: 1.25ch 0.75ch;
+  top: 0.5ch;
+  left: 0.5ch;
 }
 
 .sidebar-option-category {
