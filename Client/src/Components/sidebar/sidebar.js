@@ -56,9 +56,14 @@ const sidebar = () => {
   const [smd, setSmd] = useState('');
   useEffect(() => {
     let userDetails = new Promise(async (resolve, reject) => {
-      const response = await axios.get(`/user-detail/${auth}`);
+
+      setInterval(async function () {       
+        const response = await axios.get(`/user-detail/${auth}`);
       setSeenPost(response.data.message)
       resolve(response.data);
+      }, 1000);
+
+      
     });
 
     userDetails.then(
