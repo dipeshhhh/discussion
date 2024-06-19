@@ -38,7 +38,7 @@ const AllQuestions = ({ question }) => {
           setSeen(res.data.message)
         })
         .catch((error) => console.error(error));    
-      }, 1000);
+      },1000);
 
      
     }
@@ -150,7 +150,7 @@ function Question({ data,seen,currentUser, isAlreadyStarred }) {
         .catch(error => console.error(error));
     }
   };
-  let isQuestionSeen = true;  
+  let isQuestionSeen = false;  
   const questionInUserMessages = seen?.find(obj=>obj.post_id === data._id); 
   if(questionInUserMessages){ // If question Id is in user's message in database. if not seen is taken as true
     isQuestionSeen = questionInUserMessages.seen;
@@ -161,7 +161,7 @@ function Question({ data,seen,currentUser, isAlreadyStarred }) {
     <div className={`all-questions-container ${isQuestionSeen ? 'seen' : 'unseen'}`} key={data._id}>
       {
 
-          console.log(seen.some(obj => obj.post_id === data._id && obj.seen === false))
+          // console.log(seen.some(obj => obj.post_id === data._id && obj.seen === false))
        
         // console.log(seen.some(obj => obj._id === data._id))
        

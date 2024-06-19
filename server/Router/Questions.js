@@ -39,8 +39,6 @@ router.post('/Question', upload, async (req, res) => {
   const institute = institutes.split(',')   
    
 
-  console.log(req.body)
-
   new Promise((resolve,reject)=>{        
     function containsSpecialCharacters(str) {
       var regex = /@/;

@@ -61,7 +61,7 @@ const sidebar = () => {
         const response = await Axios.get(`/user-detail/${auth}`);
       setSeenPost(response.data.message)
       resolve(response.data);
-      }, 1000);
+      },1000);
 
       
     });
