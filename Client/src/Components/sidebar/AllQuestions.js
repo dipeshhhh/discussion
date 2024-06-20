@@ -150,7 +150,7 @@ function Question({ data,seen,currentUser, isAlreadyStarred }) {
         .catch(error => console.error(error));
     }
   };
-  let isQuestionSeen = false;  
+  let isQuestionSeen = true;  
   const questionInUserMessages = seen?.find(obj=>obj.post_id === data._id); 
   if(questionInUserMessages){ // If question Id is in user's message in database. if not seen is taken as true
     isQuestionSeen = questionInUserMessages.seen;
