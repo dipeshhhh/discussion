@@ -5,7 +5,7 @@ require('./DB/conn');
 const Users = require('./DB/module');
 const app = express();
 
-const PORT = process.env.PORT;
+const PORT = process.env.PORT || 8000;
 
 // Link the router file
 app.use(express.json())
