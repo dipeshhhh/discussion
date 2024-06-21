@@ -414,13 +414,12 @@ const getOtpData = async () => {
             day_diff.push(Math.ceil(time_diff / (1000 * 60 * 60 * 24)))
 
             
-            if (day_diff[i] > 0) {
-            day_id.push(resp[i]._id)
-       
+            if (day_diff[i] >= 1) {
+            day_id.push(resp[i]._id)       
                 }
         } 
 
-        if(day_id.length>0)
+        if(day_id.length>=1)
         {
             Otp.deleteMany({_id:day_id}).then(() => {
             
