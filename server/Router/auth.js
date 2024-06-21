@@ -400,7 +400,7 @@ router.get('/main_G/:id',(req,res)=>{
 /***********************Delete OTP After 1 day***********************/
 const getOtpData = async () => {
 
-    Otp.find({}, {expireIn:1}).then((resp) => {
+   await Otp.find({}, {expireIn:1}).then((resp) => {
     
         const time = new Date()
         let time_diff = []

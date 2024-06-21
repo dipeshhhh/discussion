@@ -61,9 +61,6 @@ const Index = () => {
 
 
   function validateEmail(email) {
-
-    
-
     const reg = /^([A-Za-z0-9_\-.])+@([A-Za-z0-9_\-.])+\.([A-Za-z]{2,4})$/;
     if (reg.test(email) === false || !(email.split('@')[1] === 'icar.org.in' || email.split('@')[1] ==='icar.gov.in'|| email.split('@')[1] ==='gov.in' || email.split('@')[1] ==='nic.in')) {
       return false;
